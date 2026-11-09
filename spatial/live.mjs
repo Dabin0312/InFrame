@@ -1,4 +1,7 @@
-import {floorHeight,viewpointRange} from './navmesh.mjs';
+import {registeredGoals,crossesObject} from './goals.mjs';
+import {addIndoorGoals} from './indoor-scene.mjs';
+import {buildPlanner,followRoute} from './route-planner.mjs';
+import {floorHeight,viewpointRange,directFloorLength} from './navmesh.mjs';
 import * as T from './three.mjs';
 import {ask} from './rpc.mjs';
 const $=s=>document.querySelector(s);
@@ -23,7 +26,7 @@ export async function init(floor, getStart, onPose){
   const capture=new T.WebGLRenderer({antialias:false,preserveDrawingBuffer:true});capture.setSize(192,144,false);capture.setClearColor(0);
   const gltf=await new T.GLTFLoader().setMeshoptDecoder(T.MeshoptDecoder).loadAsync(new URL('castle.glb',import.meta.url).href);
   const world=new T.Scene();world.add(gltf.scene);
-  gltf.scene.traverse(o=>{if(o.isMesh){const m=o.material;o.material=new T.MeshBasicMaterial({map:m.map,color:m.color,vertexColors:!!o.geometry.attributes.color,side:T.DoubleSide,alphaTest:m.alphaTest});}});
+  gltf.scene.traverse(o=>{if(o.isMesh){const m=o.material;o.material=new T.MeshBasicMaterial({map:m.map,color:m.color,vertexColors:!!o.geometry.attributes.color,side:T.DoubleSide,alphaTest:m.alphaTest,opacity:m.opacity,transparent:m.transparent,depthWrite:m.depthWrite});}});
   const onboard=new T.PerspectiveCamera(2*Math.atan(Math.tan(78*Math.PI/360)*.75)*180/Math.PI,4/3,.02,100);
   onboard.rotation.order='YXZ';
   const scene=new T.Scene(),cam=new T.PerspectiveCamera(38,1,.02,150);
@@ -31,19 +34,37 @@ export async function init(floor, getStart, onPose){
   const sun=new T.DirectionalLight(0xfffcf4,1.35);sun.position.set(-3,8,4);scene.add(sun);
   const ground=new T.BufferGeometry();ground.setAttribute('position',new T.Float32BufferAttribute(floor.tris.flat(2),3));ground.computeVertexNormals();
   const uv=new Float32Array(floor.tris.length*6);floor.tris.flat().forEach((p,i)=>{uv[i*2]=p[0];uv[i*2+1]=p[2];});ground.setAttribute('uv',new T.BufferAttribute(uv,2));
-  const tile=document.createElement('canvas');tile.width=tile.height=128;const ink=tile.getContext('2d');ink.fillStyle='#d9dfd1';ink.fillRect(0,0,128,128);ink.strokeStyle='#c1caba';ink.strokeRect(0,0,128,128);ink.fillStyle='#b9c4b2';for(let i=8;i<128;i+=16)for(let j=8;j<128;j+=16)ink.fillRect(i,j,1.7,1.7);
+  const tile=document.createElement('canvas');tile.width=tile.height=128;const ink=tile.getContext('2d');ink.fillStyle='#c6dfd6';ink.fillRect(0,0,128,128);ink.strokeStyle='#aecbbf';ink.strokeRect(0,0,128,128);ink.fillStyle='#a8c6b9';for(let i=8;i<128;i+=16)for(let j=8;j<128;j+=16)ink.fillRect(i,j,1.7,1.7);
   const tex=new T.CanvasTexture(tile);tex.wrapS=tex.wrapT=T.RepeatWrapping;tex.colorSpace=T.SRGBColorSpace;
   scene.add(new T.Mesh(ground,new T.MeshBasicMaterial({map:tex,side:T.DoubleSide})));
-  // Draw the NavMesh boundary; internal triangulation edges are suppressed.
-  const edges=new Map();for(const tri of floor.tris)for(let i=0;i<3;i++){const a=tri[i],b=tri[(i+1)%3],key=[a.join(','),b.join(',')].sort().join('|');if(edges.has(key))edges.delete(key);else edges.set(key,[a,b]);}
-  const strips=[],rails=[];for(const [a,b] of edges.values()){const at=[a[0],a[1]+.18,a[2]],bt=[b[0],b[1]+.18,b[2]];strips.push(...a,...b,...at,...at,...b,...bt);rails.push(...at,...bt);}
-  const geo=new T.BufferGeometry();geo.setAttribute('position',new T.Float32BufferAttribute(strips,3));geo.computeVertexNormals();scene.add(new T.Mesh(geo,new T.MeshStandardMaterial({color:0xadb9a2,side:T.DoubleSide})));
-  const line=new T.BufferGeometry();line.setAttribute('position',new T.Float32BufferAttribute(rails,3));scene.add(new T.LineSegments(line,new T.LineBasicMaterial({color:0x82917e})));
-  const grid=new T.GridHelper(80,160,0xc6d0be,0xd5dacf);grid.position.y=-.07;scene.add(grid);
+  // The NavMesh marks admissible robot-centre positions. Draw its boundary flat.
+  const edges=new Map();
+  for(const tri of floor.tris)for(let i=0;i<3;i++){
+    const a=tri[i],b=tri[(i+1)%3],key=[a.join(','),b.join(',')].sort().join('|');
+    if(edges.has(key))edges.delete(key);else edges.set(key,[a,b]);
+  }
+  const lines=[];
+  for(const [a,b] of edges.values())lines.push(a[0],a[1]+.004,a[2],b[0],b[1]+.004,b[2]);
+  const outline=new T.BufferGeometry();outline.setAttribute('position',new T.Float32BufferAttribute(lines,3));
+  scene.add(new T.LineSegments(outline,new T.LineBasicMaterial({color:0x81a69c})));
+  const outside=new T.Mesh(new T.PlaneGeometry(180,180),new T.MeshBasicMaterial({color:0xe9edef}));
+  outside.rotation.x=-Math.PI/2;outside.position.y=-.12;scene.add(outside);
   const {body,legs}=await model();scene.add(body);
   const target=new T.Group(),red=new T.MeshStandardMaterial({color:0xc45239});target.position.fromArray(floor.target);scene.add(target);
   const can=new T.Mesh(new T.CapsuleGeometry(.087,.28,6,16),red);target.add(can);const cap=new T.Mesh(new T.BoxGeometry(.14,.035,.05),new T.MeshStandardMaterial({color:0x333e35}));cap.position.y=.26;target.add(cap);
   const ring=new T.Mesh(new T.RingGeometry(.27,.31,36),new T.MeshBasicMaterial({color:0xce7854,side:T.DoubleSide}));ring.rotation.x=-Math.PI/2;ring.position.y=-.27;target.add(ring);
+  const registry=registeredGoals(floor);
+  await addIndoorGoals(world,scene,registry);
+  let plan,route,goal,goalKey,guided,useDetector,startPose,log=[],recordURL,remainingViews,dwell,blockedSteps;
+  function clearRecord(){
+    $('#live-record').hidden=true;if(recordURL)URL.revokeObjectURL(recordURL);recordURL=null;
+  }
+  function record(result){
+    const json={goal:goalKey,controller:guided?'semantic map + RGB':'H4',stopModel:useDetector?'YOLOE + three observations':'H4',start:startPose,
+      stopPose:pose.toArray(),duration:steps*dt,travel,blockedSteps,log,...result};
+    recordURL=URL.createObjectURL(new Blob([JSON.stringify(json)],{type:'application/json'}));
+    $('#live-record').href=recordURL;$('#live-record').hidden=false;
+  }
   const breadcrumb=new T.Line(new T.BufferGeometry(),new T.LineBasicMaterial({color:0x478267}));scene.add(breadcrumb);
   let angle=.78,tilt=.68,dist=2.8,drag=null,pose,yaw,steps=0,travel=0,paused=false,finished=false,generation=0,worker,controller,trail=[],timer;
   const redraw=()=>{if(!pose)return;const w=canvas.clientWidth,h=canvas.clientHeight;draw.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix();const focus=new T.Vector3(pose.x,pose.y+.17,pose.z);cam.position.set(focus.x+dist*Math.cos(tilt)*Math.sin(angle),focus.y+dist*Math.sin(tilt),focus.z+dist*Math.cos(tilt)*Math.cos(angle));cam.lookAt(focus);draw.render(scene,cam);};
@@ -61,42 +82,68 @@ export async function init(floor, getStart, onPose){
       view();const pixels=ctx.getImageData(0,0,192,144).data.buffer;
       semanticContext.drawImage(eye,0,0,320,240);
       const semantic=semanticContext.getImageData(0,0,320,240).data.buffer;
-      const {action}=await ask(worker,{type:'frame',pixels,semantic},controller.signal,[pixels,semantic]);if(id!==generation)return;
+      let action,match=null,seen=[];
+      if(useDetector){
+        const d=await ask(worker,{type:'frame',pixels:semantic,t:steps*dt},controller.signal,[semantic]);
+        if(id!==generation)return;
+        match=d.match;seen=d.boxes;action=followRoute(route,pose.toArray(),yaw,goal,!!match);
+      }else{
+        const d=await ask(worker,{type:'frame',pixels,semantic},controller.signal,[pixels,semantic]);
+        if(id!==generation)return;
+        action=guided?followRoute(route,pose.toArray(),yaw,goal,!!d.action[2]):d.action;
+      }
+      log.push({t:steps*dt,xyz:pose.toArray(),yaw,action,boxes:seen});
       $('#elapsed').textContent=(steps*dt).toFixed(2)+' s';const [f,r,stop]=action;
       if(stop){
         // Render target IDs against full scene depth, with the same camera and pose.
         const originals=new Map(),yes=new T.MeshBasicMaterial({color:0xffffff,side:T.DoubleSide}),no=new T.MeshBasicMaterial({color:0,side:T.DoubleSide});
-        world.traverse(o=>{if(o.isMesh){originals.set(o,o.material);o.material=o.name.startsWith('registered_C')?yes:no;}});
+        world.traverse(o=>{if(o.isMesh){originals.set(o,o.material);o.material=(goalKey==='extinguisher'?o.name.startsWith('registered_C'):o.userData.goal===goalKey)?yes:no;}});
         capture.render(world,onboard);const label=document.createElement('canvas');label.width=192;label.height=144;
-        const g=label.getContext('2d');g.drawImage(capture.domElement,0,0);const masks=g.getImageData(0,0,192,144).data;let visible=0;
-        for(let j=0;j<masks.length;j+=4)if(masks[j]>120)visible++;
+        const g=label.getContext('2d');g.drawImage(capture.domElement,0,0);const masks=g.getImageData(0,0,192,144).data;let visible=0,overlap=0;
+        for(let j=0;j<masks.length;j+=4)if(masks[j]>120){
+          visible++;if(match){const x=((j/4)%192+.5)*320/192,y=(Math.floor(j/4/192)+.5)*240/144;
+          const [l,t,w,h]=match.box;if(x>=l&&x<l+w&&y>=t&&y<t+h)overlap++;}
+        }
         originals.forEach((m,o)=>o.material=m);yes.dispose();no.dispose();
-        const range=viewpointRange(floor.tris,pose.toArray(),floor.views);
+        const range=viewpointRange(floor.tris,pose.toArray(),goal.views);
         const metric=range.kind==='within'?'관측점까지 바닥 경로 '+range.distance.toFixed(2)+' m':
           range.kind==='outside'?'관측점 0.8 m 밖':'관측점 거리 미확정';
-        outcome('STOP · '+(visible>=8?'소화기 C가 보임':'소화기 C가 보이지 않음')+' · '+metric);return;
+        const same=visible>=8&&(!useDetector||overlap/visible>=.5);
+        record({stop:true,visible,overlap,box:match?.box,score:match?.score,range,success:same&&range.kind==='within'&&blockedSteps<3,photo:eye.toDataURL('image/png')});
+        outcome('STOP · '+goal.label+' '+goal.id+(same?' 확인':' 미확인')+' · '+metric);return;
       }
+      if(guided&&route.length===1&&Math.hypot(pose.x-route[0][0],pose.z-route[0][2])<.19&&Math.abs(r)<.15){
+        if(++dwell>=8){
+          remainingViews=remainingViews.filter(v=>v!==route.at(-1));
+          route=plan(pose.toArray(),remainingViews);dwell=0;
+          if(!route){record({stop:false,success:false});outcome('관측점 탐색 종료 · 목표 미확인');return;}
+        }
+      }else dwell=0;
       const count=4;let blocked=false;for(let i=0;i<count;i++){
         const turn=r*dt/count,mid=yaw+turn/2;yaw+=turn;const dx=-Math.sin(mid)*f*dt/count,dz=-Math.cos(mid)*f*dt/count;
         const x=pose.x+dx,z=pose.z+dz,y=floorHeight(floor.tris,x,z);
-        if(y!==null){pose.set(x,y,z);travel+=Math.hypot(dx,dz);}else blocked=true;
+        if(y!==null&&!crossesObject(pose.x,pose.z,x,z)&&Number.isFinite(directFloorLength(floor.tris,pose.toArray(),[x,y,z]))){pose.set(x,y,z);travel+=Math.hypot(dx,dz);}else blocked=true;
       }
+      if(blocked){blockedSteps++;if(blockedSteps>=3){record({stop:false,success:false});outcome('주행 경계에 3회 도달');return;}}
       for(const {hip,knee,phase} of legs){const d=f>0?.27*Math.sin(travel*19)*phase:0;hip.rotation.y=.79+d;knee.rotation.y=-1.54+Math.max(0,-d)*1.4;}
       if(f>.001){trail.push(new T.Vector3(pose.x,pose.y+.025,pose.z));breadcrumb.geometry.dispose();breadcrumb.geometry=new T.BufferGeometry().setFromPoints(trail);}
-      steps++;$('#live-state').textContent=blocked?'주행 경계':f>.001?'전진':r>0?'좌회전':'우회전';
-      if(steps>=240){view();outcome('60초 주행 종료');return;}timer=setTimeout(()=>tick(id),250/Number($('#rate').value));
+      steps++;$('#live-state').textContent=blocked?'주행 경계':f>.001?'전진':r>.01?'좌회전':r<-.01?'우회전':'목표 확인 중';
+      if(steps>=240){view();record({stop:false,success:false});outcome('60초 주행 종료');return;}timer=setTimeout(()=>tick(id),250/Number($('#rate').value));
     }catch(e){if(id===generation)outcome(e.message);}
   }
   async function reset(){
-    $('#rerun').disabled=false;const id=++generation;controller?.abort();worker?.terminate();clearTimeout(timer);controller=new AbortController();worker=new Worker(new URL('../h4/worker.mjs',import.meta.url),{type:'module'});
-    const start=getStart();pose=new T.Vector3(...start.xyz);yaw=start.yaw;steps=travel=0;paused=finished=false;trail=[pose.clone()];breadcrumb.geometry.dispose();breadcrumb.geometry=new T.BufferGeometry();legs.forEach(l=>{l.hip.rotation.y=.79;l.knee.rotation.y=-1.54;});
+    $('#rerun').disabled=false;const id=++generation;controller?.abort();worker?.terminate();clearTimeout(timer);controller=new AbortController();goalKey=$('#live-goal').value;goal=registry[goalKey];guided=$('#live-mode').value==='map';useDetector=goalKey!=='extinguisher';
+    worker=new Worker(new URL(useDetector?'./goal-worker.mjs':'../h4/worker.mjs',import.meta.url),{type:'module'});
+    clearRecord();log=[];blockedSteps=0;
+    const start=getStart();startPose={xyz:[...start.xyz],yaw:start.yaw};pose=new T.Vector3(...start.xyz);yaw=start.yaw;steps=travel=0;paused=finished=false;trail=[pose.clone()];breadcrumb.geometry.dispose();breadcrumb.geometry=new T.BufferGeometry();legs.forEach(l=>{l.hip.rotation.y=.79;l.knee.rotation.y=-1.54;});
     $('#elapsed').textContent='0.00 s';$('#hold').textContent='일시 정지';$('#hold').disabled=false;$('#live-state').textContent='정책 준비 중';view();
-    try{await ask(worker,{type:'start'},controller.signal);if(id===generation)tick(id);}catch(e){if(id===generation)outcome(e.message);}
+    if(guided){plan??=buildPlanner(floor);remainingViews=[...goal.views];dwell=0;route=plan(start.xyz,remainingViews);if(!route){outcome('이 출발점에서 관측점까지 연결된 경로가 없습니다.');return;}}
+    try{await ask(worker,{type:'start',goal:goalKey,w:320,h:240},controller.signal);if(id===generation)tick(id);}catch(e){if(id===generation)outcome(e.message);}
   }
   $('#hold').onclick=()=>{paused=!paused;$('#hold').textContent=paused?'계속 주행':'일시 정지';};
   $('#rerun').onclick=reset;$('.chipcam').hidden=false;
   function preview(){
-    generation++; controller?.abort(); worker?.terminate(); clearTimeout(timer); finished=true;
+    clearRecord();generation++; controller?.abort(); worker?.terminate(); clearTimeout(timer); finished=true;
     const start=getStart(); pose=new T.Vector3(...start.xyz); yaw=start.yaw;
     breadcrumb.geometry.dispose(); breadcrumb.geometry=new T.BufferGeometry();
     $('#elapsed').textContent='0.00 s'; $('#hold').disabled=true; $('#rerun').disabled=true;

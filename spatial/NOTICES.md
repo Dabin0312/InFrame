@@ -26,3 +26,11 @@ The camera sees the textured castle scan and the registered Poly Haven target. T
 - Skokloster Castle and extinguisher C. Web assets use compressed geometry and resized textures. [Source and original licenses](../DATA-NOTICES.md)
 - Unitree Robotics Go2 visual meshes from MuJoCo Menagerie, BSD-3-Clause. OBJ parts and XML hierarchy converted to glTF. [Corresponding model](https://github.com/google-deepmind/mujoco_menagerie/tree/98a70c569c4c1b6da467a20012f766ee1f8dc521/unitree_go2) · [License](LICENSE-go2.txt)
 - Three.js 0.187.0, MIT, and meshoptimizer, MIT. [Three.js](https://github.com/mrdoob/three.js) · [License](LICENSE-three.txt) · [meshoptimizer](https://github.com/zeux/meshoptimizer) · [License](LICENSE-meshopt.txt)
+
+## Multi-goal extension
+
+The chair and bin are placed once in the Castle scene. Both RGB and the overview render their geometry. Models are scaled, repositioned, texture-resized and meshopt-compressed for the browser. [Plastic Monobloc Chair](https://polyhaven.com/a/plastic_monobloc_chair_01) · [Metal Trash Can](https://polyhaven.com/a/metal_trash_can) · [Poly Haven CC0 license](https://polyhaven.com/license)
+
+The two additional video examples are OpenDriveLab SparseVideoNav recordings `3120aeb0b735e436` (gallery chair) and `067e8e394345e3cb` (elevator bins). Resized recordings and derived frames are distributed under CC BY-NC-SA 4.0. [Dataset revision](https://huggingface.co/datasets/OpenDriveLab/SparseVideoNav/tree/c986feef0f63cd688d8b0835320516dd9aa76280) · [License](https://creativecommons.org/licenses/by-nc-sa/4.0/)
+
+The two-channel indoor detector uses the same YOLOE-11s weights, text encoder and AGPL-3.0 terms listed above. Rebuild with `python export-detector.py --indoor --output indoor.onnx`. Channel 0 is chair and channel 1 is trash can.

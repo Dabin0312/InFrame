@@ -1,3 +1,4 @@
+import {registeredGoals,occupied} from './goals.mjs';
 import {floorHeight} from './navmesh.mjs';
 
 const ns = 'http://www.w3.org/2000/svg';
@@ -15,10 +16,16 @@ export function startMap(svg, floor, onPick, onInvalid) {
   svg.setAttribute('viewBox', [x0, z0, width, height].join(' '));
   const paths = floor.tris.map(tri => 'M' + tri.map(([x,,z]) => x + ',' + z).join('L') + 'Z');
   svg.append(shape('path', {d:paths.join(''), fill:'#b7d8cf', stroke:'#b7d8cf', 'stroke-width':.035}));
-  const [gx,,gz] = floor.target;
-  svg.append(shape('circle', {cx:gx, cy:gz, r:.37, fill:'#bb5232', stroke:'white', 'stroke-width':.12}));
-  const label = shape('text', {x:gx+.55, y:gz+.24, fill:'#913d22', 'font-size':.85, 'font-weight':700});
-  label.textContent = 'C'; svg.append(label);
+  const pins=new Map();
+  for(const [key,g] of Object.entries(registeredGoals(floor))){
+    const [x,,z]=g.xyz,group=shape('g',{'aria-label':g.label});
+    if(g.radius)svg.append(shape('circle',{cx:x,cy:z,r:g.radius,fill:'#e9edef'}));
+    const dot=shape('circle',{cx:x,cy:z,r:.30,fill:'#a74827',stroke:'white','stroke-width':.12});
+    const label=shape('text',{x:x+.43,y:z+.24,fill:'#793b23','font-size':.78,'font-weight':700});
+    label.textContent=g.id;group.append(dot,label);svg.append(group);pins.set(key,group);
+  }
+  function highlight(key){for(const [k,g] of pins)g.setAttribute('opacity',k===key?'1':'.4');}
+  highlight('extinguisher');
   const start = shape('circle', {r:.32, fill:'white', stroke:'#126e64', 'stroke-width':.14});
   const robot = shape('path', {d:'M0,-.58 L.37,.38 L0,.18 L-.37,.38 Z', fill:'#084b48', stroke:'white', 'stroke-width':.08});
   svg.append(start, robot);
@@ -33,7 +40,7 @@ export function startMap(svg, floor, onPick, onInvalid) {
   }
   function pick(x,z) {
     const y = floorHeight(floor.tris,x,z);
-    if (y === null) { onInvalid(); return; }
+    if (y === null || occupied(x,z)) { onInvalid(); return; }
     onPick([x,y,z]);
   }
   svg.addEventListener('click', event => {
@@ -47,5 +54,5 @@ export function startMap(svg, floor, onPick, onInvalid) {
     const delta = deltas[event.key]; if (!delta) return;
     event.preventDefault(); pick(cursor[0]+delta[0],cursor[1]+delta[1]);
   });
-  return {select, pose};
+  return {select, pose, highlight};
 }

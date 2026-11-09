@@ -1,3 +1,4 @@
+import {goals} from './goals.mjs';
 import {startMap} from './start-map.mjs';
 
 const el = id => document.getElementById(id);
@@ -14,7 +15,7 @@ async function setup() {
   const map = startMap(el('start-map'), floor, xyz => {
     select({id:'custom', xyz, yaw:heading.value==='recorded' ? 0 : Number(heading.value)}, 'custom');
   }, () => {
-    status.textContent = '벽과 지도 바깥에서는 출발할 수 없어요. 색이 칠해진 바닥을 선택하세요.';
+    status.textContent = '물체나 주행 경계 바깥에서는 출발할 수 없어요. 색이 칠해진 바닥을 선택하세요.';
   });
   function select(start, choice) {
     selected = start;
@@ -39,6 +40,16 @@ async function setup() {
     }
     return preparing;
   }
+  const goalMenu=el('live-goal'),mode=el('live-mode');
+  function changeGoal(){
+    const key=goalMenu.value,g=goals[key];
+    if(key!=='extinguisher')mode.value='map';
+    mode.options[1].disabled=key!=='extinguisher';
+    map.highlight(key);el('goal-legend').textContent=g.label+' '+g.id;
+    el('policy-name').textContent=mode.value==='h4'?'H4 STUDENT POLICY':'SEMANTIC MAP + RGB';
+    if(runtime){launch.hidden=false;launch.querySelector('strong').textContent='▶　여기서 주행';runtime.preview();}
+  }
+  goalMenu.onchange=mode.onchange=changeGoal;changeGoal();
   presets.onchange = () => select(floor.starts[Number(presets.value)],presets.value);
   heading.onchange = () => select({id:'custom',xyz:selected.xyz,yaw:Number(heading.value)},'custom');
   select(floor.starts[0],'0');

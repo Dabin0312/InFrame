@@ -17,7 +17,7 @@ export function floorHeight(tris,x,z) {
 
 // Clip the direct X/Z segment to each triangle. A continuous chain across the
 // floor gives a traversable upper bound on the shortest path to this viewpoint.
-function directFloorLength(tris, start, end) {
+export function directFloorLength(tris, start, end) {
   const spans=[];
   for(const tri of tris) {
     const a=barycentric(tri,start[0],start[2]), b=barycentric(tri,end[0],end[2]);

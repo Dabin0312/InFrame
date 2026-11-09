@@ -6,7 +6,10 @@ InFrame은 지정된 종류의 물체가 보이는 자리까지 이동하고, �
 
 [Project page](https://dabin0312.github.io/InFrame/) · [Try your own data](https://dabin0312.github.io/InFrame/demo/) · [주행 영상](https://dabin0312.github.io/InFrame/#run) · [Data & models](https://github.com/Dabin0312/InFrame/releases/tag/v0.7.0)
 
-<picture><img src="project/framework.png" alt="전시장 의자 H1의 RGB·SLAM 지도·정지 사진과 Castle 쓰레기통 B의 경로·속도 명령·정지 사진"></picture>
+<picture>
+  <source media="(max-width: 700px)" srcset="project/framework-mobile.png">
+  <img src="project/framework.png" alt="InFrame의 영상 입력, SLAM·의미 지도, Castle 교사 시범, 소화기 H4 학습과 Go2 모의 연결. 의자·쓰레기통은 NavMesh 주행과 YOLOE 연속 관측으로 정지한다.">
+</picture>
 
 ## Try your own data
 
@@ -15,6 +18,12 @@ InFrame은 지정된 종류의 물체가 보이는 자리까지 이동하고, �
 촬영한 MP4를 선택하면 카메라 영상, 그 영상에서 복원한 단안 SLAM 지도, 정지 장면을 함께 볼 수 있습니다. 지도에서 물체 ID를 선택하면 관측한 프레임으로 이동합니다. 의자·쓰레기통은 YOLOE의 범주별 출력과 동일 개체의 연속 관측으로 정지 장면을 고릅니다. 기존 H4와 실영상으로 정지 행동을 학습한 H4의 첫 STOP을 비교할 수 있습니다. 영상은 브라우저에서 처리하며 관측과 지도는 JSON으로 저장할 수 있습니다.
 
 [전시장 의자 영상 실행](https://dabin0312.github.io/InFrame/demo/?goal=chair&example=chair) · [엘리베이터 앞 쓰레기통 영상 실행](https://dabin0312.github.io/InFrame/demo/?goal=bin&example=bin) · [동일 출발점 세 목표의 경로와 정지 사진](https://dabin0312.github.io/InFrame/#goal-comparison) · [검증 수치와 경로 좌표](project/goal-runs.json)
+
+## 지원 목표
+
+현재 업로드 영상과 Castle 데모에서 선택할 수 있는 목표는 소화기·의자·쓰레기통입니다. YOLOE의 텍스트 프롬프트는 ONNX를 내보낼 때 고정합니다. H4의 목표 임베딩은 소화기 한 종류로 학습했습니다. Castle에서 의자·쓰레기통은 등록 관측점까지 경로를 추종하고, YOLOE가 같은 개체를 세 번 연속 확인하면 정지합니다. 업로드 영상에서는 녹화 경로에서 첫 STOP을 판독합니다. [목표 등록](spatial/goals.mjs) · [검출기 내보내기](spatial/export-detector.py) · [H4 목표 사전](outputs/InFrame_5단계/src/policy.py)
+
+예를 들어 화분을 추가하려면 화분 프롬프트를 포함한 검출기를 내보내고 목표 목록과 클래스 채널을 연결한 뒤 영상에서 위치와 정지를 검증합니다. Castle 주행에는 화분 모델·지도 좌표·관측점도 필요합니다. H4로 화분까지 주행하려면 화분 교사 시범과 정지 학습 자료로 정책을 확장하고 새 출발점에서 검증해야 합니다.
 
 ## Method
 

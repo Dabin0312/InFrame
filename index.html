@@ -21,9 +21,18 @@
 <div class="transport"><button id="play" disabled class="play" aria-label="주행 재생">▶</button><output id="clock">0:00</output><input id="seek" disabled type="range" min="0" max="69" step="0.05" value="0" aria-label="주행 시점"><span class="end-time">0:17</span><button id="end" disabled class="end-button">정지 장면 ↗</button></div>
 <figcaption><b>Skokloster Castle</b><span>FRESH–015 · RGB 정책 주행 5.58 m · 첫 STOP 17.25초</span></figcaption></figure>
 </section>
-<section class="brief"><h2>ObjectNav</h2><div><p>“이 물체를 찾아 보여줘.” InFrame의 과제는 지정된 종류의 물체가 보이는 위치까지 이동해 사진을 남기는 것입니다. 지도에 등록한 개체 ID를 마지막 카메라 프레임과 대조하면, 로봇이 어느 물체 앞에서 멈췄는지 확인할 수 있습니다.</p><p>첫 검증 대상은 <b>소화기</b>입니다. Castle에서는 소화기·의자·쓰레기통이 같은 공간에 놓여 있습니다. 목표를 바꿔 각각의 주행과 정지 사진을 비교할 수 있습니다.</p></div></section>
+<section class="brief"><h2>ObjectNav</h2><div><p>“이 물체를 찾아 보여줘.” InFrame의 과제는 지정된 종류의 물체가 보이는 위치까지 이동해 사진을 남기는 것입니다. 지도에 등록한 개체 ID를 마지막 카메라 프레임과 대조하면, 로봇이 어느 물체 앞에서 멈췄는지 확인할 수 있습니다.</p><p>현재 선택할 수 있는 목표는 <b>소화기·의자·쓰레기통</b>입니다. H4가 학습한 목표는 소화기입니다. 의자와 쓰레기통은 Castle 지도에 등록한 관측점까지 이동한 뒤 전방 카메라로 목표를 확인해 멈춥니다.</p></div></section>
 <section class="band method" id="method" aria-labelledby="method-title">
-<header><p class="kicker">APPROACH</p><h2 id="method-title">시스템 프레임워크</h2></header>
+<header><h2 id="method-title">시스템 프레임워크</h2></header>
+<figure class="system-plate">
+  <picture>
+    <source media="(max-width: 700px)" srcset="project/framework-mobile.png">
+    <img src="project/framework.png?v=architecture" width="2520" height="1512" loading="lazy"
+         alt="Fire RGB-D는 ORB-SLAM3 자세와 Grounding DINO·SAM 2.1 마스크로 의미 지도를 구성한다. 업로드 영상은 AlvaAR와 YOLOE로 개체 위치를 삼각측량한다. Habitat 지도 교사의 Castle 소화기 성공 시범 297개로 CNN·GRU 기반 H4를 학습해 전진·회전·STOP을 Go2 모의 어댑터에 전달했다. 브라우저 H4에는 실영상 학습 정지 헤드를 추가했다. 의자·쓰레기통은 지도 기반 주행과 YOLOE 연속 관측으로 정지한다.">
+  </picture>
+</figure></section>
+<section class="band method" id="approach" aria-labelledby="approach-title">
+<header><h2 id="approach-title">접근 순서</h2></header>
 <div class="fw-board">
 <section class="fw-lane" aria-labelledby="fw-map-title">
 <header class="fw-head"><div><span class="fw-letter" aria-hidden="true">A</span><h3 id="fw-map-title">영상에서 물체의 위치를 찾기</h3></div><span>실제 영상 · 전시장</span></header>

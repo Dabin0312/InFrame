@@ -10,7 +10,7 @@ async function setup() {
   floor.starts.forEach((s,i) => presets.add(new Option(s.id,i)));
   const custom = new Option('직접 선택','custom');
   custom.disabled = true; presets.add(custom);
-  let selected, runtime, pending = false;
+  let selected, runtime, preparing, pending = false;
   const map = startMap(el('start-map'), floor, xyz => {
     select({id:'custom', xyz, yaw:heading.value==='recorded' ? 0 : Number(heading.value)}, 'custom');
   }, () => {
@@ -29,22 +29,35 @@ async function setup() {
       launch.hidden = false;
       launch.querySelector('strong').textContent = '▶　여기서 주행';
       runtime.preview();
-      launch.classList.add('ready-preview');
     }
+  }
+  async function prepare(){
+    if(runtime) return runtime;
+    if(!preparing) {
+      preparing=import('./live.mjs').then(({init})=>init(floor,()=>selected,map.pose))
+        .then(scene=>{runtime=scene;return scene;}).catch(error=>{preparing=null;throw error;});
+    }
+    return preparing;
   }
   presets.onchange = () => select(floor.starts[Number(presets.value)],presets.value);
   heading.onchange = () => select({id:'custom',xyz:selected.xyz,yaw:Number(heading.value)},'custom');
   select(floor.starts[0],'0');
+  launch.classList.add('ready-preview');
   launch.disabled = false;
+  // Show the camera at the chosen pose as soon as the demo comes into view.
+  const observer=new IntersectionObserver(entries=>{
+    if(!entries.some(e=>e.isIntersecting)) return;
+    observer.disconnect();
+    prepare().catch(error=>{el('live-state').textContent=error.message;});
+  },{rootMargin:'150px'});
+  observer.observe(launch);
   launch.onclick = async () => {
     if (pending) return;
     pending = true;
     launch.querySelector('strong').textContent = '정책을 불러오는 중…';
     try {
-      if (!runtime) {
-        const {init} = await import('./live.mjs');
-        runtime = await init(floor, () => selected, map.pose);
-      } else runtime.reset();
+      const scene=await prepare();
+      scene.reset();
       launch.hidden = true;
     } catch (error) {
       el('live-state').textContent = error.message;

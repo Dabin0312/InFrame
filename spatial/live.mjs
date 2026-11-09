@@ -94,7 +94,7 @@ export async function init(floor, getStart, onPose){
     try{await ask(worker,{type:'start'},controller.signal);if(id===generation)tick(id);}catch(e){if(id===generation)outcome(e.message);}
   }
   $('#hold').onclick=()=>{paused=!paused;$('#hold').textContent=paused?'계속 주행':'일시 정지';};
-  $('#rerun').onclick=reset;$('#rerun').disabled=false;$('.chipcam').hidden=false;
+  $('#rerun').onclick=reset;$('.chipcam').hidden=false;
   function preview(){
     generation++; controller?.abort(); worker?.terminate(); clearTimeout(timer); finished=true;
     const start=getStart(); pose=new T.Vector3(...start.xyz); yaw=start.yaw;
@@ -102,5 +102,5 @@ export async function init(floor, getStart, onPose){
     $('#elapsed').textContent='0.00 s'; $('#hold').disabled=true; $('#rerun').disabled=true;
     $('#live-state').textContent='출발 대기'; view();
   }
-  reset();return {reset,preview};
+  preview();return {reset,preview};
 }

@@ -22,10 +22,25 @@
 <figcaption><b>Skokloster Castle</b><span>FRESH–015 · RGB 정책 주행 5.58 m · 첫 STOP 17.25초</span></figcaption></figure>
 </section>
 <section class="brief"><h2>ObjectNav</h2><div><p>“이 물체를 찾아 보여줘.” InFrame의 과제는 지정된 종류의 물체가 보이는 위치까지 이동해 사진을 남기는 것입니다. 지도에 등록한 개체 ID를 마지막 카메라 프레임과 대조하면, 로봇이 어느 물체 앞에서 멈췄는지 확인할 수 있습니다.</p><p>첫 검증 대상은 <b>소화기</b>입니다. Castle에서는 소화기·의자·쓰레기통이 같은 공간에 놓여 있습니다. 목표를 바꿔 각각의 주행과 정지 사진을 비교할 수 있습니다.</p></div></section>
-<section class="band method" id="method"><div class="section-top"><div><p class="kicker">APPROACH</p><h2>시스템 프레임워크</h2></div><a class="plain" href="https://www.figma.com/design/51O4U6yauUxvwLy8aRX9rI/InFrame?node-id=2-2">Figma 원본 ↗</a></div>
-<p class="section-desc">훈련할 때는 지도에 등록된 관측점이 교사의 목적지가 됩니다. 주행할 때 학생 정책은 최근 카메라 영상 네 장으로 전진·회전·정지를 결정합니다.</p>
-<figure class="framework"><a href="project/framework.png" aria-label="프레임워크 원본 이미지 크게 보기"><img src="project/framework.png" loading="lazy" width="1600" height="1084" alt="영상과 카메라 자세로 개체 ID를 지도에 등록하고, Castle 교사 시범으로 H4를 학습한다. 최근 RGB 네 장을 받은 정책은 이동 또는 정지를 출력한다. Go2 모의 명령은 검증했고 실기 시험은 예정돼 있다."></a><figcaption><span>실내 영상 → 의미 지도와 교사 시범 → RGB 정책 → Go2</span><a href="project/framework.png">그림 확대 ↗</a></figcaption></figure>
-<div class="method-notes"><div><h3>지도와 시범</h3><p>Fire에서는 RGB-D로 복원한 공간의 통과 가능 구역과 개체 위치를 확인했습니다. 더 넓은 Castle 장면에서는 지도 기반 교사가 297개의 성공 시범을 만들었습니다.</p></div><div><h3>행동과 정지</h3><p>H4는 초당 네 번 행동을 출력합니다. 실영상으로 학습한 정지 헤드가 최근 관측에서 목표의 위치·크기·검출 점수를 읽어 첫 STOP을 결정합니다.</p></div><div><h3>Go2 배포</h3><p>v0.7 모의 어댑터에서 속도 제한과 카메라 단절 시 정지 명령을 검증했습니다. 실기에서는 카메라 지연, 실제 제동거리와 정지 사진의 목표 가시성을 측정합니다.</p></div></div></section>
+<section class="band method" id="method" aria-labelledby="method-title">
+<header><p class="kicker">APPROACH</p><h2 id="method-title">시스템 프레임워크</h2></header>
+<div class="fw-board">
+<section class="fw-lane" aria-labelledby="fw-map-title">
+<header class="fw-head"><div><span class="fw-letter" aria-hidden="true">A</span><h3 id="fw-map-title">영상에서 물체의 위치를 찾기</h3></div><span>실제 영상 · 전시장</span></header>
+<ol class="fw-steps">
+<li><figure><div class="fw-art"><img src="project/fw-gallery-input.jpg" width="640" height="480" alt="전시장 영상 12초 프레임. 그림이 걸린 가벽 사이로 촬영자가 이동한다." loading="lazy"><span class="fw-stamp">12.00 s</span></div><figcaption><b>실내 RGB 영상</b><span>카메라가 전시장을 가로질러 의자가 놓인 벽으로 다가갑니다.</span></figcaption></figure></li>
+<li><figure><div class="fw-art"><img src="project/fw-gallery-map.svg" width="360" height="270" alt="같은 영상의 AlvaAR 특징점, 첫 정지까지의 카메라 궤적, 의자 H1의 삼각측량 위치를 위에서 본 지도." loading="lazy"></div><figcaption><b>SLAM 궤적과 개체 지도</b><span>AlvaAR 특징점과 카메라 궤적을 위에서 본 지도입니다. H1은 여러 시점으로 추정한 의자 위치이며, 단위는 상대 척도입니다.</span></figcaption></figure></li>
+<li><figure><div class="fw-art"><img src="project/fw-gallery-stop.jpg" width="640" height="480" alt="28초 첫 STOP 원본 프레임. 지도에서 H1로 등록한 의자가 화면 중앙에 보인다." loading="lazy"><span class="fw-box" aria-hidden="true"><i>H1</i></span><span class="fw-stamp">STOP · 28.00 s</span></div><figcaption><b>지도와 연결된 정지 사진</b><span>YOLOE가 같은 의자를 연속으로 확인한 첫 STOP입니다. 상자는 그 시점의 검출 범위입니다.</span></figcaption></figure></li>
+</ol></section>
+<section class="fw-lane" aria-labelledby="fw-nav-title">
+<header class="fw-head"><div><span class="fw-letter" aria-hidden="true">B</span><h3 id="fw-nav-title">지정한 물체까지 주행하기</h3></div><span>시뮬레이션 · Skokloster Castle</span></header>
+<ol class="fw-steps">
+<li><figure><div class="fw-art"><img src="project/fw-castle-route.svg" width="360" height="270" alt="Castle의 주행 가능 영역 위에 실제 시뮬레이션 경로를 그린 지도. 로봇의 STOP 위치와 쓰레기통 B는 서로 다른 점이다." loading="lazy"></div><figcaption><b>목표 선택과 경로</b><span>쓰레기통 B를 선택한 주행입니다. 로봇은 FRESH-015에서 출발해 등록된 관측점으로 향합니다.</span></figcaption></figure></li>
+<li><figure><div class="fw-art"><img src="project/fw-castle-actions.svg" width="360" height="270" alt="동일 주행의 전진 속도와 회전 속도 명령 그래프. 16.75초에 두 명령이 모두 0이 되고 STOP이 기록된다." loading="lazy"></div><figcaption><b>전진·회전 명령</b><span>0.25초마다 기록한 속도 명령입니다. 처음에는 방향을 틀고, 목표 앞에서는 전진을 멈춰 시야를 맞춥니다.</span></figcaption></figure></li>
+<li><figure><div class="fw-art"><img src="project/castle-bin-stop.jpg" width="192" height="144" alt="가상 로봇이 9.47 m 이동한 뒤 멈췄을 때의 전방 RGB. 화면 중앙에 금속 쓰레기통 B가 보인다." loading="lazy"><span class="fw-stamp">STOP · 16.75 s</span></div><figcaption><b>로봇 시점의 정지 사진</b><span>9.47 m 이동한 뒤의 전방 RGB입니다. B가 보이고 로봇과 지정 관측점 사이의 거리는 0.11 m입니다.</span></figcaption></figure></li>
+</ol></section>
+<aside class="fw-policy" aria-label="소화기 H4 학습과 Go2 연결"><div><small>TRAIN</small><h3>지도 기반 교사</h3><p>Castle의 등록 관측점까지 도달한 성공 시범 297개로 소화기 탐색 정책을 학습했습니다.</p></div><div><small>INFER</small><h3>H4 학생 정책</h3><p>최근 RGB 네 장으로 이동을 결정하고, 실영상으로 학습한 정지 헤드가 첫 STOP을 선택합니다.</p></div><div><small>DEPLOY</small><h3>Go2 모의 어댑터</h3><p>속도 제한과 카메라 단절 시 정지 명령을 검증했습니다. 실제 기체의 제동거리는 아직 측정하지 않았습니다.</p></div></aside>
+</div></section>
 <section class="band" id="mapping"><div class="section-top"><div><p class="kicker">SEMANTIC MAP · 7-SCENES FIRE</p><h2>사진 속 물체를 3D 지도에서 찾기</h2></div><div class="switch" role="group" aria-label="소화기 선택"><button data-id="A" aria-pressed="true">A</button><button data-id="B" aria-pressed="false">B</button></div></div><p class="section-desc">같은 종류의 물체에도 서로 다른 ID를 부여합니다. A와 B를 선택하면 Fire 장면의 두 소화기 중 같은 개체가 사진과 점군에서 함께 강조됩니다.</p>
 <div class="pair"><div class="photo"><img src="project/fire.jpg" alt="표지판 뒤에 소화기 두 대가 놓인 Fire 원본 프레임"><span class="box" id="bbox"><b>A</b></span><span class="tag">RGB FRAME</span></div><div class="cloud-pane"><canvas id="cloud" width="640" height="480" aria-label="Fire의 실제 RGB-D 점군과 선택한 소화기"></canvas><span class="tag">SLAM POINT CLOUD</span><div id="coordinate" class="coord"></div></div></div></section>
 <section class="band" id="live"><div class="section-top"><div><p class="kicker">INTERACTIVE SIMULATION</p><h2>Go2 ObjectNav</h2></div></div><p class="section-desc">지도에서 출발 위치를 찍고 주행을 시작하세요. 같은 성 안에서 목표를 바꾸면 지도에 등록한 관측점으로 이동하고 전방 RGB로 물체를 확인해 멈춥니다.</p>

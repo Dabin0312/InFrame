@@ -6,9 +6,7 @@ InFrame은 지정된 종류의 물체가 보이는 자리까지 이동하고, �
 
 [Project page](https://dabin0312.github.io/InFrame/) · [Try your own data](https://dabin0312.github.io/InFrame/demo/) · [주행 영상](https://dabin0312.github.io/InFrame/#run) · [Data & models](https://github.com/Dabin0312/InFrame/releases/tag/v0.7.0)
 
-[![InFrame 시스템 프레임워크. 지도 구성, 교사 학습, RGB 정책, 모의 Go2와 실기 검증 계획](project/framework.png)](https://dabin0312.github.io/InFrame/#method)
-
-[편집용 Figma 원본](https://www.figma.com/design/51O4U6yauUxvwLy8aRX9rI/InFrame?node-id=2-2) · [영상과 같은 공간의 지도 보기](https://dabin0312.github.io/InFrame/#run)
+![전시장 의자 H1의 RGB·SLAM 지도·정지 사진과 Castle 쓰레기통 B의 경로·속도 명령·정지 사진](project/framework.png)
 
 ## Try your own data
 

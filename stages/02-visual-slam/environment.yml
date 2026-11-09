@@ -1,0 +1,14 @@
+name: inframe-slam
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10
+  - cmake=3.27
+  - ninja
+  - opencv=4.8
+  - eigen=3.4
+  - boost-cpp
+  - openssl
+  - pangolin-opengl=0.9.2
+  - ffmpeg
+  - pillow

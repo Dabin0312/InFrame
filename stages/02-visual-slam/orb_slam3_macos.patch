@@ -1,0 +1,248 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 016e743..6abea15 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -17,7 +17,7 @@ include(CheckCXXCompilerFlag)
+ CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
+ CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
+ if(COMPILER_SUPPORTS_CXX11)
+-   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
++   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
+    add_definitions(-DCOMPILEDWITHC11)
+    message(STATUS "Using flag -std=c++11.")
+ elseif(COMPILER_SUPPORTS_CXX0X)
+@@ -119,8 +119,8 @@ target_link_libraries(${PROJECT_NAME}
+ ${OpenCV_LIBS}
+ ${EIGEN3_LIBS}
+ ${Pangolin_LIBRARIES}
+-${PROJECT_SOURCE_DIR}/Thirdparty/DBoW2/lib/libDBoW2.so
+-${PROJECT_SOURCE_DIR}/Thirdparty/g2o/lib/libg2o.so
++${PROJECT_SOURCE_DIR}/Thirdparty/DBoW2/lib/libDBoW2.dylib
++${PROJECT_SOURCE_DIR}/Thirdparty/g2o/lib/libg2o.dylib
+ -lboost_serialization
+ -lcrypto
+ )
+diff --git a/Examples/Monocular/mono_tum.cc b/Examples/Monocular/mono_tum.cc
+index 0e7d922..5a8b3ed 100644
+--- a/Examples/Monocular/mono_tum.cc
++++ b/Examples/Monocular/mono_tum.cc
+@@ -47,7 +47,9 @@ int main(int argc, char **argv)
+     int nImages = vstrImageFilenames.size();
+ 
+     // Create SLAM system. It initializes all system threads and gets ready to process frames.
+-    ORB_SLAM3::System SLAM(argv[1],argv[2],ORB_SLAM3::System::MONOCULAR,true);
++    ORB_SLAM3::System SLAM(argv[1],argv[2],ORB_SLAM3::System::MONOCULAR,false);
++    ofstream trackingLog("TrackingStatus.csv");
++    trackingLog << "timestamp_s,state,big_map_change\n";
+     float imageScale = SLAM.GetImageScale();
+ 
+     // Vector for tracking time statistics
+@@ -107,6 +109,7 @@ int main(int argc, char **argv)
+ 
+         // Pass the image to the SLAM system
+         SLAM.TrackMonocular(im,tframe);
++        trackingLog << tframe << "," << SLAM.GetTrackingState() << "," << (SLAM.MapChanged() ? 1 : 0) << "\n";
+ 
+ #ifdef COMPILEDWITHC11
+         std::chrono::steady_clock::time_point t2 = std::chrono::steady_clock::now();
+@@ -150,6 +153,8 @@ int main(int argc, char **argv)
+ 
+     // Save camera trajectory
+     SLAM.SaveKeyFrameTrajectoryTUM("KeyFrameTrajectory.txt");
++    SLAM.SaveTrajectoryEuRoC("FrameTrajectoryEuRoC.txt");
++    SLAM.SaveMapPointsXYZ("MapPoints.xyz");
+ 
+     return 0;
+ }
+diff --git a/Thirdparty/DBoW2/DBoW2/FORB.cpp b/Thirdparty/DBoW2/DBoW2/FORB.cpp
+index 1f1990c..b78c2d1 100644
+--- a/Thirdparty/DBoW2/DBoW2/FORB.cpp
++++ b/Thirdparty/DBoW2/DBoW2/FORB.cpp
+@@ -13,7 +13,7 @@
+ #include <vector>
+ #include <string>
+ #include <sstream>
+-#include <stdint-gcc.h>
++#include <cstdint>
+ 
+ #include "FORB.h"
+ 
+diff --git a/Thirdparty/g2o/g2o/core/estimate_propagator.h b/Thirdparty/g2o/g2o/core/estimate_propagator.h
+index 6a16d11..3384075 100644
+--- a/Thirdparty/g2o/g2o/core/estimate_propagator.h
++++ b/Thirdparty/g2o/g2o/core/estimate_propagator.h
+@@ -37,7 +37,7 @@
+ #ifdef _MSC_VER
+ #include <unordered_map>
+ #else
+-#include <tr1/unordered_map>
++#include <unordered_map>
+ #endif
+ 
+ namespace g2o {
+@@ -135,7 +135,7 @@ namespace g2o {
+           size_t operator ()(const OptimizableGraph::Vertex* v) const { return v->id();}
+       };
+ 
+-      typedef std::tr1::unordered_map<OptimizableGraph::Vertex*, AdjacencyMapEntry, VertexIDHashFunction> AdjacencyMap;
++      typedef std::unordered_map<OptimizableGraph::Vertex*, AdjacencyMapEntry, VertexIDHashFunction> AdjacencyMap;
+ 
+     public:
+       EstimatePropagator(OptimizableGraph* g);
+diff --git a/Thirdparty/g2o/g2o/core/hyper_graph.h b/Thirdparty/g2o/g2o/core/hyper_graph.h
+index da6bb3d..077db28 100644
+--- a/Thirdparty/g2o/g2o/core/hyper_graph.h
++++ b/Thirdparty/g2o/g2o/core/hyper_graph.h
+@@ -38,7 +38,7 @@
+ #ifdef _MSC_VER
+ #include <unordered_map>
+ #else
+-#include <tr1/unordered_map>
++#include <unordered_map>
+ #endif
+ 
+ 
+@@ -90,7 +90,7 @@ namespace g2o {
+       typedef std::set<Edge*>                           EdgeSet;
+       typedef std::set<Vertex*>                         VertexSet;
+ 
+-      typedef std::tr1::unordered_map<int, Vertex*>     VertexIDMap;
++      typedef std::unordered_map<int, Vertex*>     VertexIDMap;
+       typedef std::vector<Vertex*>                      VertexContainer;
+ 
+       //! abstract Vertex, your types must derive from that one
+diff --git a/Thirdparty/g2o/g2o/core/marginal_covariance_cholesky.h b/Thirdparty/g2o/g2o/core/marginal_covariance_cholesky.h
+index e7dfce8..c64b30a 100644
+--- a/Thirdparty/g2o/g2o/core/marginal_covariance_cholesky.h
++++ b/Thirdparty/g2o/g2o/core/marginal_covariance_cholesky.h
+@@ -36,7 +36,7 @@
+ #ifdef _MSC_VER
+ #include <unordered_map>
+ #else
+-#include <tr1/unordered_map>
++#include <unordered_map>
+ #endif
+ 
+ 
+@@ -50,7 +50,7 @@ namespace g2o {
+       /**
+        * hash struct for storing the matrix elements needed to compute the covariance
+        */
+-      typedef std::tr1::unordered_map<int, double>     LookupMap;
++      typedef std::unordered_map<int, double>     LookupMap;
+     
+     public:
+       MarginalCovarianceCholesky();
+diff --git a/Thirdparty/g2o/g2o/core/robust_kernel.h b/Thirdparty/g2o/g2o/core/robust_kernel.h
+index 29e1394..ce8add4 100644
+--- a/Thirdparty/g2o/g2o/core/robust_kernel.h
++++ b/Thirdparty/g2o/g2o/core/robust_kernel.h
+@@ -27,11 +27,7 @@
+ #ifndef G2O_ROBUST_KERNEL_H
+ #define G2O_ROBUST_KERNEL_H
+ 
+-#ifdef _MSC_VER
+ #include <memory>
+-#else
+-#include <tr1/memory>
+-#endif
+ #include <Eigen/Core>
+ 
+ 
+@@ -74,7 +70,7 @@ namespace g2o {
+     protected:
+       double _delta;
+   };
+-  typedef std::tr1::shared_ptr<RobustKernel> RobustKernelPtr;
++  typedef std::shared_ptr<RobustKernel> RobustKernelPtr;
+ 
+ } // end namespace g2o
+ 
+diff --git a/Thirdparty/g2o/g2o/core/sparse_block_matrix_ccs.h b/Thirdparty/g2o/g2o/core/sparse_block_matrix_ccs.h
+index eb9042c..5936f33 100644
+--- a/Thirdparty/g2o/g2o/core/sparse_block_matrix_ccs.h
++++ b/Thirdparty/g2o/g2o/core/sparse_block_matrix_ccs.h
+@@ -37,7 +37,7 @@
+ #ifdef _MSC_VER
+ #include <unordered_map>
+ #else
+-#include <tr1/unordered_map>
++#include <unordered_map>
+ #endif
+ 
+ namespace g2o {
+@@ -223,7 +223,7 @@ namespace g2o {
+       //! rows of the matrix
+       int rows() const {return _rowBlockIndices.size() ? _rowBlockIndices.back() : 0;}
+ 
+-      typedef std::tr1::unordered_map<int, MatrixType*> SparseColumn;
++      typedef std::unordered_map<int, MatrixType*> SparseColumn;
+ 
+       SparseBlockMatrixHashMap(const std::vector<int>& rowIndices, const std::vector<int>& colIndices) :
+         _rowBlockIndices(rowIndices), _colBlockIndices(colIndices)
+diff --git a/include/LoopClosing.h b/include/LoopClosing.h
+index c9ccb26..7b6bfe0 100644
+--- a/include/LoopClosing.h
++++ b/include/LoopClosing.h
+@@ -223,7 +223,7 @@ protected:
+     bool mbFixScale;
+ 
+ 
+-    bool mnFullBAIdx;
++    int mnFullBAIdx;
+ 
+ 
+ 
+diff --git a/include/System.h b/include/System.h
+index 872c86e..9e9da66 100644
+--- a/include/System.h
++++ b/include/System.h
+@@ -152,6 +152,9 @@ public:
+     // See format details at: http://vision.in.tum.de/data/datasets/rgbd-dataset
+     void SaveKeyFrameTrajectoryTUM(const string &filename);
+ 
++    // SitePilot adapter: export final optimized sparse map points.
++    void SaveMapPointsXYZ(const string &filename);
++
+     void SaveTrajectoryEuRoC(const string &filename);
+     void SaveKeyFrameTrajectoryEuRoC(const string &filename);
+ 
+diff --git a/src/ORBmatcher.cc b/src/ORBmatcher.cc
+index 9129683..d234694 100644
+--- a/src/ORBmatcher.cc
++++ b/src/ORBmatcher.cc
+@@ -25,7 +25,7 @@
+ 
+ #include "Thirdparty/DBoW2/DBoW2/FeatureVector.h"
+ 
+-#include<stdint-gcc.h>
++#include<cstdint>
+ 
+ using namespace std;
+ 
+diff --git a/src/System.cc b/src/System.cc
+index 60d9c51..44544bf 100644
+--- a/src/System.cc
++++ b/src/System.cc
+@@ -659,6 +659,21 @@ void System::SaveKeyFrameTrajectoryTUM(const string &filename)
+     f.close();
+ }
+ 
++void System::SaveMapPointsXYZ(const string &filename)
++{
++    ofstream f(filename.c_str());
++    f << "# id x_slam y_slam z_slam\n";
++    vector<MapPoint*> points = mpAtlas->GetAllMapPoints();
++    for(MapPoint* point : points)
++    {
++        if(point == nullptr || point->isBad())
++            continue;
++        Eigen::Vector3f p = point->GetWorldPos();
++        if(p.allFinite())
++            f << point->mnId << " " << p.x() << " " << p.y() << " " << p.z() << "\n";
++    }
++}
++
+ void System::SaveTrajectoryEuRoC(const string &filename)
+ {
+ 

@@ -2,7 +2,7 @@
 
 **실내 의미 지도와 전방 RGB에 기반한 목표 객체 탐색 및 정지(ObjectNav).**
 
-InFrame은 지정된 종류의 물체가 보이는 자리까지 이동하고, 첫 STOP 사진을 지도 위의 개체와 연결합니다. 공개 데모에서 소화기·의자·쓰레기통을 선택할 수 있습니다. Castle의 동일 출발 자세에서 지도 기반 주행을 비교하고, 촬영한 영상에서는 목표별 관측과 첫 STOP을 확인합니다.
+InFrame은 지정된 종류의 물체가 보이는 자리까지 이동하고, 첫 STOP 사진을 지도 위의 개체와 연결합니다. 업로드한 영상에서는 물체 이름을 직접 입력할 수 있습니다. Castle의 동일 출발 자세에서 지도 기반 주행을 비교하고, 촬영한 영상에서는 목표별 관측과 첫 STOP을 확인합니다.
 
 [Project page](https://dabin0312.github.io/InFrame/) · [Try your own data](https://dabin0312.github.io/InFrame/demo/) · [주행 영상](https://dabin0312.github.io/InFrame/#run) · [Data & models](https://github.com/Dabin0312/InFrame/releases/tag/v0.7.0)
 
@@ -21,9 +21,11 @@ InFrame은 지정된 종류의 물체가 보이는 자리까지 이동하고, �
 
 ## 지원 목표
 
-현재 업로드 영상과 Castle 데모에서 선택할 수 있는 목표는 소화기·의자·쓰레기통입니다. YOLOE의 텍스트 프롬프트는 ONNX를 내보낼 때 고정합니다. H4의 목표 임베딩은 소화기 한 종류로 학습했습니다. Castle에서 의자·쓰레기통은 등록 관측점까지 경로를 추종하고, YOLOE가 같은 개체를 세 번 연속 확인하면 정지합니다. 업로드 영상에서는 녹화 경로에서 첫 STOP을 판독합니다. [목표 등록](spatial/goals.mjs) · [검출기 내보내기](spatial/export-detector.py) · [H4 목표 사전](outputs/InFrame_5단계/src/policy.py)
+**내 영상**에서 `wet floor sign`이나 `painting`을 입력하면 MobileCLIP이 이름을 인코딩하고 YOLOE가 해당 물체를 분할합니다. 여러 시점에서 위치를 확인한 관측에는 지도점과 근거 사진을 연결합니다. 한국어 이름은 기본 번역 목록 또는 브라우저의 한영 번역기를 사용합니다.
 
-예를 들어 화분을 추가하려면 화분 프롬프트를 포함한 검출기를 내보내고 목표 목록과 클래스 채널을 연결한 뒤 영상에서 위치와 정지를 검증합니다. Castle 주행에는 화분 모델·지도 좌표·관측점도 필요합니다. H4로 화분까지 주행하려면 화분 교사 시범과 정지 학습 자료로 정책을 확장하고 새 출발점에서 검증해야 합니다.
+**목표 위치 없이 탐색하는 심**에서는 전방 RGB에서 찾은 물체에 접근해 정지합니다. 같은 방에서 교통 콘의 위치를 바꾸거나 치운 주행을 다시 실행할 수 있습니다. [탐색 경로와 정지 사진](https://dabin0312.github.io/InFrame/demo/search.html) · [표지판의 다른 시점 재투영](evidence/sign-reprojection.jpg)
+
+**Castle**의 세 목표는 별도 비교 실험입니다. H4는 소화기 시범으로 학습했고, 의자·쓰레기통은 등록된 관측점과 시각 정지 규칙을 사용합니다.
 
 ## Method
 

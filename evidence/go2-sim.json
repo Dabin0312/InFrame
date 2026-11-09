@@ -1,0 +1,74 @@
+{
+  "frozen_sha256": {
+    "recovery.pt": "1e891c9c0f376b2a717b4e5e011554d66621aa1e9f590238555f9de3a4248819",
+    "policy.py": "a65f000578dc0e5b3e2b2fde4c0df933382455f7eb647102779229bd562e9ab4",
+    "visual_motion.py": "f384f2776a42f865bc41c7c777155bce375ef589daf9118086185b3e215af094",
+    "recovery_policy.py": "7d22ba7cef879f8c906b130073362ceb779708b9c884fe95e0c8eac69da3f217",
+    "worker.py": "ea45edcbc36878e2546ae967fb64d742661ceaf86777a0f90dc0e2606f259eb1"
+  },
+  "episodes": 60,
+  "success": 51,
+  "previous_success": 51,
+  "agree_success": 60,
+  "agree_stop": 60,
+  "agree_collision_count": 60,
+  "outcomes": {
+    "goal_stop": 51,
+    "mission_timeout": 3,
+    "collision_limit": 6
+  },
+  "confirmed_policy_stops": 51,
+  "peak_v": 0.4,
+  "peak_abs_yaw": 1.0,
+  "max_end_pose_difference_m": 0.10014272013400227,
+  "max_end_time_difference_s": 0.25,
+  "moves": 6521,
+  "camera_cut": {
+    "id": "FRESH-015",
+    "mode": "cut",
+    "success": false,
+    "reason": "frame_timeout",
+    "seen": true,
+    "goal_distance_m": 4.8292436599731445,
+    "travel_m": 1.271562360227108,
+    "collisions": 0,
+    "final_xyz": [
+      5.768127918243408,
+      0.06948214769363403,
+      9.752864837646484
+    ],
+    "end_s": 6.0,
+    "frames": 19,
+    "moves": 19,
+    "peak_v": 0.39999982714653015,
+    "peak_abs_yaw": 1.0,
+    "last_rgb_s": 4.5,
+    "stop_s": 5.0,
+    "delay_s": 0.5,
+    "last_v": 0.399793416261673,
+    "last_w": 0.05785398930311203,
+    "travel_during_silence_m": 0.19989735633134842,
+    "after_stop_displacement_m": 0.0,
+    "observed_hold_s": 1.0
+  },
+  "lower_limits": {
+    "id": "FRESH-015",
+    "mode": "limited",
+    "success": true,
+    "reason": "goal_stop",
+    "seen": true,
+    "goal_distance_m": 0.5249115228652954,
+    "travel_m": 5.601500179618597,
+    "collisions": 0,
+    "final_xyz": [
+      4.528286933898926,
+      0.0349230095744133,
+      13.86464786529541
+    ],
+    "end_s": 33.25,
+    "frames": 134,
+    "moves": 133,
+    "peak_v": 0.2,
+    "peak_abs_yaw": 0.5
+  }
+}

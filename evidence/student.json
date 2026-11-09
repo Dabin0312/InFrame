@@ -1,0 +1,50 @@
+{
+  "training_episodes": 297,
+  "training_frames": 24434,
+  "evaluation_scene": "Skokloster Castle",
+  "goal": "소화기",
+  "models": {
+    "1": {
+      "n": 60,
+      "success": 46,
+      "rate": 0.7666666666666667,
+      "mean_spl": 0.7666666666666667,
+      "reason": {
+        "success": 46,
+        "timeout": 8,
+        "collision_limit": 6
+      },
+      "initially_unseen": 54,
+      "success_from_unseen": 40,
+      "observations": 7792
+    },
+    "4": {
+      "n": 60,
+      "success": 50,
+      "rate": 0.8333333333333334,
+      "mean_spl": 0.8333333333333334,
+      "reason": {
+        "success": 50,
+        "timeout": 3,
+        "collision_limit": 7
+      },
+      "initially_unseen": 54,
+      "success_from_unseen": 44,
+      "observations": 5073
+    }
+  },
+  "paired": {
+    "both": 46,
+    "one_only": 0,
+    "four_only": 4,
+    "neither": 10
+  },
+  "same_initial_rgb_pairs": 60,
+  "train_val_start_block_overlap": 0,
+  "replayed_and_rescored": 120,
+  "blind_human_review": "pending",
+  "frozen_checkpoint_sha256": {
+    "1": "5cb48a4fa1a97ad975c59b577b213d3414e12f163efb50454053e90215c57ab0",
+    "4": "d06c6e2a0a3e4c09e625cb77460c3d148edc6f77d544696910f20f3b6cfca4db"
+  }
+}

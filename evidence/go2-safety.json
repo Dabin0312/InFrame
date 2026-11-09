@@ -1,0 +1,3104 @@
+{
+  "logic_cases": 13,
+  "logic": [
+    {
+      "case": "command (2.5, 4.0, 0)",
+      "reason": "case_end",
+      "stop_confirmed": true,
+      "events": [
+        {
+          "t": 100.0,
+          "completed": 100.0,
+          "rpc": "StopMove",
+          "args": [],
+          "reason": "startup",
+          "ok": true,
+          "error": null
+        },
+        {
+          "t": 100.0,
+          "completed": 100.0,
+          "rpc": "Move",
+          "args": [
+            0.4,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 0,
+          "captured": 100.0,
+          "raw": [
+            2.5,
+            4.0,
+            0
+          ]
+        },
+        {
+          "t": 100.0,
+          "completed": 100.0,
+          "rpc": "StopMove",
+          "args": [],
+          "reason": "case_end",
+          "ok": true,
+          "error": null,
+          "attempt": 1
+        }
+      ]
+    },
+    {
+      "case": "command (-0.5, -4.0, 0)",
+      "reason": "case_end",
+      "stop_confirmed": true,
+      "events": [
+        {
+          "t": 100.0,
+          "completed": 100.0,
+          "rpc": "StopMove",
+          "args": [],
+          "reason": "startup",
+          "ok": true,
+          "error": null
+        },
+        {
+          "t": 100.0,
+          "completed": 100.0,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 0,
+          "captured": 100.0,
+          "raw": [
+            -0.5,
+            -4.0,
+            0
+          ]
+        },
+        {
+          "t": 100.0,
+          "completed": 100.0,
+          "rpc": "StopMove",
+          "args": [],
+          "reason": "case_end",
+          "ok": true,
+          "error": null,
+          "attempt": 1
+        }
+      ]
+    },
+    {
+      "case": "command (0.12, -0.32, 0)",
+      "reason": "case_end",
+      "stop_confirmed": true,
+      "events": [
+        {
+          "t": 100.0,
+          "completed": 100.0,
+          "rpc": "StopMove",
+          "args": [],
+          "reason": "startup",
+          "ok": true,
+          "error": null
+        },
+        {
+          "t": 100.0,
+          "completed": 100.0,
+          "rpc": "Move",
+          "args": [
+            0.12,
+            0.0,
+            -0.32
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 0,
+          "captured": 100.0,
+          "raw": [
+            0.12,
+            -0.32,
+            0
+          ]
+        },
+        {
+          "t": 100.0,
+          "completed": 100.0,
+          "rpc": "StopMove",
+          "args": [],
+          "reason": "case_end",
+          "ok": true,
+          "error": null,
+          "attempt": 1
+        }
+      ]
+    },
+    {
+      "case": "STOP priority and late input",
+      "reason": "goal_stop",
+      "stop_confirmed": true,
+      "events": [
+        {
+          "t": 100.0,
+          "completed": 100.0,
+          "rpc": "StopMove",
+          "args": [],
+          "reason": "startup",
+          "ok": true,
+          "error": null
+        },
+        {
+          "t": 100.0,
+          "completed": 100.0,
+          "rpc": "StopMove",
+          "args": [],
+          "reason": "goal_stop",
+          "ok": true,
+          "error": null,
+          "attempt": 1
+        }
+      ]
+    },
+    {
+      "case": "invalid (nan, 0.0, 0)",
+      "reason": "invalid_action",
+      "stop_confirmed": true,
+      "events": [
+        {
+          "t": 100.0,
+          "completed": 100.0,
+          "rpc": "StopMove",
+          "args": [],
+          "reason": "startup",
+          "ok": true,
+          "error": null
+        },
+        {
+          "t": 100.0,
+          "completed": 100.0,
+          "rpc": "Move",
+          "args": [
+            0.25,
+            0.0,
+            0.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 0,
+          "captured": 100.0,
+          "raw": [
+            0.25,
+            0.0,
+            0
+          ]
+        },
+        {
+          "t": 100.25,
+          "completed": 100.25,
+          "rpc": "StopMove",
+          "args": [],
+          "reason": "invalid_action",
+          "ok": true,
+          "error": null,
+          "attempt": 1
+        }
+      ]
+    },
+    {
+      "case": "invalid (0.1, inf, 0)",
+      "reason": "invalid_action",
+      "stop_confirmed": true,
+      "events": [
+        {
+          "t": 100.0,
+          "completed": 100.0,
+          "rpc": "StopMove",
+          "args": [],
+          "reason": "startup",
+          "ok": true,
+          "error": null
+        },
+        {
+          "t": 100.0,
+          "completed": 100.0,
+          "rpc": "Move",
+          "args": [
+            0.25,
+            0.0,
+            0.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 0,
+          "captured": 100.0,
+          "raw": [
+            0.25,
+            0.0,
+            0
+          ]
+        },
+        {
+          "t": 100.25,
+          "completed": 100.25,
+          "rpc": "StopMove",
+          "args": [],
+          "reason": "invalid_action",
+          "ok": true,
+          "error": null,
+          "attempt": 1
+        }
+      ]
+    },
+    {
+      "case": "invalid (0.1, 0.2, 9)",
+      "reason": "invalid_action",
+      "stop_confirmed": true,
+      "events": [
+        {
+          "t": 100.0,
+          "completed": 100.0,
+          "rpc": "StopMove",
+          "args": [],
+          "reason": "startup",
+          "ok": true,
+          "error": null
+        },
+        {
+          "t": 100.0,
+          "completed": 100.0,
+          "rpc": "Move",
+          "args": [
+            0.25,
+            0.0,
+            0.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 0,
+          "captured": 100.0,
+          "raw": [
+            0.25,
+            0.0,
+            0
+          ]
+        },
+        {
+          "t": 100.25,
+          "completed": 100.25,
+          "rpc": "StopMove",
+          "args": [],
+          "reason": "invalid_action",
+          "ok": true,
+          "error": null,
+          "attempt": 1
+        }
+      ]
+    },
+    {
+      "case": "duplicated sequence",
+      "reason": "invalid_or_stale_frame",
+      "stop_confirmed": true,
+      "events": [
+        {
+          "t": 100.0,
+          "completed": 100.0,
+          "rpc": "StopMove",
+          "args": [],
+          "reason": "startup",
+          "ok": true,
+          "error": null
+        },
+        {
+          "t": 100.0,
+          "completed": 100.0,
+          "rpc": "Move",
+          "args": [
+            0.3,
+            0.0,
+            0.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 0,
+          "captured": 100.0,
+          "raw": [
+            0.3,
+            0.0,
+            0
+          ]
+        },
+        {
+          "t": 100.25,
+          "completed": 100.25,
+          "rpc": "StopMove",
+          "args": [],
+          "reason": "invalid_or_stale_frame",
+          "ok": true,
+          "error": null,
+          "attempt": 1
+        }
+      ]
+    },
+    {
+      "case": "old capture",
+      "reason": "invalid_or_stale_frame",
+      "stop_confirmed": true,
+      "events": [
+        {
+          "t": 100.0,
+          "completed": 100.0,
+          "rpc": "StopMove",
+          "args": [],
+          "reason": "startup",
+          "ok": true,
+          "error": null
+        },
+        {
+          "t": 100.0,
+          "completed": 100.0,
+          "rpc": "Move",
+          "args": [
+            0.3,
+            0.0,
+            0.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 0,
+          "captured": 100.0,
+          "raw": [
+            0.3,
+            0.0,
+            0
+          ]
+        },
+        {
+          "t": 100.25,
+          "completed": 100.25,
+          "rpc": "StopMove",
+          "args": [],
+          "reason": "invalid_or_stale_frame",
+          "ok": true,
+          "error": null,
+          "attempt": 1
+        }
+      ]
+    },
+    {
+      "case": "future capture",
+      "reason": "invalid_or_stale_frame",
+      "stop_confirmed": true,
+      "events": [
+        {
+          "t": 100.0,
+          "completed": 100.0,
+          "rpc": "StopMove",
+          "args": [],
+          "reason": "startup",
+          "ok": true,
+          "error": null
+        },
+        {
+          "t": 100.0,
+          "completed": 100.0,
+          "rpc": "Move",
+          "args": [
+            0.3,
+            0.0,
+            0.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 0,
+          "captured": 100.0,
+          "raw": [
+            0.3,
+            0.0,
+            0
+          ]
+        },
+        {
+          "t": 100.25,
+          "completed": 100.25,
+          "rpc": "StopMove",
+          "args": [],
+          "reason": "invalid_or_stale_frame",
+          "ok": true,
+          "error": null,
+          "attempt": 1
+        }
+      ]
+    },
+    {
+      "case": "timeout at exact boundary and late decision",
+      "reason": "frame_timeout",
+      "stop_confirmed": true,
+      "events": [
+        {
+          "t": 100.0,
+          "completed": 100.0,
+          "rpc": "StopMove",
+          "args": [],
+          "reason": "startup",
+          "ok": true,
+          "error": null
+        },
+        {
+          "t": 100.0,
+          "completed": 100.0,
+          "rpc": "Move",
+          "args": [
+            0.3,
+            0.0,
+            0.2
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 0,
+          "captured": 100.0,
+          "raw": [
+            0.3,
+            0.2,
+            0
+          ]
+        },
+        {
+          "t": 100.5,
+          "completed": 100.5,
+          "rpc": "StopMove",
+          "args": [],
+          "reason": "frame_timeout",
+          "ok": true,
+          "error": null,
+          "attempt": 1
+        }
+      ]
+    },
+    {
+      "case": "SDK Move error; stop retry",
+      "reason": "move_failed",
+      "stop_confirmed": true,
+      "events": [
+        {
+          "t": 100.0,
+          "completed": 100.0,
+          "rpc": "StopMove",
+          "args": [],
+          "reason": "startup",
+          "ok": true,
+          "error": null
+        },
+        {
+          "t": 100.0,
+          "completed": 100.0,
+          "rpc": "Move",
+          "args": [
+            0.4,
+            0.0,
+            0.3
+          ],
+          "reason": "policy",
+          "ok": false,
+          "error": "SDK return 17",
+          "seq": 0,
+          "captured": 100.0,
+          "raw": [
+            0.4,
+            0.3,
+            0
+          ]
+        },
+        {
+          "t": 100.0,
+          "completed": 100.0,
+          "rpc": "StopMove",
+          "args": [],
+          "reason": "move_failed",
+          "ok": false,
+          "error": "SDK return 11",
+          "attempt": 1
+        },
+        {
+          "t": 100.0,
+          "completed": 100.0,
+          "rpc": "StopMove",
+          "args": [],
+          "reason": "move_failed",
+          "ok": true,
+          "error": null,
+          "attempt": 2
+        }
+      ]
+    },
+    {
+      "case": "SDK Move error; stop unconfirmed",
+      "reason": "move_failed",
+      "stop_confirmed": false,
+      "events": [
+        {
+          "t": 100.0,
+          "completed": 100.0,
+          "rpc": "StopMove",
+          "args": [],
+          "reason": "startup",
+          "ok": true,
+          "error": null
+        },
+        {
+          "t": 100.0,
+          "completed": 100.0,
+          "rpc": "Move",
+          "args": [
+            0.4,
+            0.0,
+            0.3
+          ],
+          "reason": "policy",
+          "ok": false,
+          "error": "SDK return 17",
+          "seq": 0,
+          "captured": 100.0,
+          "raw": [
+            0.4,
+            0.3,
+            0
+          ]
+        },
+        {
+          "t": 100.0,
+          "completed": 100.0,
+          "rpc": "StopMove",
+          "args": [],
+          "reason": "move_failed",
+          "ok": false,
+          "error": "SDK return 11",
+          "attempt": 1
+        },
+        {
+          "t": 100.0,
+          "completed": 100.0,
+          "rpc": "StopMove",
+          "args": [],
+          "reason": "move_failed",
+          "ok": false,
+          "error": "SDK return 11",
+          "attempt": 2
+        },
+        {
+          "t": 100.0,
+          "completed": 100.0,
+          "rpc": "StopMove",
+          "args": [],
+          "reason": "move_failed",
+          "ok": false,
+          "error": "SDK return 11",
+          "attempt": 3
+        }
+      ]
+    }
+  ],
+  "wall_clock": [
+    {
+      "fault": "camera_block",
+      "delay_from_last_rgb_ms": 501.25916593242437,
+      "from_missing_call_ms": 246.16391595918685,
+      "last_v": 0.3222977817058563,
+      "last_yaw": 1.0,
+      "events": [
+        {
+          "t": 771734.4075855,
+          "completed": 771734.407586958,
+          "rpc": "StopMove",
+          "args": [],
+          "reason": "startup",
+          "ok": true,
+          "error": null
+        },
+        {
+          "t": 771734.415574625,
+          "completed": 771734.415575833,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 0,
+          "captured": 771734.40764275,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771734.671533625,
+          "completed": 771734.671538833,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 1,
+          "captured": 771734.662698583,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771734.926405833,
+          "completed": 771734.926410875,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 2,
+          "captured": 771734.917742625,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771735.183204458,
+          "completed": 771735.18320775,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 3,
+          "captured": 771735.172820958,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771735.4352755,
+          "completed": 771735.43528025,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 4,
+          "captured": 771735.4266625,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771735.687180416,
+          "completed": 771735.687182625,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 5,
+          "captured": 771735.681715583,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771735.942662375,
+          "completed": 771735.942664666,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 6,
+          "captured": 771735.936357666,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771736.194626916,
+          "completed": 771736.19463,
+          "rpc": "Move",
+          "args": [
+            0.3222977817058563,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 7,
+          "captured": 771736.18758975,
+          "raw": [
+            0.3222977817058563,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771736.688848916,
+          "completed": 771736.688859875,
+          "rpc": "StopMove",
+          "args": [],
+          "reason": "frame_timeout",
+          "ok": true,
+          "error": null,
+          "attempt": 1
+        }
+      ],
+      "reason": "frame_timeout",
+      "stop_confirmed": true,
+      "detail": null
+    },
+    {
+      "fault": "camera_block",
+      "delay_from_last_rgb_ms": 501.7732920823619,
+      "from_missing_call_ms": 251.7399589996785,
+      "last_v": 0.3222977817058563,
+      "last_yaw": 1.0,
+      "events": [
+        {
+          "t": 771736.749715833,
+          "completed": 771736.749721458,
+          "rpc": "StopMove",
+          "args": [],
+          "reason": "startup",
+          "ok": true,
+          "error": null
+        },
+        {
+          "t": 771736.758790916,
+          "completed": 771736.758794791,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 0,
+          "captured": 771736.749850541,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771737.0094635,
+          "completed": 771737.009467,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 1,
+          "captured": 771737.00161525,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771737.263793208,
+          "completed": 771737.263798541,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 2,
+          "captured": 771737.254331291,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771737.518232166,
+          "completed": 771737.518237041,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 3,
+          "captured": 771737.509373416,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771737.773482625,
+          "completed": 771737.773487333,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 4,
+          "captured": 771737.764409708,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771738.021804208,
+          "completed": 771738.021805333,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 5,
+          "captured": 771738.018098375,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771738.282272708,
+          "completed": 771738.282277958,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 6,
+          "captured": 771738.273161,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771738.531928416,
+          "completed": 771738.531929916,
+          "rpc": "Move",
+          "args": [
+            0.3222977817058563,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 7,
+          "captured": 771738.528201083,
+          "raw": [
+            0.3222977817058563,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771739.029974375,
+          "completed": 771739.029983041,
+          "rpc": "StopMove",
+          "args": [],
+          "reason": "frame_timeout",
+          "ok": true,
+          "error": null,
+          "attempt": 1
+        }
+      ],
+      "reason": "frame_timeout",
+      "stop_confirmed": true,
+      "detail": null
+    },
+    {
+      "fault": "camera_block",
+      "delay_from_last_rgb_ms": 501.70737493317574,
+      "from_missing_call_ms": 248.42195794917643,
+      "last_v": 0.3222977817058563,
+      "last_yaw": 1.0,
+      "events": [
+        {
+          "t": 771739.086689458,
+          "completed": 771739.086694458,
+          "rpc": "StopMove",
+          "args": [],
+          "reason": "startup",
+          "ok": true,
+          "error": null
+        },
+        {
+          "t": 771739.095257291,
+          "completed": 771739.095259375,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 0,
+          "captured": 771739.086793833,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771739.346318833,
+          "completed": 771739.346321833,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 1,
+          "captured": 771739.33865925,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771739.607773083,
+          "completed": 771739.607776416,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 2,
+          "captured": 771739.59372425,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771739.860113708,
+          "completed": 771739.860117041,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 3,
+          "captured": 771739.848962708,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771740.108344375,
+          "completed": 771740.108347208,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 4,
+          "captured": 771740.0992975,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771740.360099041,
+          "completed": 771740.360101041,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 5,
+          "captured": 771740.354339416,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771740.611346875,
+          "completed": 771740.611348583,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 6,
+          "captured": 771740.607581916,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771740.866809,
+          "completed": 771740.866810958,
+          "rpc": "Move",
+          "args": [
+            0.3222977817058563,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 7,
+          "captured": 771740.862622458,
+          "raw": [
+            0.3222977817058563,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771741.364329833,
+          "completed": 771741.364334833,
+          "rpc": "StopMove",
+          "args": [],
+          "reason": "frame_timeout",
+          "ok": true,
+          "error": null,
+          "attempt": 1
+        }
+      ],
+      "reason": "frame_timeout",
+      "stop_confirmed": true,
+      "detail": null
+    },
+    {
+      "fault": "camera_block",
+      "delay_from_last_rgb_ms": 501.3248330214992,
+      "from_missing_call_ms": 246.24949996359646,
+      "last_v": 0.3222977817058563,
+      "last_yaw": 1.0,
+      "events": [
+        {
+          "t": 771741.417264291,
+          "completed": 771741.417266291,
+          "rpc": "StopMove",
+          "args": [],
+          "reason": "startup",
+          "ok": true,
+          "error": null
+        },
+        {
+          "t": 771741.42060225,
+          "completed": 771741.420603125,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 0,
+          "captured": 771741.417319583,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771741.676580291,
+          "completed": 771741.676581791,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 1,
+          "captured": 771741.672367083,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771741.931974375,
+          "completed": 771741.931976166,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 2,
+          "captured": 771741.927405125,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771742.192189583,
+          "completed": 771742.192197125,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 3,
+          "captured": 771742.182456625,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771742.43757875,
+          "completed": 771742.437580208,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 4,
+          "captured": 771742.43464725,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771742.698949791,
+          "completed": 771742.69895325,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 5,
+          "captured": 771742.689701166,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771742.9548005,
+          "completed": 771742.954803375,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 6,
+          "captured": 771742.944757208,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771743.207004208,
+          "completed": 771743.207008,
+          "rpc": "Move",
+          "args": [
+            0.3222977817058563,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 7,
+          "captured": 771743.199368833,
+          "raw": [
+            0.3222977817058563,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771743.700693666,
+          "completed": 771743.700704666,
+          "rpc": "StopMove",
+          "args": [],
+          "reason": "frame_timeout",
+          "ok": true,
+          "error": null,
+          "attempt": 1
+        }
+      ],
+      "reason": "frame_timeout",
+      "stop_confirmed": true,
+      "detail": null
+    },
+    {
+      "fault": "camera_block",
+      "delay_from_last_rgb_ms": 504.4179999968037,
+      "from_missing_call_ms": 249.3654580321163,
+      "last_v": 0.3222977817058563,
+      "last_yaw": 1.0,
+      "events": [
+        {
+          "t": 771743.760059625,
+          "completed": 771743.760066708,
+          "rpc": "StopMove",
+          "args": [],
+          "reason": "startup",
+          "ok": true,
+          "error": null
+        },
+        {
+          "t": 771743.769645666,
+          "completed": 771743.769648208,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 0,
+          "captured": 771743.760207083,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771744.023225125,
+          "completed": 771744.023228625,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 1,
+          "captured": 771744.015305708,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771744.277067416,
+          "completed": 771744.277071166,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 2,
+          "captured": 771744.267871708,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771744.531562208,
+          "completed": 771744.531566916,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 3,
+          "captured": 771744.52290575,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771744.78701525,
+          "completed": 771744.787020125,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 4,
+          "captured": 771744.777950541,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771745.039966166,
+          "completed": 771745.039970041,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 5,
+          "captured": 771745.031123583,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771745.290558208,
+          "completed": 771745.290560666,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 6,
+          "captured": 771745.281384916,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771745.54168425,
+          "completed": 771745.541685916,
+          "rpc": "Move",
+          "args": [
+            0.3222977817058563,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 7,
+          "captured": 771745.536416291,
+          "raw": [
+            0.3222977817058563,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771746.040834291,
+          "completed": 771746.040844708,
+          "rpc": "StopMove",
+          "args": [],
+          "reason": "frame_timeout",
+          "ok": true,
+          "error": null,
+          "attempt": 1
+        }
+      ],
+      "reason": "frame_timeout",
+      "stop_confirmed": true,
+      "detail": null
+    },
+    {
+      "fault": "camera_block",
+      "delay_from_last_rgb_ms": 503.43120901379734,
+      "from_missing_call_ms": 248.35324997548014,
+      "last_v": 0.3222977817058563,
+      "last_yaw": 1.0,
+      "events": [
+        {
+          "t": 771746.096884083,
+          "completed": 771746.0968905,
+          "rpc": "StopMove",
+          "args": [],
+          "reason": "startup",
+          "ok": true,
+          "error": null
+        },
+        {
+          "t": 771746.106402666,
+          "completed": 771746.106406916,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 0,
+          "captured": 771746.097213708,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771746.358356791,
+          "completed": 771746.358361041,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 1,
+          "captured": 771746.349325375,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771746.610931125,
+          "completed": 771746.610935625,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 2,
+          "captured": 771746.601402375,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771746.86266675,
+          "completed": 771746.862670125,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 3,
+          "captured": 771746.8532935,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771747.11398725,
+          "completed": 771747.113991291,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 4,
+          "captured": 771747.105599833,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771747.3706725,
+          "completed": 771747.370679458,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 5,
+          "captured": 771747.360683,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771747.620200625,
+          "completed": 771747.6202025,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 6,
+          "captured": 771747.615740041,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771747.87961925,
+          "completed": 771747.879622541,
+          "rpc": "Move",
+          "args": [
+            0.3222977817058563,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 7,
+          "captured": 771747.870777291,
+          "raw": [
+            0.3222977817058563,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771748.3742085,
+          "completed": 771748.3742185,
+          "rpc": "StopMove",
+          "args": [],
+          "reason": "frame_timeout",
+          "ok": true,
+          "error": null,
+          "attempt": 1
+        }
+      ],
+      "reason": "frame_timeout",
+      "stop_confirmed": true,
+      "detail": null
+    },
+    {
+      "fault": "camera_block",
+      "delay_from_last_rgb_ms": 504.33345802593976,
+      "from_missing_call_ms": 249.29800000973046,
+      "last_v": 0.3222977817058563,
+      "last_yaw": 1.0,
+      "events": [
+        {
+          "t": 771748.434261875,
+          "completed": 771748.434264958,
+          "rpc": "StopMove",
+          "args": [],
+          "reason": "startup",
+          "ok": true,
+          "error": null
+        },
+        {
+          "t": 771748.443360708,
+          "completed": 771748.443363791,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 0,
+          "captured": 771748.434370291,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771748.695447,
+          "completed": 771748.695452291,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 1,
+          "captured": 771748.686971041,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771748.951707833,
+          "completed": 771748.9517115,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 2,
+          "captured": 771748.941342541,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771749.201681291,
+          "completed": 771749.201683916,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 3,
+          "captured": 771749.191507416,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771749.454705125,
+          "completed": 771749.454708458,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 4,
+          "captured": 771749.446544375,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771749.706051333,
+          "completed": 771749.706053041,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 5,
+          "captured": 771749.701589208,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771749.960089791,
+          "completed": 771749.96009125,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 6,
+          "captured": 771749.956624916,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771750.21718225,
+          "completed": 771750.217184416,
+          "rpc": "Move",
+          "args": [
+            0.3222977817058563,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 7,
+          "captured": 771750.2112665,
+          "raw": [
+            0.3222977817058563,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771750.715599958,
+          "completed": 771750.715606958,
+          "rpc": "StopMove",
+          "args": [],
+          "reason": "frame_timeout",
+          "ok": true,
+          "error": null,
+          "attempt": 1
+        }
+      ],
+      "reason": "frame_timeout",
+      "stop_confirmed": true,
+      "detail": null
+    },
+    {
+      "fault": "camera_block",
+      "delay_from_last_rgb_ms": 501.1180000146851,
+      "from_missing_call_ms": 246.10425007995218,
+      "last_v": 0.3222977817058563,
+      "last_yaw": 1.0,
+      "events": [
+        {
+          "t": 771750.774917416,
+          "completed": 771750.77492725,
+          "rpc": "StopMove",
+          "args": [],
+          "reason": "startup",
+          "ok": true,
+          "error": null
+        },
+        {
+          "t": 771750.784905083,
+          "completed": 771750.78490775,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 0,
+          "captured": 771750.77514325,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771751.035939833,
+          "completed": 771751.035943333,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 1,
+          "captured": 771751.027500166,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771751.291289041,
+          "completed": 771751.291292458,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 2,
+          "captured": 771751.282566833,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771751.540369458,
+          "completed": 771751.540371041,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 3,
+          "captured": 771751.532643916,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771751.796531041,
+          "completed": 771751.796536541,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 4,
+          "captured": 771751.787684291,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771752.050547375,
+          "completed": 771752.050550125,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 5,
+          "captured": 771752.041060125,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771752.300059958,
+          "completed": 771752.300061583,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 6,
+          "captured": 771752.296078208,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771752.554116208,
+          "completed": 771752.554117583,
+          "rpc": "Move",
+          "args": [
+            0.3222977817058563,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 7,
+          "captured": 771752.551091708,
+          "raw": [
+            0.3222977817058563,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771753.052209708,
+          "completed": 771753.052212583,
+          "rpc": "StopMove",
+          "args": [],
+          "reason": "frame_timeout",
+          "ok": true,
+          "error": null,
+          "attempt": 1
+        }
+      ],
+      "reason": "frame_timeout",
+      "stop_confirmed": true,
+      "detail": null
+    },
+    {
+      "fault": "camera_block",
+      "delay_from_last_rgb_ms": 501.1734589934349,
+      "from_missing_call_ms": 246.1584999691695,
+      "last_v": 0.3222977817058563,
+      "last_yaw": 1.0,
+      "events": [
+        {
+          "t": 771753.112464791,
+          "completed": 771753.112466208,
+          "rpc": "StopMove",
+          "args": [],
+          "reason": "startup",
+          "ok": true,
+          "error": null
+        },
+        {
+          "t": 771753.115485458,
+          "completed": 771753.115486583,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 0,
+          "captured": 771753.112502,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771753.391218208,
+          "completed": 771753.391220208,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 1,
+          "captured": 771753.36560675,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771753.622482,
+          "completed": 771753.622483291,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 2,
+          "captured": 771753.618977791,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771753.876808208,
+          "completed": 771753.876809791,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 3,
+          "captured": 771753.873992583,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771754.131770208,
+          "completed": 771754.131771791,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 4,
+          "captured": 771754.12900525,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771754.385549541,
+          "completed": 771754.385550875,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 5,
+          "captured": 771754.382494166,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771754.638864333,
+          "completed": 771754.638865958,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 6,
+          "captured": 771754.635702291,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771754.889394541,
+          "completed": 771754.889396208,
+          "rpc": "Move",
+          "args": [
+            0.3222977817058563,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 7,
+          "captured": 771754.886562041,
+          "raw": [
+            0.3222977817058563,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771755.3877355,
+          "completed": 771755.38774,
+          "rpc": "StopMove",
+          "args": [],
+          "reason": "frame_timeout",
+          "ok": true,
+          "error": null,
+          "attempt": 1
+        }
+      ],
+      "reason": "frame_timeout",
+      "stop_confirmed": true,
+      "detail": null
+    },
+    {
+      "fault": "camera_block",
+      "delay_from_last_rgb_ms": 503.56779189314693,
+      "from_missing_call_ms": 252.35474994406104,
+      "last_v": 0.3222977817058563,
+      "last_yaw": 1.0,
+      "events": [
+        {
+          "t": 771755.447932375,
+          "completed": 771755.447933833,
+          "rpc": "StopMove",
+          "args": [],
+          "reason": "startup",
+          "ok": true,
+          "error": null
+        },
+        {
+          "t": 771755.451253291,
+          "completed": 771755.451254458,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 0,
+          "captured": 771755.447968625,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771755.70596925,
+          "completed": 771755.705970916,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 1,
+          "captured": 771755.702987083,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771755.956092458,
+          "completed": 771755.95609375,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 2,
+          "captured": 771755.953109625,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771756.2109355,
+          "completed": 771756.210937166,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 3,
+          "captured": 771756.208126041,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771756.465933458,
+          "completed": 771756.465935166,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 4,
+          "captured": 771756.463142125,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771756.716536833,
+          "completed": 771756.716538083,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 5,
+          "captured": 771756.713715125,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771756.971701666,
+          "completed": 771756.971702875,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 6,
+          "captured": 771756.968744708,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771757.224399666,
+          "completed": 771757.224400875,
+          "rpc": "Move",
+          "args": [
+            0.3222977817058563,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 7,
+          "captured": 771757.221343541,
+          "raw": [
+            0.3222977817058563,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771757.724911333,
+          "completed": 771757.724913875,
+          "rpc": "StopMove",
+          "args": [],
+          "reason": "frame_timeout",
+          "ok": true,
+          "error": null,
+          "attempt": 1
+        }
+      ],
+      "reason": "frame_timeout",
+      "stop_confirmed": true,
+      "detail": null
+    },
+    {
+      "fault": "policy_block",
+      "delay_from_last_rgb_ms": 500.83545793313533,
+      "from_missing_call_ms": 244.6549169253558,
+      "last_v": 0.3222977817058563,
+      "last_yaw": 1.0,
+      "events": [
+        {
+          "t": 771757.782909125,
+          "completed": 771757.782910416,
+          "rpc": "StopMove",
+          "args": [],
+          "reason": "startup",
+          "ok": true,
+          "error": null
+        },
+        {
+          "t": 771757.7858235,
+          "completed": 771757.7858245,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 0,
+          "captured": 771757.782962208,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771758.040775708,
+          "completed": 771758.040777208,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 1,
+          "captured": 771758.037977375,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771758.296066125,
+          "completed": 771758.296067541,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 2,
+          "captured": 771758.292997333,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771758.546820125,
+          "completed": 771758.546821708,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 3,
+          "captured": 771758.544105958,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771758.802124958,
+          "completed": 771758.802126375,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 4,
+          "captured": 771758.799132708,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771759.056272416,
+          "completed": 771759.056273833,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 5,
+          "captured": 771759.053312083,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771759.311243708,
+          "completed": 771759.311245458,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 6,
+          "captured": 771759.308332291,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771759.566091958,
+          "completed": 771759.566093041,
+          "rpc": "Move",
+          "args": [
+            0.3222977817058563,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 7,
+          "captured": 771759.563389,
+          "raw": [
+            0.3222977817058563,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771760.064224458,
+          "completed": 771760.064229583,
+          "rpc": "StopMove",
+          "args": [],
+          "reason": "frame_timeout",
+          "ok": true,
+          "error": null,
+          "attempt": 1
+        }
+      ],
+      "reason": "frame_timeout",
+      "stop_confirmed": true,
+      "detail": null
+    },
+    {
+      "fault": "camera_error",
+      "delay_from_last_rgb_ms": 255.0513750175014,
+      "from_missing_call_ms": 0.0310409814119339,
+      "last_v": 0.3222977817058563,
+      "last_yaw": 1.0,
+      "events": [
+        {
+          "t": 771760.1246395,
+          "completed": 771760.12464075,
+          "rpc": "StopMove",
+          "args": [],
+          "reason": "startup",
+          "ok": true,
+          "error": null
+        },
+        {
+          "t": 771760.12780025,
+          "completed": 771760.127801625,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 0,
+          "captured": 771760.124691458,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771760.382587583,
+          "completed": 771760.382589291,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 1,
+          "captured": 771760.379707166,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771760.637597708,
+          "completed": 771760.637599375,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 2,
+          "captured": 771760.634728125,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771760.892352458,
+          "completed": 771760.892354166,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 3,
+          "captured": 771760.889742625,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771761.145194625,
+          "completed": 771761.145196166,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 4,
+          "captured": 771761.142064333,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771761.396854708,
+          "completed": 771761.396856125,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 5,
+          "captured": 771761.393988208,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771761.647165541,
+          "completed": 771761.64716725,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 6,
+          "captured": 771761.644465416,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771761.902290458,
+          "completed": 771761.902291875,
+          "rpc": "Move",
+          "args": [
+            0.3222977817058563,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 7,
+          "captured": 771761.899479416,
+          "raw": [
+            0.3222977817058563,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771762.154530791,
+          "completed": 771762.154532791,
+          "rpc": "StopMove",
+          "args": [],
+          "reason": "camera_error",
+          "ok": true,
+          "error": null,
+          "attempt": 1
+        }
+      ],
+      "reason": "camera_error",
+      "stop_confirmed": true,
+      "detail": "OSError('GetImageSample returned 29')"
+    },
+    {
+      "fault": "corrupt_image",
+      "delay_from_last_rgb_ms": 255.05645805969834,
+      "from_missing_call_ms": 0.03245798870921135,
+      "last_v": 0.3222977817058563,
+      "last_yaw": 1.0,
+      "events": [
+        {
+          "t": 771762.154658541,
+          "completed": 771762.154659125,
+          "rpc": "StopMove",
+          "args": [],
+          "reason": "startup",
+          "ok": true,
+          "error": null
+        },
+        {
+          "t": 771762.157544916,
+          "completed": 771762.157546416,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 0,
+          "captured": 771762.154690208,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771762.412732125,
+          "completed": 771762.412733458,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 1,
+          "captured": 771762.409705125,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771762.667841166,
+          "completed": 771762.667842833,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 2,
+          "captured": 771762.664726208,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771762.922506416,
+          "completed": 771762.922507833,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 3,
+          "captured": 771762.919748791,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771763.173593708,
+          "completed": 771763.173595208,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 4,
+          "captured": 771763.170831708,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771763.428671708,
+          "completed": 771763.428673458,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 5,
+          "captured": 771763.425878333,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771763.681281958,
+          "completed": 771763.681283375,
+          "rpc": "Move",
+          "args": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 6,
+          "captured": 771763.678288375,
+          "raw": [
+            0.0,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771763.931487791,
+          "completed": 771763.931489041,
+          "rpc": "Move",
+          "args": [
+            0.3222977817058563,
+            0.0,
+            1.0
+          ],
+          "reason": "policy",
+          "ok": true,
+          "error": null,
+          "seq": 7,
+          "captured": 771763.928563583,
+          "raw": [
+            0.3222977817058563,
+            1.0,
+            0
+          ]
+        },
+        {
+          "t": 771764.183620041,
+          "completed": 771764.1836215,
+          "rpc": "StopMove",
+          "args": [],
+          "reason": "camera_error",
+          "ok": true,
+          "error": null,
+          "attempt": 1
+        }
+      ],
+      "reason": "camera_error",
+      "stop_confirmed": true,
+      "detail": "ValueError('Missing camera JPEG/PNG header')"
+    }
+  ],
+  "camera_silence_ms": {
+    "n": 10,
+    "min": 501.1180000146851,
+    "median": 501.7403335077688,
+    "max": 504.4179999968037
+  }
+}

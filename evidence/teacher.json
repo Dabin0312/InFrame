@@ -1,0 +1,60 @@
+{
+  "episodes": 386,
+  "observations": 29680,
+  "commands": 29677,
+  "unique_wide_starts": 360,
+  "train_val_start_block_overlap": 0,
+  "block_size_m": 2.0,
+  "train_blocks": 57,
+  "val_blocks": 10,
+  "bounds_checked_for_all_commands": true,
+  "all_endposes_rerendered": true,
+  "all_steps_on_expected_floor": true,
+  "max_rerender_rgb_mae_255": 0.0044005594135802465,
+  "max_jpeg_terminal_mae_255": 4.463939525462963,
+  "human_blind_ratings_pending": true,
+  "groups": {
+    "train": {
+      "total": 300,
+      "success_auto": 297,
+      "reasons": {
+        "success": 297,
+        "collision_limit": 3
+      },
+      "min_start_geodesic_m": 1.9349422454833984,
+      "max_start_geodesic_m": 12.712498664855957,
+      "mean_spl_auto": 0.9809466435251344
+    },
+    "val": {
+      "total": 60,
+      "success_auto": 60,
+      "reasons": {
+        "success": 60
+      },
+      "min_start_geodesic_m": 1.9349418878555298,
+      "max_start_geodesic_m": 10.188040733337402,
+      "mean_spl_auto": 0.991680989199872
+    },
+    "control": {
+      "total": 4,
+      "success_auto": 0,
+      "reasons": {
+        "stopped_too_far": 1,
+        "goal_out_of_view": 3
+      },
+      "min_start_geodesic_m": 0.3427063822746277,
+      "max_start_geodesic_m": 10.188040733337402,
+      "mean_spl_auto": 0.0
+    },
+    "near": {
+      "total": 22,
+      "success_auto": 22,
+      "reasons": {
+        "success": 22
+      },
+      "min_start_geodesic_m": 0.06286828964948654,
+      "max_start_geodesic_m": 0.3427063822746277,
+      "mean_spl_auto": 0.9957735642508674
+    }
+  }
+}

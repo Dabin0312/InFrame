@@ -1,0 +1,2038 @@
+{
+  "baseline": {
+    "original45": {
+      "localized": 34,
+      "expected_instances": 82,
+      "linked_instances": 55,
+      "correct_mask_and_id": 55,
+      "exact_photos": 26,
+      "photos": 45,
+      "false_links": 0,
+      "missed": 27
+    },
+    "new10": {
+      "localized": 9,
+      "expected_instances": 20,
+      "linked_instances": 14,
+      "correct_mask_and_id": 14,
+      "exact_photos": 5,
+      "photos": 10,
+      "false_links": 0,
+      "missed": 6
+    },
+    "controls6": {
+      "localized": 6,
+      "expected_instances": 4,
+      "linked_instances": 4,
+      "correct_mask_and_id": 4,
+      "exact_photos": 6,
+      "photos": 6,
+      "false_links": 0,
+      "missed": 0
+    }
+  },
+  "improved": {
+    "original45": {
+      "localized": 43,
+      "expected_instances": 82,
+      "linked_instances": 77,
+      "correct_mask_and_id": 77,
+      "exact_photos": 41,
+      "photos": 45,
+      "false_links": 0,
+      "missed": 5
+    },
+    "new10": {
+      "localized": 10,
+      "expected_instances": 20,
+      "linked_instances": 18,
+      "correct_mask_and_id": 18,
+      "exact_photos": 8,
+      "photos": 10,
+      "false_links": 0,
+      "missed": 2
+    },
+    "controls6": {
+      "localized": 6,
+      "expected_instances": 4,
+      "linked_instances": 4,
+      "correct_mask_and_id": 4,
+      "exact_photos": 6,
+      "photos": 6,
+      "false_links": 0,
+      "missed": 0
+    }
+  },
+  "photos": {
+    "before": [
+      {
+        "photo": "seq-02_000000",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-02_000010",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-02_000020",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-02_000030",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-02_000040",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "B"
+        ],
+        "correct": [
+          "B"
+        ],
+        "wrong": [],
+        "exact": false
+      },
+      {
+        "photo": "seq-02_000050",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A"
+        ],
+        "correct": [
+          "A"
+        ],
+        "wrong": [],
+        "exact": false
+      },
+      {
+        "photo": "seq-02_000060",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-02_000070",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "B"
+        ],
+        "correct": [
+          "B"
+        ],
+        "wrong": [],
+        "exact": false
+      },
+      {
+        "photo": "seq-02_000100",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A"
+        ],
+        "correct": [
+          "A"
+        ],
+        "wrong": [],
+        "exact": false
+      },
+      {
+        "photo": "seq-02_000200",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A"
+        ],
+        "correct": [
+          "A"
+        ],
+        "wrong": [],
+        "exact": false
+      },
+      {
+        "photo": "seq-02_000300",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-02_000400",
+        "localized": true,
+        "expected": [
+          "A"
+        ],
+        "predicted": [
+          "A"
+        ],
+        "correct": [
+          "A"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-02_000500",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-02_000600",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "B"
+        ],
+        "correct": [
+          "B"
+        ],
+        "wrong": [],
+        "exact": false
+      },
+      {
+        "photo": "seq-02_000700",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-02_000800",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-02_000900",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-03_000000",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-03_000090",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-03_000180",
+        "localized": false,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [],
+        "correct": [],
+        "wrong": [],
+        "exact": false
+      },
+      {
+        "photo": "seq-03_000270",
+        "localized": false,
+        "expected": [],
+        "predicted": [],
+        "correct": [],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-03_000360",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-03_000450",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-03_000540",
+        "localized": false,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [],
+        "correct": [],
+        "wrong": [],
+        "exact": false
+      },
+      {
+        "photo": "seq-03_000630",
+        "localized": false,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [],
+        "correct": [],
+        "wrong": [],
+        "exact": false
+      },
+      {
+        "photo": "seq-03_000720",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "B"
+        ],
+        "correct": [
+          "B"
+        ],
+        "wrong": [],
+        "exact": false
+      },
+      {
+        "photo": "seq-03_000810",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-03_000900",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-03_000990",
+        "localized": false,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [],
+        "correct": [],
+        "wrong": [],
+        "exact": false
+      },
+      {
+        "photo": "seq-04_000000",
+        "localized": false,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [],
+        "correct": [],
+        "wrong": [],
+        "exact": false
+      },
+      {
+        "photo": "seq-04_000060",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-04_000125",
+        "localized": false,
+        "expected": [],
+        "predicted": [],
+        "correct": [],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-04_000185",
+        "localized": false,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [],
+        "correct": [],
+        "wrong": [],
+        "exact": false
+      },
+      {
+        "photo": "seq-04_000250",
+        "localized": false,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [],
+        "correct": [],
+        "wrong": [],
+        "exact": false
+      },
+      {
+        "photo": "seq-04_000310",
+        "localized": false,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [],
+        "correct": [],
+        "wrong": [],
+        "exact": false
+      },
+      {
+        "photo": "seq-04_000375",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-04_000435",
+        "localized": true,
+        "expected": [],
+        "predicted": [],
+        "correct": [],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-04_000500",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-04_000560",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "B"
+        ],
+        "correct": [
+          "B"
+        ],
+        "wrong": [],
+        "exact": false
+      },
+      {
+        "photo": "seq-04_000625",
+        "localized": false,
+        "expected": [
+          "B"
+        ],
+        "predicted": [],
+        "correct": [],
+        "wrong": [],
+        "exact": false
+      },
+      {
+        "photo": "seq-04_000685",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "B"
+        ],
+        "correct": [
+          "B"
+        ],
+        "wrong": [],
+        "exact": false
+      },
+      {
+        "photo": "seq-04_000750",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-04_000810",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-04_000875",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-04_000935",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A"
+        ],
+        "correct": [
+          "A"
+        ],
+        "wrong": [],
+        "exact": false
+      },
+      {
+        "photo": "control_000000_A",
+        "localized": true,
+        "expected": [
+          "A"
+        ],
+        "predicted": [
+          "A"
+        ],
+        "correct": [
+          "A"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "control_000000_B",
+        "localized": true,
+        "expected": [
+          "B"
+        ],
+        "predicted": [
+          "B"
+        ],
+        "correct": [
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "control_000000_none",
+        "localized": true,
+        "expected": [],
+        "predicted": [],
+        "correct": [],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "control_000010_A",
+        "localized": true,
+        "expected": [
+          "A"
+        ],
+        "predicted": [
+          "A"
+        ],
+        "correct": [
+          "A"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "control_000010_B",
+        "localized": true,
+        "expected": [
+          "B"
+        ],
+        "predicted": [
+          "B"
+        ],
+        "correct": [
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "control_000010_none",
+        "localized": true,
+        "expected": [],
+        "predicted": [],
+        "correct": [],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-03_000033",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-03_000213",
+        "localized": false,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [],
+        "correct": [],
+        "wrong": [],
+        "exact": false
+      },
+      {
+        "photo": "seq-03_000393",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-03_000573",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-03_000753",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "B"
+        ],
+        "correct": [
+          "B"
+        ],
+        "wrong": [],
+        "exact": false
+      },
+      {
+        "photo": "seq-04_000033",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-04_000213",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "B"
+        ],
+        "correct": [
+          "B"
+        ],
+        "wrong": [],
+        "exact": false
+      },
+      {
+        "photo": "seq-04_000393",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A"
+        ],
+        "correct": [
+          "A"
+        ],
+        "wrong": [],
+        "exact": false
+      },
+      {
+        "photo": "seq-04_000573",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "B"
+        ],
+        "correct": [
+          "B"
+        ],
+        "wrong": [],
+        "exact": false
+      },
+      {
+        "photo": "seq-04_000753",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      }
+    ],
+    "after": [
+      {
+        "photo": "seq-02_000000",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-02_000010",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-02_000020",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-02_000030",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-02_000040",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "B",
+          "A"
+        ],
+        "correct": [
+          "B",
+          "A"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-02_000050",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-02_000060",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-02_000070",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "B"
+        ],
+        "correct": [
+          "B"
+        ],
+        "wrong": [],
+        "exact": false
+      },
+      {
+        "photo": "seq-02_000100",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-02_000200",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-02_000300",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-02_000400",
+        "localized": true,
+        "expected": [
+          "A"
+        ],
+        "predicted": [
+          "A"
+        ],
+        "correct": [
+          "A"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-02_000500",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-02_000600",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "B",
+          "A"
+        ],
+        "correct": [
+          "B",
+          "A"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-02_000700",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-02_000800",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-02_000900",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-03_000000",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-03_000090",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-03_000180",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-03_000270",
+        "localized": true,
+        "expected": [],
+        "predicted": [],
+        "correct": [],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-03_000360",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-03_000450",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-03_000540",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-03_000630",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-03_000720",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "B",
+          "A"
+        ],
+        "correct": [
+          "B",
+          "A"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-03_000810",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-03_000900",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-03_000990",
+        "localized": false,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [],
+        "correct": [],
+        "wrong": [],
+        "exact": false
+      },
+      {
+        "photo": "seq-04_000000",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-04_000060",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-04_000125",
+        "localized": true,
+        "expected": [],
+        "predicted": [],
+        "correct": [],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-04_000185",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A"
+        ],
+        "correct": [
+          "A"
+        ],
+        "wrong": [],
+        "exact": false
+      },
+      {
+        "photo": "seq-04_000250",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-04_000310",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-04_000375",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-04_000435",
+        "localized": true,
+        "expected": [],
+        "predicted": [],
+        "correct": [],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-04_000500",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-04_000560",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "B",
+          "A"
+        ],
+        "correct": [
+          "B",
+          "A"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-04_000625",
+        "localized": false,
+        "expected": [
+          "B"
+        ],
+        "predicted": [],
+        "correct": [],
+        "wrong": [],
+        "exact": false
+      },
+      {
+        "photo": "seq-04_000685",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "B",
+          "A"
+        ],
+        "correct": [
+          "B",
+          "A"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-04_000750",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-04_000810",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-04_000875",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-04_000935",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "control_000000_A",
+        "localized": true,
+        "expected": [
+          "A"
+        ],
+        "predicted": [
+          "A"
+        ],
+        "correct": [
+          "A"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "control_000000_B",
+        "localized": true,
+        "expected": [
+          "B"
+        ],
+        "predicted": [
+          "B"
+        ],
+        "correct": [
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "control_000000_none",
+        "localized": true,
+        "expected": [],
+        "predicted": [],
+        "correct": [],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "control_000010_A",
+        "localized": true,
+        "expected": [
+          "A"
+        ],
+        "predicted": [
+          "A"
+        ],
+        "correct": [
+          "A"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "control_000010_B",
+        "localized": true,
+        "expected": [
+          "B"
+        ],
+        "predicted": [
+          "B"
+        ],
+        "correct": [
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "control_000010_none",
+        "localized": true,
+        "expected": [],
+        "predicted": [],
+        "correct": [],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-03_000033",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-03_000213",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-03_000393",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-03_000573",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-03_000753",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "B",
+          "A"
+        ],
+        "correct": [
+          "B",
+          "A"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-04_000033",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-04_000213",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "B"
+        ],
+        "correct": [
+          "B"
+        ],
+        "wrong": [],
+        "exact": false
+      },
+      {
+        "photo": "seq-04_000393",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A"
+        ],
+        "correct": [
+          "A"
+        ],
+        "wrong": [],
+        "exact": false
+      },
+      {
+        "photo": "seq-04_000573",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "B",
+          "A"
+        ],
+        "correct": [
+          "B",
+          "A"
+        ],
+        "wrong": [],
+        "exact": true
+      },
+      {
+        "photo": "seq-04_000753",
+        "localized": true,
+        "expected": [
+          "A",
+          "B"
+        ],
+        "predicted": [
+          "A",
+          "B"
+        ],
+        "correct": [
+          "A",
+          "B"
+        ],
+        "wrong": [],
+        "exact": true
+      }
+    ]
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "min_clearance_center_to_cell_edge_m": {
+    "mapped_obstacle": 0.22980934498913366,
+    "mapped_unknown": 0.24044231068672553,
+    "heldout_obstacle": 0.22640505520785717,
+    "heldout_unknown": 0.2375000119209289
+  },
+  "sample_spacing_at_most_m": 0.002,
+  "body_radius_m": 0.22,
+  "checked_positions": 231,
+  "targets_arrived": {
+    "A": true,
+    "B": true
+  },
+  "anchor_roundtrip_max_m": 4.744904746134193e-16,
+  "cases": {
+    "P1": {
+      "data": "pass",
+      "sim": "pass"
+    },
+    "P2": {
+      "data": "pass",
+      "sim": "pass"
+    },
+    "P3": {
+      "data": "pass",
+      "sim": "obstacle"
+    },
+    "C1": {
+      "data": "obstacle",
+      "sim": "obstacle"
+    },
+    "C2": {
+      "data": "obstacle",
+      "sim": "obstacle"
+    },
+    "C3": {
+      "data": "obstacle",
+      "sim": "obstacle"
+    },
+    "U1": {
+      "data": "unknown",
+      "sim": "unknown"
+    }
+  }
+}

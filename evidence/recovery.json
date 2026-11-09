@@ -1,0 +1,217 @@
+{
+  "fresh": {
+    "policies": {
+      "before": {
+        "total": 60,
+        "success": 38,
+        "rate": 0.6333333333333333,
+        "mean_spl": 0.6333333333333333,
+        "outcomes": {
+          "boundary": 13,
+          "success": 38,
+          "rotation": 9
+        },
+        "impacts": 39,
+        "runs_with_contact": 13,
+        "initially_invisible": 56,
+        "success_from_invisible": 37
+      },
+      "after": {
+        "total": 60,
+        "success": 51,
+        "rate": 0.85,
+        "mean_spl": 0.85,
+        "outcomes": {
+          "success": 51,
+          "rotation": 3,
+          "boundary": 6
+        },
+        "impacts": 24,
+        "runs_with_contact": 10,
+        "initially_invisible": 56,
+        "success_from_invisible": 47
+      }
+    },
+    "paired": {
+      "recovered": 13,
+      "regressed": 0,
+      "both_success": 38,
+      "both_failed": 9
+    },
+    "transitions": {
+      "boundary → success": 10,
+      "success → success": 38,
+      "rotation → rotation": 3,
+      "rotation → boundary": 3,
+      "boundary → boundary": 3,
+      "rotation → success": 3
+    }
+  },
+  "development": {
+    "policies": {
+      "before": {
+        "total": 72,
+        "success": 63,
+        "rate": 0.875,
+        "mean_spl": 0.875,
+        "outcomes": {
+          "success": 63,
+          "boundary": 6,
+          "rotation": 3
+        },
+        "impacts": 18,
+        "runs_with_contact": 6,
+        "initially_invisible": 64,
+        "success_from_invisible": 56
+      },
+      "after": {
+        "total": 72,
+        "success": 71,
+        "rate": 0.9861111111111112,
+        "mean_spl": 0.9861111111111112,
+        "outcomes": {
+          "success": 71,
+          "boundary": 1
+        },
+        "impacts": 9,
+        "runs_with_contact": 4,
+        "initially_invisible": 64,
+        "success_from_invisible": 63
+      }
+    },
+    "paired": {
+      "recovered": 8,
+      "regressed": 0,
+      "both_success": 63,
+      "both_failed": 1
+    },
+    "transitions": {
+      "success → success": 63,
+      "boundary → success": 5,
+      "rotation → success": 3,
+      "boundary → boundary": 1
+    }
+  },
+  "training_area": {
+    "policies": {
+      "before": {
+        "total": 132,
+        "success": 105,
+        "rate": 0.7954545454545454,
+        "mean_spl": 0.7954545454545454,
+        "outcomes": {
+          "success": 105,
+          "boundary": 16,
+          "rotation": 11
+        },
+        "impacts": 48,
+        "runs_with_contact": 16,
+        "initially_invisible": 119,
+        "success_from_invisible": 93
+      },
+      "after": {
+        "total": 132,
+        "success": 125,
+        "rate": 0.946969696969697,
+        "mean_spl": 0.9446815713423506,
+        "outcomes": {
+          "success": 125,
+          "boundary": 5,
+          "rotation": 2
+        },
+        "impacts": 28,
+        "runs_with_contact": 12,
+        "initially_invisible": 119,
+        "success_from_invisible": 112
+      }
+    },
+    "paired": {
+      "recovered": 20,
+      "regressed": 0,
+      "both_success": 105,
+      "both_failed": 7
+    },
+    "transitions": {
+      "success → success": 105,
+      "boundary → success": 12,
+      "rotation → success": 8,
+      "boundary → boundary": 3,
+      "boundary → rotation": 1,
+      "rotation → boundary": 2,
+      "rotation → rotation": 1
+    }
+  },
+  "registered_starts_sha256": "118b8d12910dd9adfe32ca257c5d8c987301ba0f8769da1278d16204e2b14764",
+  "model_lock": {
+    "before": "d06c6e2a0a3e4c09e625cb77460c3d148edc6f77d544696910f20f3b6cfca4db",
+    "after": "1e891c9c0f376b2a717b4e5e011554d66621aa1e9f590238555f9de3a4248819",
+    "controller": "7d22ba7cef879f8c906b130073362ceb779708b9c884fe95e0c8eac69da3f217",
+    "visual_motion": "f384f2776a42f865bc41c7c777155bce375ef589daf9118086185b3e215af094",
+    "baseline_policy": "a65f000578dc0e5b3e2b2fde4c0df933382455f7eb647102779229bd562e9ab4",
+    "worker": "ea45edcbc36878e2546ae967fb64d742661ceaf86777a0f90dc0e2606f259eb1",
+    "evaluator": "fb373a4b0171633c612509a21393f9b2e5c73fb218adc5d32fe08dce0fee57a0",
+    "starts": "118b8d12910dd9adfe32ca257c5d8c987301ba0f8769da1278d16204e2b14764",
+    "development_run": "dev2",
+    "development_metrics": {
+      "policies": {
+        "before": {
+          "total": 72,
+          "success": 63,
+          "rate": 0.875,
+          "mean_spl": 0.875,
+          "outcomes": {
+            "success": 63,
+            "boundary": 6,
+            "rotation": 3
+          },
+          "impacts": 18,
+          "runs_with_contact": 6,
+          "initially_invisible": 64,
+          "success_from_invisible": 56
+        },
+        "after": {
+          "total": 72,
+          "success": 71,
+          "rate": 0.9861111111111112,
+          "mean_spl": 0.9861111111111112,
+          "outcomes": {
+            "success": 71,
+            "boundary": 1
+          },
+          "impacts": 9,
+          "runs_with_contact": 4,
+          "initially_invisible": 64,
+          "success_from_invisible": 63
+        }
+      },
+      "paired": {
+        "recovered": 8,
+        "regressed": 0,
+        "both_success": 63,
+        "both_failed": 1
+      },
+      "transitions": {
+        "success → success": 63,
+        "boundary → success": 5,
+        "rotation → success": 3,
+        "boundary → boundary": 1
+      }
+    },
+    "selection_basis": "Training-area development trials only; model weights and code frozen before running either policy on the fresh split."
+  },
+  "min_test_start_to_correction_m": 0.11192334832662966,
+  "min_test_start_to_additional_traces_m": {
+    "train/before": 0.23999977111816406,
+    "dev/before": 0.23023216668033206,
+    "dev/after": 0.3052210249983568,
+    "dev2/after": 0.2301119207767197
+  },
+  "episodes_replayed": 120,
+  "initial_pose_matched_pairs": 60,
+  "initial_rgb_hash_matched_pairs": 59,
+  "initial_rgb_raw_mismatch": [
+    "FRESH-004"
+  ],
+  "initial_archived_rgb_matched_pairs": 46,
+  "human_rating": "pending"
+}

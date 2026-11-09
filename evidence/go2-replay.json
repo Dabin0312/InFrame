@@ -1,0 +1,12 @@
+{
+  "episodes": 62,
+  "post_start_commands_checked": 6735,
+  "normal_outcomes": {
+    "goal_stop": 51,
+    "mission_timeout": 3,
+    "collision_limit": 6
+  },
+  "limited_commands_actually_clamped": 133,
+  "max_step_pose_diff_m": 0.0,
+  "max_terminal_rgb_mae_255": 0.0
+}

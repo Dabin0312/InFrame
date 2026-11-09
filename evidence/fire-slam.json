@@ -1,0 +1,129 @@
+{
+  "dataset_url": "https://www.microsoft.com/en-us/research/project/rgb-d-dataset-7-scenes/",
+  "distribution_url": "https://3dmatch.cs.princeton.edu/",
+  "slam": {
+    "source": "Microsoft Research 7-Scenes Fire, 3DMatch registered RGB-D distribution",
+    "calibration": [
+      [
+        585.0,
+        0.0,
+        320.0
+      ],
+      [
+        0.0,
+        585.0,
+        240.0
+      ],
+      [
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "range": "first 80 frames per sequence; each initialized independently, synthetic 30 Hz index clock",
+    "runs": [
+      {
+        "sequence": "seq-01",
+        "frames": 80,
+        "tracked_ok": 80,
+        "landmarks": 1807,
+        "reference_poses_compared": 80,
+        "rmse_m": 0.019318212886344565,
+        "alignment": "first pose SE(3), no scale fit"
+      },
+      {
+        "sequence": "seq-02",
+        "frames": 80,
+        "tracked_ok": 80,
+        "landmarks": 1370,
+        "reference_poses_compared": 80,
+        "rmse_m": 0.02595767364184272,
+        "alignment": "first pose SE(3), no scale fit"
+      }
+    ]
+  },
+  "relocalization": {
+    "dataset": "7-Scenes Fire / 3DMatch",
+    "map": "seq-01, first 80 RGB-D frames, ORB-SLAM3 estimated poses",
+    "query_input": "seq-02 RGB, frames 0:80:10; query depth/poses not used by localizer",
+    "method": "ORB descriptors + depth-backed first-sequence map + PnP-RANSAC, >=20 inliers; median reprojection <3px",
+    "records": [
+      {
+        "query_frame": 0,
+        "localized": true,
+        "keyframe": 0,
+        "inliers": 408,
+        "reprojection_median_px": 1.2894337177276611,
+        "reference_position_error_m": 0.026478210891536985,
+        "reference_rotation_error_deg": 1.3221876461506403
+      },
+      {
+        "query_frame": 10,
+        "localized": true,
+        "keyframe": 0,
+        "inliers": 441,
+        "reprojection_median_px": 1.301288366317749,
+        "reference_position_error_m": 0.04280528654723494,
+        "reference_rotation_error_deg": 1.6602965320410616
+      },
+      {
+        "query_frame": 20,
+        "localized": true,
+        "keyframe": 0,
+        "inliers": 530,
+        "reprojection_median_px": 1.2983877658843994,
+        "reference_position_error_m": 0.020694091085993568,
+        "reference_rotation_error_deg": 1.551027093406992
+      },
+      {
+        "query_frame": 30,
+        "localized": true,
+        "keyframe": 0,
+        "inliers": 457,
+        "reprojection_median_px": 1.1251369714736938,
+        "reference_position_error_m": 0.03201934809803682,
+        "reference_rotation_error_deg": 1.9612682291369932
+      },
+      {
+        "query_frame": 40,
+        "localized": true,
+        "keyframe": 0,
+        "inliers": 295,
+        "reprojection_median_px": 1.4095485210418701,
+        "reference_position_error_m": 0.040834644939558365,
+        "reference_rotation_error_deg": 2.0457089949648624
+      },
+      {
+        "query_frame": 50,
+        "localized": true,
+        "keyframe": 0,
+        "inliers": 225,
+        "reprojection_median_px": 1.4673808813095093,
+        "reference_position_error_m": 0.04789208897164526,
+        "reference_rotation_error_deg": 2.193520919271975
+      },
+      {
+        "query_frame": 60,
+        "localized": true,
+        "keyframe": 0,
+        "inliers": 195,
+        "reprojection_median_px": 1.3294532299041748,
+        "reference_position_error_m": 0.04518180159314922,
+        "reference_rotation_error_deg": 1.814588840788935
+      },
+      {
+        "query_frame": 70,
+        "localized": true,
+        "keyframe": 0,
+        "inliers": 122,
+        "reprojection_median_px": 1.2356914281845093,
+        "reference_position_error_m": 0.06753899444158683,
+        "reference_rotation_error_deg": 2.633799027709565
+      }
+    ],
+    "localized": 8,
+    "queries": 8,
+    "reference_position_median_m": 0.04181996574339665
+  },
+  "scope": "Real RGB-D public data from one small scene. Independent tracking runs and cross-sequence RGB query localization only. Navigation, STOP instance visibility and physical passage are unevaluated."
+}

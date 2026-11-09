@@ -10,7 +10,7 @@ The downloadable report was produced by selecting the short MP4 through the same
 
 ## Project teaser and framework
 
-The real-video project teaser uses seconds 37.00–43.00 of SparseVideoNav BVN recording `fe75cd3028c834ef`, trimmed and re-encoded for playback. Its overlaid observations, reconstructed camera path and 43.00 s STOP are from the [same held-out run](../h4/). The framework includes that recording's STOP frame (CC BY-NC-SA 4.0), derived 7-Scenes Fire and Castle illustrations from the [original project sources](../DATA-NOTICES.md), and the simulated Menagerie Go2 credited below. [Source recording](https://huggingface.co/datasets/OpenDriveLab/SparseVideoNav/blob/main/raw_videos/bvn/fe75cd3028c834ef.mp4) · [License](https://creativecommons.org/licenses/by-nc-sa/4.0/)
+The real-video project teaser uses seconds 37.00–43.00 of SparseVideoNav BVN recording `fe75cd3028c834ef`, trimmed and re-encoded for playback. Its overlaid observations, reconstructed camera path and 43.00 s STOP are from the [same held-out run](../h4/). [Source recording](https://huggingface.co/datasets/OpenDriveLab/SparseVideoNav/blob/main/raw_videos/bvn/fe75cd3028c834ef.mp4) · [License](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 
 ## Browser mapper and detector
 
@@ -34,3 +34,5 @@ The chair and bin are placed once in the Castle scene. Both RGB and the overview
 The two additional video examples are OpenDriveLab SparseVideoNav recordings `3120aeb0b735e436` (gallery chair) and `067e8e394345e3cb` (elevator bins). Resized recordings and derived frames are distributed under CC BY-NC-SA 4.0. [Dataset revision](https://huggingface.co/datasets/OpenDriveLab/SparseVideoNav/tree/c986feef0f63cd688d8b0835320516dd9aa76280) · [License](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 
 The two-channel indoor detector uses the same YOLOE-11s weights, text encoder and AGPL-3.0 terms listed above. Rebuild with `python export-detector.py --indoor --output indoor.onnx`. Channel 0 is chair and channel 1 is trash can.
+
+The framework on the project page and in the README pairs the gallery recording `3120aeb0b735e436` (frames at 12.00 and 28.00 s, a map derived with AlvaAR, and the associated chair detection; CC BY-NC-SA 4.0 as above) with the FRESH-015 Castle bin run (NavMesh, commanded velocities and robot-camera frame at 16.75 s). The Castle scan is credited in [project sources](../DATA-NOTICES.md) and the bin asset above. The gallery and Castle are separate scenes.

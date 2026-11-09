@@ -2,7 +2,7 @@
 
 **실내 의미 지도와 전방 RGB에 기반한 목표 객체 탐색 및 정지(ObjectNav).**
 
-InFrame은 지정된 종류의 물체가 보이는 자리까지 이동하고, 첫 STOP 사진을 지도 위의 개체와 연결합니다. 소화기는 첫 검증 범주입니다. 현재 공개 모델의 검출·정지 가중치는 소화기에 맞춰져 있으며, 의자·쓰레기통에 대한 주행 평가는 후속 과제입니다.
+InFrame은 지정된 종류의 물체가 보이는 자리까지 이동하고, 첫 STOP 사진을 지도 위의 개체와 연결합니다. 공개 데모에서 소화기·의자·쓰레기통을 선택할 수 있습니다. Castle의 동일 출발 자세에서 지도 기반 주행을 비교하고, 촬영한 영상에서는 목표별 관측과 첫 STOP을 확인합니다.
 
 [Project page](https://dabin0312.github.io/InFrame/) · [Try your own data](https://dabin0312.github.io/InFrame/demo/) · [주행 영상](https://dabin0312.github.io/InFrame/#run) · [Data & models](https://github.com/Dabin0312/InFrame/releases/tag/v0.7.0)
 
@@ -14,7 +14,9 @@ InFrame은 지정된 종류의 물체가 보이는 자리까지 이동하고, �
 
 [새 공개 영상 9편의 정책 비교](https://dabin0312.github.io/InFrame/h4/) · [공개 실내 영상의 결과 열기](https://dabin0312.github.io/InFrame/demo/?example=approach) · [내 영상으로 실행](https://dabin0312.github.io/InFrame/demo/) · [Go2 주행 직접 실행](https://dabin0312.github.io/InFrame/#live)
 
-촬영한 MP4를 선택하면 카메라 영상, 그 영상에서 복원한 단안 SLAM 지도, 정지 장면을 함께 볼 수 있습니다. 지도에서 소화기를 선택하면 관측한 프레임으로 이동합니다. 기존 H4와 실영상으로 정지 행동을 학습한 H4의 첫 STOP을 비교할 수 있습니다. 영상은 브라우저에서 처리하며 관측과 지도는 JSON으로 저장할 수 있습니다.
+촬영한 MP4를 선택하면 카메라 영상, 그 영상에서 복원한 단안 SLAM 지도, 정지 장면을 함께 볼 수 있습니다. 지도에서 물체 ID를 선택하면 관측한 프레임으로 이동합니다. 의자·쓰레기통은 YOLOE의 범주별 출력과 동일 개체의 연속 관측으로 정지 장면을 고릅니다. 기존 H4와 실영상으로 정지 행동을 학습한 H4의 첫 STOP을 비교할 수 있습니다. 영상은 브라우저에서 처리하며 관측과 지도는 JSON으로 저장할 수 있습니다.
+
+[전시장 의자 영상 실행](https://dabin0312.github.io/InFrame/demo/?goal=chair&example=chair) · [엘리베이터 앞 쓰레기통 영상 실행](https://dabin0312.github.io/InFrame/demo/?goal=bin&example=bin) · [동일 출발점 세 목표의 경로와 정지 사진](https://dabin0312.github.io/InFrame/#goal-comparison) · [검증 수치와 경로 좌표](project/goal-runs.json)
 
 ## Method
 

@@ -1,108 +1,18 @@
-<!doctype html>
-<html lang="ko">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#f8f8f4">
-  <title>In Frame — 실내 영상 SLAM과 ObjectNav</title>
-  <meta name="description" content="실내 영상에서 카메라 궤적과 3D 지도가 만들어지는 과정, 소화기를 향해 이동한 로봇이 멈춘 순간의 시야.">
-  <link rel="icon" href="mark.svg">
-  <link rel="preload" href="geist.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="korean.woff2?room=1" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="style.css"><link rel="stylesheet" href="sequence.css?room=1">
-</head>
-<body id="top">
-<a class="skip" href="#playground">시연으로 이동</a>
-<header class="wrap mast">
-  <a href="#top" class="brand" aria-label="In Frame 홈"><span class="brand-icon" aria-hidden="true"></span>In Frame</a>
-  <nav aria-label="페이지 메뉴"><a href="#records">실험 기록</a><a href="#evaluation">평가 계획</a><a class="git" href="https://github.com/Dabin0312/InFrame">GitHub ↗</a></nav>
-</header>
-<main class="wrap">
-  <section aria-labelledby="title">
-    <div class="intro">
-      <h1 id="title">In Frame<span class="title-dot" aria-hidden="true"></span></h1>
-      <p class="brief">실내 영상이 지도가 되고,<br><strong>로봇은 목표를 찾아 멈춥니다.</strong></p>
-    </div>
-    <div class="sequence" id="playground" data-phase="0">
-      <div class="chapters" role="group" aria-label="재생할 단계">
-        <button class="chapter" data-chapter="0" aria-pressed="true"><i class="frame-icon" aria-hidden="true"></i><span>실내 영상</span></button><span class="join" aria-hidden="true">→</span>
-        <button class="chapter" data-chapter="1" aria-pressed="false"><i class="point-icon" aria-hidden="true"></i><span>SLAM <em>지도</em></span></button><span class="join" aria-hidden="true">→</span>
-        <button class="chapter" data-chapter="2" aria-pressed="false"><i class="goal-icon" aria-hidden="true"></i><span>ObjectNav <em>주행</em></span></button>
-      </div>
-      <div id="scan-view" class="scan-view">
-        <figure class="rgb-pane">
-          <video id="indoor" src="indoor.mp4?room=1" poster="indoor.jpg?room=1" muted playsinline preload="auto" aria-label="한 작업실을 여러 시점에서 기록한 RGB-D 카메라 영상"></video>
-          <video id="drive-video" src="drive.mp4" muted playsinline preload="metadata" aria-label="같은 작업실 안에서 경로를 따라가는 로봇의 시야" hidden></video>
-          <img id="reverse-view" src="reverse.jpg" alt="정지 위치에서 뒤를 돌아본 카메라 영상" hidden>
-          <div id="object-box" hidden aria-hidden="true"></div>
-          <figcaption><span class="feed-dot"></span><span id="feed-name">실내 카메라</span></figcaption>
-          <div class="camera-time" id="camera-time"></div>
-          <span class="decision" id="decision" role="status" hidden></span>
-        </figure>
-        <figure class="map-pane" id="map-pane">
-          <canvas id="scan-canvas" aria-label="영상과 같은 시각의 공간 표면과 카메라 궤적"></canvas>
-          <figcaption id="map-caption"><span class="trajectory-key"></span><span id="map-key">촬영 궤적</span></figcaption>
-          <button id="map-flip" class="flip-control" hidden>뒤돌아보기</button>
-          <button class="layer" id="map-layer" aria-pressed="false">SLAM 지도점</button>
-        </figure>
-      </div>
-      <div id="mission" hidden>
-      <div class="stage" id="stage" tabindex="0" role="region" aria-label="소화기 탐색 주행 장면" aria-describedby="controls-help">
-        <canvas id="map" aria-label="소화기와 두 개의 장비 상자가 있는 방"></canvas>
-        <span class="tag player-tag" id="player-tag" hidden>로봇</span>
-        <button class="tag target-tag" id="target-tag" aria-label="소화기로 이동" hidden>소화기</button>
-        <div class="stage-top">
-          <div class="scene-name"><span class="live-dot"></span>목표 · 소화기</div>
-          <div class="views" role="group" aria-label="시점">
-            <button id="overview" aria-pressed="true">공간 지도</button><button id="first-person" aria-pressed="false">1인칭</button>
-          </div>
-        </div>
-        <canvas id="minimap" width="160" height="160" hidden aria-label="미니맵에 표시된 현재 위치와 바라보는 방향"></canvas>
-        <div id="crosshair" aria-hidden="true" hidden></div>
-        <div class="touch-controls" aria-label="터치 조종">
-          <div id="stick" aria-label="이동 조이스틱"><i></i></div>
-          <div class="turn-pad"><button data-turn="-1" aria-label="왼쪽으로 회전">↶</button><button data-turn="1" aria-label="오른쪽으로 회전">↷</button></div>
-        </div>
-        <div id="message" role="status" hidden></div>
-        <noscript><img src="room.svg" class="offline" alt="소화기 관측 지점으로 이어지는 경로"><p>직접 주행하려면 자바스크립트를 켜 주세요.</p></noscript>
-      </div>
-      <div class="toolbar">
-        <div class="mode-group" role="group" aria-label="주행 방식">
-          <button id="free" aria-pressed="true"><span aria-hidden="true">✥</span> 자유 주행</button>
-          <button id="auto" aria-pressed="false"><span aria-hidden="true">▷</span> 경로 재생</button>
-        </div>
-        <div class="tools">
-          <button class="reset" id="reset" aria-label="출발점으로 초기화" title="출발점으로 초기화">↺</button>
-          <button id="judge" class="stop"><i aria-hidden="true"></i> 정지 판정</button>
-        </div>
-      </div>
-      <div id="replay" class="replay" hidden><button id="play" aria-label="경로 일시정지">Ⅱ</button><input type="range" id="time" min="0" max="1000" value="0" aria-label="경로 재생 위치"><output id="replay-distance">0.00 m</output><button id="ending">정지 장면</button></div>
-      <div id="compare" class="compare" hidden><span>정지 방향</span><button id="toward" aria-pressed="true">목표 쪽</button><button id="away" aria-pressed="false">반대쪽</button><output id="compare-result"></output></div>
-      <div class="under" id="manual-help" hidden><p id="controls-help"><span class="desktop-hint"><kbd>WASD</kbd> 이동 <kbd>← →</kbd> 회전 · </span><span class="touch-hint">조이스틱 이동 · </span>바닥을 눌러 이동</p><output id="coordinates"></output></div>
-      </div>
-      <div class="transport">
-        <button id="sequence-play" aria-label="시연 재생"><span aria-hidden="true"></span></button>
-        <label class="sr-only" for="sequence-time">전체 재생 위치</label><input id="sequence-time" type="range" min="0" max="2100" step="1" value="0">
-        <output id="clock">0:00 / 0:21</output>
-        <button id="manual" hidden>직접 주행</button>
-      </div>
-    </div>
-    <div class="sequence-note"><p id="sequence-caption" aria-live="polite">카메라가 작업대를 돌아 이동하며 바닥과 장애물, 소화기를 관측합니다.</p><span id="data-source">작업실 · RGB-D 시뮬레이션</span></div>
-    <noscript><p>실내 영상과 지도, 주행 경로를 재생하려면 자바스크립트를 켜 주세요.</p></noscript>
-  </section>
-  <section id="records" class="lower"><div class="section-title"><h2>실험 기록</h2></div>
-    <div class="results">
-      <article><div class="record-top"><h3>카메라 추적</h3><span>ORB-SLAM3 · RGB-D</span></div><img src="tracking.svg?room=1" width="600" height="180" loading="lazy" alt="작업실에서 추정한 카메라 궤적과 지도점"><strong class="metric" id="metric-frames"></strong><p id="tracking-detail"></p></article>
-      <article><div class="record-top"><h3>소화기까지의 경로</h3><span>10 cm 점유 격자</span></div><img src="plan.svg?room=1" width="600" height="180" loading="lazy" alt="관측된 바닥 위의 로봇 경로와 소화기 위치"><strong class="metric" id="metric-distance"></strong><p id="stop-detail"></p></article>
-    </div>
-  </section>
-  <section id="evaluation" class="lower evaluation"><div class="section-title"><h2>평가 계획</h2><p>현장 촬영 후 검증 예정</p></div><dl>
-    <div><dt>학습</dt><dd>지도에서 구한 시범 경로로 학습하고, 전방 영상·목표 종류·최근 행동으로 주행합니다.</dd></div>
-    <div><dt>정지</dt><dd>정지 시 지정 관측 지점까지 경로 거리 0.8 m 이내이며 같은 목표가 카메라에 보여야 성공입니다.</dd></div>
-    <div><dt>현장 대조</dt><dd>복도의 통과 구간 3곳과 차단 구간 3곳을 복원 장면에서 다시 확인합니다.</dd></div>
-    <div><dt>주행 평가</dt><dd>미학습 출발 자세 20개와 목표 3종을 조합해 총 60회 중 42회 이상 성공을 목표로 합니다.</dd></div>
-  </dl></section>
-</main>
-<footer class="wrap"><a class="brand" href="#top"><span class="brand-icon" aria-hidden="true"></span>In Frame</a><a href="https://github.com/Dabin0312/InFrame#in-frame">실행 기록 ↗</a></footer>
-<script type="module" src="sequence.js?room=1"></script>
-</body></html>
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#faf9f6"><meta name="description" content="InFrame: 실내 RGB-D 의미 지도와 카메라 기반 ObjectNav. 기록된 주행을 살펴보고 자신의 영상으로 정책을 실행하세요."><title>InFrame — Semantic SLAM &amp; ObjectNav</title><link rel="icon" href="project/icon.svg"><link rel="stylesheet" href="project/site.css"></head><body>
+<header class="bar"><a class="brand" href="./"><img src="project/icon.svg" alt="">InFrame</a><nav><a href="#mapping">Semantic map</a><a href="#results">Results</a><a href="https://github.com/Dabin0312/InFrame">GitHub ↗</a></nav></header>
+<main><section class="intro"><p class="kicker">SEMANTIC SLAM <i></i> OBJECTNAV</p><h1>InFrame<span>.</span></h1><p class="subtitle">공간을 지도로, 소화기를 로봇의 시야로.</p><p class="byline">김다빈 <span>/</span> AI 실무 프로젝트</p>
+<div class="buttons"><a class="pill primary" href="demo/"><span aria-hidden="true">↗</span> Try your own data</a><a class="pill" href="https://github.com/Dabin0312/InFrame">Code</a><a class="pill" href="https://github.com/Dabin0312/InFrame/releases/tag/v0.7.0">Data &amp; models</a></div></section>
+<figure class="hero" id="run"><div class="scene">
+<div class="camera"><video id="film" preload="metadata" playsinline muted poster="project/view-52.jpg" src="project/castle.mp4" aria-label="Skokloster Castle에서 소화기 C를 향해 이동하는 가상 로봇"></video><div class="film-label"><b></b> ROBOT VIEW</div></div>
+<div class="map-pane"><div class="pane-title"><span>FLOOR PLAN</span><span>FRESH–015</span></div><canvas id="floor" width="640" height="640" aria-label="로봇 위치, 진행 방향, 소화기 C가 표시된 같은 공간의 평면도"></canvas><div class="map-key"><span><i class="agent-dot"></i>로봇</span><span><i class="target-dot"></i>소화기 C</span></div></div></div>
+<div class="transport"><button id="play" class="play" aria-label="주행 재생">▶</button><output id="clock">0:00</output><input id="seek" type="range" min="0" max="69" step="0.05" value="0" aria-label="주행 시점"><span class="end-time">0:17</span><button id="end" class="end-button">정지 장면 ↗</button></div>
+<figcaption><b>Skokloster Castle</b><span>개선한 4스텝 정책의 실제 시뮬레이션 기록 · 이동 거리 5.58 m</span></figcaption></figure>
+<section class="article overview"><h2>어디에서 멈춰야 할까?</h2><p>소화기에 가까이 가도 카메라가 벽을 향하면 점검 사진을 남길 수 없다. InFrame의 로봇은 소화기를 볼 수 있는 지점까지 이동한 뒤 스스로 멈춘다. 성공하려면 정지 위치가 등록된 관측점에서 주행 거리 0.8 m 이내이고, 그 관측점의 소화기가 마지막 RGB에 보여야 한다.</p></section>
+<section class="band" id="mapping"><div class="section-top"><div><p class="kicker">7-SCENES FIRE</p><h2>사진과 지도가 가리키는 소화기</h2></div><div class="switch" role="group" aria-label="소화기 선택"><button data-id="A" aria-pressed="true">A</button><button data-id="B" aria-pressed="false">B</button></div></div><p class="section-desc">공개 실내 RGB-D로 만든 점군에 소화기 두 대를 등록했다. A와 B를 눌러 같은 물체의 사진 위치와 3D 좌표를 확인할 수 있다.</p>
+<div class="pair"><div class="photo"><img src="project/fire.jpg" alt="표지판 뒤에 소화기 두 대가 놓인 Fire 원본 프레임"><span class="box" id="bbox"><b>A</b></span><span class="tag">RGB FRAME</span></div><div class="cloud-pane"><canvas id="cloud" width="640" height="480" aria-label="Fire의 실제 RGB-D 점군과 선택한 소화기"></canvas><span class="tag">SLAM POINT CLOUD</span><div id="coordinate" class="coord"></div></div></div></section>
+<section class="band metrics" id="results"><p class="kicker">OBJECTNAV</p><h2>교사의 경로에서 학생의 행동으로</h2><p class="section-desc">지도와 목표 좌표를 아는 교사가 시범을 만들었다. 학생은 소화기라는 목표명과 최근 RGB 네 장을 읽고 매 0.25초마다 전진·회전·정지를 결정한다.</p>
+<div class="stats"><div><strong>297</strong><span>학습에 사용한 성공 시범</span></div><div><strong>38 <em>→</em> 51<span>/60</span></strong><span>예약 출발점에서의 개선 전후 성공</span></div><div><strong>10<span>/10</span></strong><span>카메라 단절 시 호스트 정지 명령</span></div></div>
+<p class="scope">같은 성 장면의 별도 출발점 60곳을 사용했다. Go2는 모의 어댑터까지 검증했고, 실기 주행은 후속 평가다.</p><div class="text-links"><a href="evidence/student-comparison.mp4">학생 주행 비교 ↗</a><a href="evidence/go2-stop.mp4">모의 Go2 정지 영상 ↗</a><a href="https://github.com/Dabin0312/InFrame/blob/main/RUNBOOK.md">0–7단계 실행 가이드 ↗</a></div></section>
+<section class="closing"><div><h2>Try your own data</h2><p>내가 찍은 실내 영상에서 정책이 언제 방향을 바꾸고 멈추는지 확인해 보세요.</p></div><a class="pill primary" href="demo/">영상으로 실행 ↗</a></section></main>
+<footer><span>InFrame · 김다빈</span><a href="https://github.com/Dabin0312/InFrame/blob/main/DATA-NOTICES.md">데이터 출처 및 라이선스 ↗</a></footer>
+<script type="module" src="project/page.mjs"></script></body></html>

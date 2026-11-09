@@ -1,6 +1,6 @@
 # 처음 실행하는 순서
 
-**영상만 보려면** [교사 주행](https://github.com/Dabin0312/InFrame/raw/refs/heads/main/evidence/teacher-run.mp4), [학생 비교](https://github.com/Dabin0312/InFrame/raw/refs/heads/main/evidence/student-comparison.mp4), [개선 후 남은 실패](https://github.com/Dabin0312/InFrame/raw/refs/heads/main/evidence/remaining-failure.mp4), [정상 정지와 입력 단절](https://github.com/Dabin0312/InFrame/raw/refs/heads/main/evidence/go2-stop.mp4)을 연다. MP4가 다운로드되면 로컬 플레이어로 재생한다. [검증 결과 표](README.md#단계별로-무엇을-확인했나)에는 각 숫자의 JSON·CSV 원본이 연결돼 있다.
+**영상만 보려면** [교사 주행](https://github.com/Dabin0312/InFrame/raw/refs/heads/main/evidence/teacher-run.mp4), [학생 비교](https://github.com/Dabin0312/InFrame/raw/refs/heads/main/evidence/student-comparison.mp4), [개선 후 남은 실패](https://github.com/Dabin0312/InFrame/raw/refs/heads/main/evidence/remaining-failure.mp4), [정상 정지와 입력 단절](https://github.com/Dabin0312/InFrame/raw/refs/heads/main/evidence/go2-stop.mp4)을 연다. MP4가 다운로드되면 로컬 플레이어로 재생한다. [검증 기록](evidence/)에는 각 숫자의 JSON·CSV 원본이 있다.
 
 ## 1. 데이터를 받는다
 
@@ -89,4 +89,4 @@ python3.10 -m venv .venv
 
 ## 실기 전 검증 경계
 
-이 릴리스에서 확인한 마지막 지점은 **호스트에서 Go2 형식의 Move 또는 StopMove 호출이 발생하는 순간**이다. 모의 시험에서 단절 감지까지 약 0.20 m 이동했고, 정지 명령 후 시뮬레이터의 1초 변위는 0 m였다. 물리적 제동거리와 네트워크 단절 시 기체 측 동작은 측정하지 않았다. 현장 검증 항목과 복도·최종 사진 판독 기준은 [README](README.md#실물에서-남은-검증)와 [과제 명세](stages/00-task/README.md)에 있다.
+이 릴리스에서 확인한 마지막 지점은 **호스트에서 Go2 형식의 Move 또는 StopMove 호출이 발생하는 순간**이다. 모의 시험에서 단절 감지까지 약 0.20 m 이동했고, 정지 명령 후 시뮬레이터의 1초 변위는 0 m였다. 물리적 제동거리와 네트워크 단절 시 기체 측 동작은 측정하지 않았다. 현장 검증 항목과 복도·최종 사진 판독 기준은 [과제 명세](stages/00-task/README.md)에 있다. 실기에서는 카메라 화각·지연과 제동거리를 측정하고, 복도 통과 3곳·차단 3곳을 실측한 뒤 정지 사진의 소화기를 독립 판독자 2명이 식별한다.

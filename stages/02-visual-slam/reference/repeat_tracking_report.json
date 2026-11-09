@@ -1,0 +1,8 @@
+{
+  "frame_count": 798,
+  "tracked_ok_count": 792,
+  "tracked_ok_fraction": 0.9924812030075187,
+  "big_map_change_times_s": [],
+  "lost_to_ok_times_s": [],
+  "interpretation": "A big map change is not by itself proof of loop closure; inspect trajectory and map. Lost-to-OK indicates tracking recovery, which may need visual verification for relocalization."
+}

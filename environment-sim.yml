@@ -1,0 +1,13 @@
+name: inframe-sim
+channels:
+  - aihabitat
+  - conda-forge
+dependencies:
+  - python=3.9
+  - habitat-sim=0.3.3
+  - numpy=1.26.4
+  - scipy=1.13.1
+  - pillow=11.3
+  - quaternion=2023.0.4
+  - trimesh=4.7.4
+  - imageio=2.37

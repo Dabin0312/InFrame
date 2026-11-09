@@ -75,9 +75,16 @@ function inspectionTarget(boxes,history,mapped,w,h){
   }
   return null;
 }
+async function loadClip(file,url,signal){
+  let blob=file;
+  if(!blob){const response=await fetch(url,{signal});if(!response.ok)throw Error('공개 영상을 읽을 수 없습니다.');blob=await response.blob();}
+  if(signal.aborted)throw new DOMException('취소','AbortError');
+  if(sourceURL)URL.revokeObjectURL(sourceURL);sourceURL=URL.createObjectURL(blob);
+  await waitEvent(video,'loadeddata',signal,()=>{video.src=sourceURL;video.load();});
+}
 async function start(file,key){
   current?.abort();const control=new AbortController(),signal=control.signal;current=control;reviewVersion++;
-  if(sourceURL)URL.revokeObjectURL(sourceURL);sourceURL=file?URL.createObjectURL(file):'';
+
   const conf=file?{name:file.name,fov:68}:options[key];
   mode=key==='castle'&&!file?'policy':'inspection';$('#stopmode').value=mode;delete photos.policy;delete photos.inspection;data={inspection:null,source:conf.name,goal:'fire extinguisher',units:'monocular relative scale per submap',frames:[],points:[],targets:[],stop:null};
   $('#source-name').textContent=conf.name;$('#session').hidden=false;$('#policy-note').textContent='';$('#cancel').hidden=false;
@@ -85,7 +92,7 @@ async function start(file,key){
   $('#stopjump').hidden=$('#download').hidden=true;['#stopat','#stopinfo','#targets','#summary','#action','#at','#mapinfo'].forEach(s=>$(s).textContent='');
   mc.clearRect(0,0,640,440);$('#status').textContent='영상과 모델을 여는 중…';let mw,pw;
   try{
-    await waitEvent(video,'loadeddata',signal,()=>{video.src=sourceURL||conf.url;video.load();});
+    await loadClip(file,conf.url,signal);
     if(!Number.isFinite(video.duration)||!video.videoWidth)throw Error('영상의 길이를 읽을 수 없어요. H.264 MP4로 시도해 주세요.');
     const portrait=video.videoHeight>video.videoWidth;
     const hz=portrait?32:16,interval=hz/4;data.mappingHz=hz;
@@ -154,7 +161,7 @@ map.onclick=e=>{if(current||!data)return;const rect=map.getBoundingClientRect(),
 async function openReport(){
   current?.abort();const control=new AbortController(),signal=control.signal;current=control;reviewVersion++;
   try{
-    const [response]=await Promise.all([fetch(new URL('approach-report.json',import.meta.url),{signal}),waitEvent(video,'loadeddata',signal,()=>{video.src=options.corridor.url;video.load();})]);
+    const [response]=await Promise.all([fetch(new URL('approach-report.json',import.meta.url),{signal}),loadClip(null,options.corridor.url,signal)]);
     if(!response.ok)throw Error('공개 검증 결과를 읽지 못했어요.');
     const result=await response.json();if(current!==control)return;data=result;mode='inspection';$('#stopmode').value=mode;photos.inspection='../spatial/inspection.jpg';delete photos.policy;
     screen.width=data.intrinsics.width;screen.height=data.intrinsics.height;$('#source-name').textContent=options.corridor.name;

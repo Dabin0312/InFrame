@@ -1,45 +1,74 @@
 <!doctype html>
-<html lang="ko"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#111817">
-<title>In Frame — 로봇의 시야로 검증하는 ObjectNav</title>
-<meta name="description" content="로봇이 소화기를 찾아 멈춘 순간, 그 시야에 무엇이 보일까? 실공간 Semantic SLAM 기반 ObjectNav 프로젝트.">
-<link rel="icon" href="mark.svg" type="image/svg+xml"><link rel="stylesheet" href="style.css">
-<noscript><style>.actions,.views,.timeline{display:none}.viewport .poster{display:block}</style></noscript>
-</head><body id="top">
-<a class="skip" href="#main">본문으로</a>
-<svg aria-hidden="true" class="defs" xmlns="http://www.w3.org/2000/svg"><defs>
-<symbol id="mark" viewBox="0 0 28 28"><path d="M3 10V3h7m8 0h7v7m0 8v7h-7m-8 0H3v-7" fill="none" stroke="currentColor" stroke-width="2.3"/><circle cx="14" cy="14" r="3" fill="currentColor"/></symbol>
-<symbol id="arr" viewBox="0 0 20 20"><path d="M4 10h12m-5-5 5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
-<symbol id="ext" viewBox="0 0 20 20"><path d="M5 15 15 5M6 5h9v9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
-</defs></svg>
-<div class="dark"><header class="wrap"><a class="wordmark" href="#top" aria-label="In Frame 홈"><svg><use href="#mark"/></svg>In Frame</a><nav aria-label="페이지 메뉴"><a href="#records">실험 기록</a><a href="#evaluation">평가 계획</a><a class="repo" href="https://github.com/Dabin0312/InFrame">GitHub <svg><use href="#ext"/></svg></a></nav></header>
-<main id="main" class="wrap"><section class="hero" aria-labelledby="title">
-<div class="intro"><p class="eyebrow"><i></i>SEMANTIC SLAM <span>/</span> OBJECTNAV</p><h1 id="title">In <em>Frame</em></h1>
-<h2>“소화기를 찾아줘.”</h2><p class="lede">실내 영상으로 지도를 만듭니다.<br class="desktop"> 로봇이 멈춘 순간, 목표가 시야에 있어야 성공입니다.</p>
-<div class="actions"><button id="play" class="primary" type="button"><span class="play-glyph" aria-hidden="true">▶</span><span id="play-label">주행 재생</span></button><button id="stop-view" class="text-button" type="button">정지 장면 보기 <svg><use href="#arr"/></svg></button></div></div>
-<figure class="instrument" aria-label="Habitat-Sim 합성 경로를 바탕으로 만든 대화형 장면">
-<div class="instrument-head"><span class="plate"><b></b> 합성 장면</span><div class="views" role="group" aria-label="시점 전환"><button id="map-mode" type="button" aria-pressed="true">공간 지도</button><button id="eye-mode" type="button" aria-pressed="false">로봇 시야</button></div></div>
-<div id="scene" class="viewport"><canvas id="view" aria-label="장애물을 우회해 소화기로 향하는 3차원 경로 도해"></canvas>
-<img class="poster" src="room.svg" alt="두 장애물을 돌아 소화기 앞에 이르는 합성 장면의 경로">
-<span class="notch n1"></span><span class="notch n2"></span><span class="notch n3"></span><span class="notch n4"></span>
-</div><div class="timeline"><span id="read-state">출발</span><input id="time" type="range" min="0" max="1000" value="0" aria-label="주행 위치"><output id="distance" for="time">0.00 / 8.19 m</output></div>
-<div id="aim" class="aim" hidden><span>정지 방향</span><div class="aim-opts" role="group" aria-label="같은 정지 위치에서 방향 비교"><button type="button" id="toward" aria-pressed="true">목표 쪽</button><button type="button" id="away" aria-pressed="false">반대쪽</button></div><span id="verdict" role="status"></span></div>
-<noscript><p>경로 재생과 시점 전환에는 자바스크립트가 필요합니다.</p></noscript>
-</figure></section></main></div>
-<div class="paper"><div class="wrap">
-<section id="records" class="section" aria-labelledby="records-title"><div class="section-head"><h2 id="records-title"><small>01</small>실험 기록</h2><span class="section-meta">측정 완료</span></div>
-<div class="records"><article class="record"><div class="record-title"><h3>단안 영상 추적</h3><span>ORB-SLAM3</span></div>
-<img src="tracking.svg" class="plot" alt="TUM 영상에서 추출한 희소 지도점과 카메라 키프레임 궤적의 투영도" width="600" height="180">
-<div class="number">794<span> / 798 프레임</span></div><p><a href="https://cvg.cit.tum.de/data/datasets/rgbd-dataset">TUM fr1/xyz</a>에서 추적한 프레임. 희소 지도점 3,381개.</p></article>
-<article class="record"><div class="record-title"><h3>실내 경로와 충돌</h3><span>Habitat-Sim</span></div>
-<img src="plan.svg" class="plot" alt="8 m 정사각형 방의 평면도. 경로는 장애물 둘을 우회하고, 벽으로 이동하라는 별도 명령은 경계 안에서 차단됐다." width="600" height="180">
-<div class="number">8.188<span> m</span></div><p>합성 방의 최단 경로. 벽 밖으로 이동시키자 x = 3.65 m에서 막혔다.</p></article></div></section>
-<section id="evaluation" class="section eval" aria-labelledby="eval-title"><div class="section-head"><h2 id="eval-title"><small>02</small>평가 계획</h2><span class="section-meta planned">실험 전</span></div>
-<div class="eval-body"><div><h3>가까이 멈춰도,<br><em>보여야</em> 성공.</h3><p>로봇이 스스로 STOP을 선택한 순간을 평가합니다.</p></div><dl class="rules">
-<div><dt>학습</dt><dd>지도에서 구한 시범 경로로 학습합니다. 주행할 때는 전방 영상, 목표 종류, 최근 이력만 사용합니다.</dd></div>
-<div><dt>정지 판정</dt><dd>목표를 볼 수 있는 지정 지점까지 경로 거리 0.8 m 이내이고, 정지 화면에서 같은 물체를 확인해야 합니다.</dd></div>
-<div><dt>현장 대조</dt><dd>실제 복도의 통과 구간 3곳과 차단 구간 3곳을 복원 장면에서 다시 확인합니다.</dd></div>
-<div><dt>주행 평가</dt><dd>미학습 출발 자세 20개 × 목표 3종. 총 60회 중 42회 이상 성공이 목표입니다.</dd></div>
-</dl></div></section></div></div>
-<footer class="wrap"><a class="wordmark" href="#top"><svg><use href="#mark"/></svg>In Frame</a><a href="https://github.com/Dabin0312/InFrame" class="foot-repo">GitHub <svg><use href="#ext"/></svg></a></footer>
-<script src="scene.js" defer></script></body></html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#f7f8ff">
+  <title>In Frame — 실내 로봇 탐색</title>
+  <meta name="description" content="로봇을 움직여 소화기를 찾고, 멈춘 순간의 시야를 확인하는 대화형 ObjectNav 프로젝트.">
+  <link rel="icon" href="mark.svg">
+  <link rel="preload" href="geist.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="korean.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body id="top">
+<a class="skip" href="#playground">맵으로 이동</a>
+<header class="wrap mast">
+  <a href="#top" class="brand" aria-label="In Frame 홈"><span class="brand-icon" aria-hidden="true"></span>In Frame</a>
+  <nav aria-label="페이지 메뉴"><a href="#records">실험 기록</a><a href="#evaluation">평가 계획</a><a class="git" href="https://github.com/Dabin0312/InFrame">GitHub ↗</a></nav>
+</header>
+<main class="wrap">
+  <section aria-labelledby="title">
+    <div class="intro"><div><p class="topic">Semantic SLAM <span>×</span> ObjectNav</p><h1 id="title">In Frame<span class="title-dot" aria-hidden="true"></span></h1></div>
+      <p class="brief">소화기를 찾아가서,<br><strong>시야에 담고 멈춰 보세요.</strong></p>
+    </div>
+    <div class="console" id="playground">
+      <div class="stage" id="stage" tabindex="0" role="region" aria-label="로봇 주행 맵" aria-describedby="controls-help">
+        <canvas id="map" aria-label="소화기와 두 개의 장비 상자가 있는 방"></canvas>
+        <span class="tag player-tag" id="player-tag" hidden>로봇</span>
+        <button class="tag target-tag" id="target-tag" aria-label="소화기로 이동" hidden>소화기</button>
+        <div class="stage-top">
+          <div class="scene-name"><span class="live-dot"></span>합성 맵 <span class="dimensions">8 × 8 m</span></div>
+          <div class="views" role="group" aria-label="시점">
+            <button id="overview" aria-pressed="true">공간 지도</button><button id="first-person" aria-pressed="false">1인칭</button>
+          </div>
+        </div>
+        <canvas id="minimap" width="160" height="160" hidden aria-label="미니맵에 표시된 현재 위치와 바라보는 방향"></canvas>
+        <div id="crosshair" aria-hidden="true" hidden></div>
+        <div class="touch-controls" aria-label="터치 조종">
+          <div id="stick" aria-label="이동 조이스틱"><i></i></div>
+          <div class="turn-pad"><button data-turn="-1" aria-label="왼쪽으로 회전">↶</button><button data-turn="1" aria-label="오른쪽으로 회전">↷</button></div>
+        </div>
+        <div id="message" role="status" hidden></div>
+        <noscript><img src="room.svg" class="offline" alt="합성 방의 경로 도해"><p>직접 주행하려면 자바스크립트를 켜 주세요.</p></noscript>
+      </div>
+      <div class="toolbar">
+        <div class="mode-group" role="group" aria-label="주행 방식">
+          <button id="free" aria-pressed="true"><span aria-hidden="true">✥</span> 자유 주행</button>
+          <button id="auto" aria-pressed="false"><span aria-hidden="true">▷</span> 경로 재생</button>
+        </div>
+        <div class="tools">
+          <button class="reset" id="reset" aria-label="출발점으로 초기화" title="출발점으로 초기화">↺</button>
+          <button id="judge" class="stop"><i aria-hidden="true"></i> 정지 판정</button>
+        </div>
+      </div>
+      <div id="replay" class="replay" hidden><button id="play" aria-label="경로 일시정지">Ⅱ</button><input type="range" id="time" min="0" max="1000" value="0" aria-label="경로 재생 위치"><output id="replay-distance">0.00 / 8.19 m</output><button id="ending">정지 장면</button></div>
+      <div id="compare" class="compare" hidden><span>정지 방향</span><button id="toward" aria-pressed="true">목표 쪽</button><button id="away" aria-pressed="false">반대쪽</button><output id="compare-result"></output></div>
+    </div>
+    <div class="under"><p id="controls-help"><span class="desktop-hint"><kbd>WASD</kbd> 이동 <kbd>← →</kbd> 회전 <span class="divider">/</span> </span><span class="touch-hint">조이스틱 이동 · 드래그 회전 <span class="divider">/</span> </span>지도 바닥을 누르면 그곳으로 이동</p>
+    <output id="coordinates" aria-label="로봇 좌표"></output></div>
+  </section>
+  <section id="records" class="lower"><div class="section-title"><h2>실험 기록</h2><p>공개 영상과 합성 방에서 측정한 결과</p></div>
+    <div class="results"><article><div class="record-top"><h3>단안 영상 추적</h3><span>ORB-SLAM3</span></div><img src="tracking.svg" width="600" height="180" loading="lazy" alt="희소 지도점과 카메라 궤적"><strong class="metric">794 <small>/ 798 프레임</small></strong><p><a href="https://cvg.cit.tum.de/data/datasets/rgbd-dataset">TUM fr1/xyz</a>에서 추적한 프레임. 희소 지도점 3,381개.</p></article>
+    <article><div class="record-top"><h3>실내 경로와 충돌</h3><span>Habitat-Sim</span></div><img src="plan.svg" width="600" height="180" loading="lazy" alt="장비 상자를 돌아 목표까지 이어지는 최단 경로"><strong class="metric">8.188 <small>m</small></strong><p>합성 방의 최단 경로. 벽 밖으로 이동을 요청했을 때 x = 3.65 m에서 정지.</p></article></div>
+  </section>
+  <section id="evaluation" class="lower evaluation"><div class="section-title"><h2>평가 계획</h2><p>현장 촬영 후 검증 예정</p></div><dl>
+    <div><dt>학습</dt><dd>지도에서 구한 시범 경로로 학습하고, 전방 영상·목표 종류·최근 행동으로 주행합니다.</dd></div>
+    <div><dt>정지</dt><dd>정지 시 지정 관측 지점까지 경로 거리 0.8 m 이내이며 같은 목표가 카메라에 보여야 성공입니다.</dd></div>
+    <div><dt>현장 대조</dt><dd>복도의 통과 구간 3곳과 차단 구간 3곳을 복원 장면에서 다시 확인합니다.</dd></div>
+    <div><dt>주행 평가</dt><dd>미학습 출발 자세 20개와 목표 3종을 조합해 총 60회 중 42회 이상 성공을 목표로 합니다.</dd></div>
+  </dl></section>
+</main>
+<footer class="wrap"><a class="brand" href="#top"><span class="brand-icon" aria-hidden="true"></span>In Frame</a><a href="https://github.com/Dabin0312/InFrame">GitHub ↗</a></footer>
+<script type="module" src="scene.js"></script>
+</body></html>

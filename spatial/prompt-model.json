@@ -1,0 +1,11 @@
+{
+  "text": [
+    "prompt-text-0.bin",
+    "prompt-text-1.bin",
+    "prompt-text-2.bin",
+    "prompt-text-3.bin"
+  ],
+  "size": 64289775,
+  "sha256": "09c0bd18604d829f5d4d1528b30342b1512348578b5be0528b476c3a282aa9fa",
+  "vision": "prompt-vision.onnx"
+}

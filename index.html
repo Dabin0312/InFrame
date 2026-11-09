@@ -3,33 +3,52 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#f7f8ff">
-  <title>In Frame — 실내 로봇 탐색</title>
-  <meta name="description" content="로봇을 움직여 소화기를 찾고, 멈춘 순간의 시야를 확인하는 대화형 ObjectNav 프로젝트.">
+  <meta name="theme-color" content="#f8f8f4">
+  <title>In Frame — 실내 영상 SLAM과 ObjectNav</title>
+  <meta name="description" content="실내 영상에서 카메라 궤적과 3D 지도가 만들어지는 과정, 소화기를 향해 이동한 로봇이 멈춘 순간의 시야.">
   <link rel="icon" href="mark.svg">
   <link rel="preload" href="geist.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="korean.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css"><link rel="stylesheet" href="sequence.css">
 </head>
 <body id="top">
-<a class="skip" href="#playground">맵으로 이동</a>
+<a class="skip" href="#playground">시연으로 이동</a>
 <header class="wrap mast">
   <a href="#top" class="brand" aria-label="In Frame 홈"><span class="brand-icon" aria-hidden="true"></span>In Frame</a>
   <nav aria-label="페이지 메뉴"><a href="#records">실험 기록</a><a href="#evaluation">평가 계획</a><a class="git" href="https://github.com/Dabin0312/InFrame">GitHub ↗</a></nav>
 </header>
 <main class="wrap">
   <section aria-labelledby="title">
-    <div class="intro"><div><p class="topic">Semantic SLAM <span>×</span> ObjectNav</p><h1 id="title">In Frame<span class="title-dot" aria-hidden="true"></span></h1></div>
-      <p class="brief">소화기를 찾아가서,<br><strong>시야에 담고 멈춰 보세요.</strong></p>
+    <div class="intro">
+      <h1 id="title">In Frame<span class="title-dot" aria-hidden="true"></span></h1>
+      <p class="brief">실내 영상이 지도가 되고,<br><strong>로봇은 목표를 찾아 멈춥니다.</strong></p>
     </div>
-    <div class="console" id="playground">
-      <div class="stage" id="stage" tabindex="0" role="region" aria-label="로봇 주행 맵" aria-describedby="controls-help">
+    <div class="sequence" id="playground" data-phase="0">
+      <div class="chapters" role="group" aria-label="재생할 단계">
+        <button class="chapter" data-chapter="0" aria-pressed="true"><i class="frame-icon" aria-hidden="true"></i><span>실내 영상</span></button><span class="join" aria-hidden="true">→</span>
+        <button class="chapter" data-chapter="1" aria-pressed="false"><i class="point-icon" aria-hidden="true"></i><span>SLAM <em>지도</em></span></button><span class="join" aria-hidden="true">→</span>
+        <button class="chapter" data-chapter="2" aria-pressed="false"><i class="goal-icon" aria-hidden="true"></i><span>ObjectNav <em>주행</em></span></button>
+      </div>
+      <div id="scan-view" class="scan-view">
+        <figure class="rgb-pane">
+          <video id="indoor" src="indoor.mp4" poster="indoor.jpg" muted playsinline preload="auto" aria-label="TUM 연구실을 촬영한 컬러 영상"></video>
+          <figcaption><span class="feed-dot"></span>실내 카메라</figcaption>
+          <div class="camera-time" id="camera-time"></div>
+        </figure>
+        <figure class="map-pane" id="map-pane">
+          <canvas id="scan-canvas" aria-label="영상과 같은 시각의 공간 표면과 카메라 궤적"></canvas>
+          <figcaption id="map-caption"><span class="trajectory-key"></span>카메라 궤적</figcaption>
+          <button class="layer" id="map-layer" aria-pressed="false">SLAM 지도점</button>
+        </figure>
+      </div>
+      <div id="mission" hidden>
+      <div class="stage" id="stage" tabindex="0" role="region" aria-label="소화기 탐색 주행 장면" aria-describedby="controls-help">
         <canvas id="map" aria-label="소화기와 두 개의 장비 상자가 있는 방"></canvas>
         <span class="tag player-tag" id="player-tag" hidden>로봇</span>
         <button class="tag target-tag" id="target-tag" aria-label="소화기로 이동" hidden>소화기</button>
         <div class="stage-top">
-          <div class="scene-name"><span class="live-dot"></span>합성 맵 <span class="dimensions">8 × 8 m</span></div>
-          <div class="views" role="group" aria-label="시점">
+          <div class="scene-name"><span class="live-dot"></span>목표 · 소화기</div>
+          <div class="episode-tools"><button id="flip" hidden>뒤돌아보기</button><div id="episode-state" role="status" hidden></div></div><div class="views" role="group" aria-label="시점">
             <button id="overview" aria-pressed="true">공간 지도</button><button id="first-person" aria-pressed="false">1인칭</button>
           </div>
         </div>
@@ -40,7 +59,7 @@
           <div class="turn-pad"><button data-turn="-1" aria-label="왼쪽으로 회전">↶</button><button data-turn="1" aria-label="오른쪽으로 회전">↷</button></div>
         </div>
         <div id="message" role="status" hidden></div>
-        <noscript><img src="room.svg" class="offline" alt="합성 방의 경로 도해"><p>직접 주행하려면 자바스크립트를 켜 주세요.</p></noscript>
+        <noscript><img src="room.svg" class="offline" alt="소화기 관측 지점으로 이어지는 경로"><p>직접 주행하려면 자바스크립트를 켜 주세요.</p></noscript>
       </div>
       <div class="toolbar">
         <div class="mode-group" role="group" aria-label="주행 방식">
@@ -54,13 +73,21 @@
       </div>
       <div id="replay" class="replay" hidden><button id="play" aria-label="경로 일시정지">Ⅱ</button><input type="range" id="time" min="0" max="1000" value="0" aria-label="경로 재생 위치"><output id="replay-distance">0.00 / 8.19 m</output><button id="ending">정지 장면</button></div>
       <div id="compare" class="compare" hidden><span>정지 방향</span><button id="toward" aria-pressed="true">목표 쪽</button><button id="away" aria-pressed="false">반대쪽</button><output id="compare-result"></output></div>
+      <div class="under" id="manual-help" hidden><p id="controls-help"><span class="desktop-hint"><kbd>WASD</kbd> 이동 <kbd>← →</kbd> 회전 · </span><span class="touch-hint">조이스틱 이동 · </span>바닥을 눌러 이동</p><output id="coordinates"></output></div>
+      </div>
+      <div class="transport">
+        <button id="sequence-play" aria-label="시연 재생"><span aria-hidden="true"></span></button>
+        <label class="sr-only" for="sequence-time">전체 재생 위치</label><input id="sequence-time" type="range" min="0" max="2100" step="1" value="0">
+        <output id="clock">0:00 / 0:21</output>
+        <button id="manual" hidden>직접 주행</button>
+      </div>
     </div>
-    <div class="under"><p id="controls-help"><span class="desktop-hint"><kbd>WASD</kbd> 이동 <kbd>← →</kbd> 회전 <span class="divider">/</span> </span><span class="touch-hint">조이스틱 이동 · 드래그 회전 <span class="divider">/</span> </span>지도 바닥을 누르면 그곳으로 이동</p>
-    <output id="coordinates" aria-label="로봇 좌표"></output></div>
+    <div class="sequence-note"><p id="sequence-caption" aria-live="polite">카메라가 움직이면 같은 공간을 여러 각도에서 관측합니다.</p><span id="data-source">TUM fr1/xyz</span></div>
+    <noscript><p>실내 영상과 지도, 주행 경로를 재생하려면 자바스크립트를 켜 주세요.</p></noscript>
   </section>
-  <section id="records" class="lower"><div class="section-title"><h2>실험 기록</h2><p>공개 영상과 합성 방에서 측정한 결과</p></div>
+  <section id="records" class="lower"><div class="section-title"><h2>실험 기록</h2></div>
     <div class="results"><article><div class="record-top"><h3>단안 영상 추적</h3><span>ORB-SLAM3</span></div><img src="tracking.svg" width="600" height="180" loading="lazy" alt="희소 지도점과 카메라 궤적"><strong class="metric">794 <small>/ 798 프레임</small></strong><p><a href="https://cvg.cit.tum.de/data/datasets/rgbd-dataset">TUM fr1/xyz</a>에서 추적한 프레임. 희소 지도점 3,381개.</p></article>
-    <article><div class="record-top"><h3>실내 경로와 충돌</h3><span>Habitat-Sim</span></div><img src="plan.svg" width="600" height="180" loading="lazy" alt="장비 상자를 돌아 목표까지 이어지는 최단 경로"><strong class="metric">8.188 <small>m</small></strong><p>합성 방의 최단 경로. 벽 밖으로 이동을 요청했을 때 x = 3.65 m에서 정지.</p></article></div>
+    <article><div class="record-top"><h3>목표까지의 주행 경로</h3><span>Habitat-Sim</span></div><img src="plan.svg" width="600" height="180" loading="lazy" alt="장비 상자를 돌아 목표까지 이어지는 최단 경로"><strong class="metric">8.188 <small>m</small></strong><p>소화기 관측 지점까지의 최단 경로. 벽 너머로 이동을 요청하면 경계에서 정지했습니다.</p></article></div>
   </section>
   <section id="evaluation" class="lower evaluation"><div class="section-title"><h2>평가 계획</h2><p>현장 촬영 후 검증 예정</p></div><dl>
     <div><dt>학습</dt><dd>지도에서 구한 시범 경로로 학습하고, 전방 영상·목표 종류·최근 행동으로 주행합니다.</dd></div>
@@ -69,6 +96,6 @@
     <div><dt>주행 평가</dt><dd>미학습 출발 자세 20개와 목표 3종을 조합해 총 60회 중 42회 이상 성공을 목표로 합니다.</dd></div>
   </dl></section>
 </main>
-<footer class="wrap"><a class="brand" href="#top"><span class="brand-icon" aria-hidden="true"></span>In Frame</a><a href="https://github.com/Dabin0312/InFrame">GitHub ↗</a></footer>
-<script type="module" src="scene.js"></script>
+<footer class="wrap"><a class="brand" href="#top"><span class="brand-icon" aria-hidden="true"></span>In Frame</a><span class="credit">영상 · <a href="https://cvg.cit.tum.de/data/datasets/rgbd-dataset">TUM RGB-D, Sturm et al.</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></span></footer>
+<script type="module" src="sequence.js"></script>
 </body></html>

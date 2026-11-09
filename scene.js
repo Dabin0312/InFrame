@@ -13,6 +13,7 @@ let panelWidth=1, panelHeight=1, inView=true, frame=0, lastTime=null;
 let waypoints=[], faceGoal=false, destination=null, lastPointer=null, turning=0;
 let stickX=0,stickForward=0,lastCoord='',messageTimer;
 const keys=new Set();
+let guided=false, loadStarted=false, episodeText='';
 const stick=$('stick'),thumb=stick.querySelector('i');
 const touchPad=document.querySelector('.touch-controls');
 
@@ -65,7 +66,15 @@ function drawMini(){
     c.fillStyle='#979dca';
     c.fillRect(pixel(ob.x-ob.width/2),pixel(ob.z-ob.depth/2),size*.105*ob.width,size*.105*ob.depth);
   }
-  c.fillStyle='#ed4944';c.beginPath();c.arc(pixel(target.x),pixel(target.z),5,0,2*Math.PI);c.fill();
+  if(!guided||visibleGoal()){c.fillStyle='#ed4944';c.beginPath();c.arc(pixel(target.x),pixel(target.z),5,0,2*Math.PI);c.fill()}
+  if(guided){
+    c.strokeStyle='#2d7462';c.lineWidth=3;c.beginPath();
+    for(let i=0;i<=60;i++){
+      const p=sampleReference(state.progress*i/60);
+      if(i)c.lineTo(pixel(p.x),pixel(p.z));else c.moveTo(pixel(p.x),pixel(p.z));
+    }
+    c.stroke();
+  }
   const {pose}=state;c.save();c.translate(pixel(pose.x),pixel(pose.z));c.rotate(pose.yaw);
   c.fillStyle='#625bf52c';c.beginPath();c.moveTo(0,0);c.arc(0,0,27,-2.15,-.99);c.closePath();c.fill();
   c.fillStyle='#3d32bb';c.beginPath();c.moveTo(0,-10);c.lineTo(6,6);c.lineTo(-6,6);c.closePath();c.fill();c.restore();
@@ -74,12 +83,12 @@ function paint(){
   if(!panelWidth || !panelHeight)return;
   const label=world.render(state);
   const tag=$('target-tag');
-  tag.hidden=state.eye||!label;
+  tag.hidden=state.eye||!label||(guided&&!visibleGoal());
   if(!tag.hidden){tag.style.left=label.x+'px';tag.style.top=(label.y-11)+'px'}
   const player=$('player-tag');
   player.hidden=tag.hidden || distance(state.pose,target)<1.05;
   if(!player.hidden){player.style.left=label.player[0]+'px';player.style.top=(label.player[1]+9)+'px'}
-  if(state.eye)drawMini();
+  if(state.eye||guided)drawMini();
   const signed=n=>(n>=0?'+':'−')+Math.abs(n).toFixed(2);
   const coords='X '+signed(state.pose.x)+'  /  Z '+signed(state.pose.z)+' m';
   if(coords!==lastCoord){$('coordinates').textContent=coords;lastCoord=coords}
@@ -210,7 +219,7 @@ for(const [id,reversed] of [['toward',false],['away',true]]){
 
 const movementKeys=new Set(['KeyW','KeyS','KeyA','KeyD','KeyQ','KeyE','ArrowUp','ArrowDown','ArrowLeft','ArrowRight']);
 window.addEventListener('keydown',event=>{
-  if(!inView || event.ctrlKey||event.altKey||event.metaKey||!movementKeys.has(event.code))return;
+  if(guided || $('mission').hidden || !inView || event.ctrlKey||event.altKey||event.metaKey||!movementKeys.has(event.code))return;
   if(document.activeElement!==stage && !(document.activeElement===document.body && event.code.startsWith('Key')))return;
   event.preventDefault();takeControl();clearPath();focusStage();
   if(!keys.has(event.code)){keys.add(event.code);manualMotion(1/60);paint()}
@@ -221,7 +230,7 @@ stage.addEventListener('blur',releaseInputs);
 window.addEventListener('blur',releaseInputs);
 document.addEventListener('visibilitychange',()=>{releaseInputs();if(!document.hidden)requestFrame()});
 stage.addEventListener('pointerdown',event=>{
-  if(event.button!==0 || event.target!==activeCanvas)return;
+  if(guided || event.button!==0 || event.target!==activeCanvas)return;
   interact();focusStage();dismiss();
   lastPointer={id:event.pointerId,x:event.clientX,y:event.clientY,lastX:event.clientX,lastY:event.clientY,drag:false};
   activeCanvas.setPointerCapture(event.pointerId);
@@ -274,4 +283,31 @@ new IntersectionObserver(([entry])=>{
   inView=entry.isIntersecting;lastTime=null;
   if(inView)requestFrame();else releaseInputs();
 }).observe(stage);
-resize();sync();loadWorld();
+resize();sync();
+export function prepareMission(){
+  if(!loadStarted){loadStarted=true;loadWorld()}
+}
+export function showEpisode(progress, reversed=false){
+  guided=true;prepareMission();interact();halt();dismiss();
+  state.mode='auto';state.progress=progress;state.reversed=reversed;
+  state.eye=progress>=.59;state.routePoints=recordedRoute;
+  settleReplay();
+  if(panelWidth<2 || panelHeight<2)resize();
+  sync();mini.hidden=false;
+  const sees=visibleGoal();
+  const stopped=progress>=1;
+  const near=distance(state.pose,observation)<=.8;
+  const label=stopped?(near && sees?'STOP · 소화기 시야 안':'STOP · 소화기 시야 밖'):(sees?'소화기 관측 · 접근 중':'소화기 탐색 중');
+  const status=$('episode-state');
+  status.hidden=false;
+  if(episodeText!==label){status.textContent=label;episodeText=label}
+  status.classList.toggle('stopped',stopped && near && sees);
+}
+export function manualMode(){
+  prepareMission();guided=false;interact();halt();dismiss();
+  state.mode='free';state.pose={...start};state.progress=0;state.reversed=false;
+  state.eye=false;state.pitch=-.14;state.mapAngle=0;$('episode-state').hidden=true;
+  resize();sync();focusStage();
+}
+export function leaveMission(){guided=false;halt();dismiss()}
+

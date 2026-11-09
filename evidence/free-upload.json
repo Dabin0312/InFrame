@@ -1,0 +1,183 @@
+[
+  {
+    "input": "chair-walk.mp4",
+    "sha256": "5c1bc925d6e7e62939ab1d1b776c40b40fb204ca03ec767986b78b7585f93a6b",
+    "query": "painting",
+    "prompt": "painting",
+    "frames": 477,
+    "tracked": 477,
+    "confirmed_observations": 52,
+    "map_tracks": [
+      {
+        "id": 13,
+        "segment": 1,
+        "point": [
+          8.144386708926035,
+          -0.9166872867159492,
+          12.119785387906969
+        ],
+        "evidence_s": 24.25
+      },
+      {
+        "id": 14,
+        "segment": 1,
+        "point": [
+          8.996788362503938,
+          -1.92795227020208,
+          17.691213248470227
+        ],
+        "evidence_s": 28.5
+      },
+      {
+        "id": 2,
+        "segment": 1,
+        "point": [
+          8.965188112625892,
+          -6.405084976433033,
+          36.92678100831495
+        ],
+        "evidence_s": 25.5
+      },
+      {
+        "id": 11,
+        "segment": 1,
+        "point": [
+          10.68604606707617,
+          -1.8787872251713273,
+          18.237888468514505
+        ],
+        "evidence_s": 29.75
+      }
+    ],
+    "first_stop_s": 24.5
+  },
+  {
+    "input": "chair-walk.mp4",
+    "sha256": "5c1bc925d6e7e62939ab1d1b776c40b40fb204ca03ec767986b78b7585f93a6b",
+    "query": "microwave",
+    "prompt": "microwave",
+    "frames": 477,
+    "tracked": 477,
+    "confirmed_observations": 0,
+    "map_tracks": [],
+    "first_stop_s": null
+  },
+  {
+    "input": "fire-sign.mp4",
+    "sha256": "310a7ef1bae6e1d8468d86aa8347fe3a452c146a789e45e510cf32a2d3ca7550",
+    "query": "미끄럼 주의 표지판",
+    "prompt": "wet floor sign",
+    "frames": 80,
+    "tracked": 80,
+    "confirmed_observations": 6,
+    "map_tracks": [
+      {
+        "id": 1,
+        "segment": 1,
+        "point": [
+          3.9186808553733634,
+          4.323554712349239,
+          18.558110798014393
+        ],
+        "evidence_s": 4.75
+      }
+    ],
+    "first_stop_s": null,
+    "rgb_only_reprojection": [
+      {
+        "t": 0,
+        "uv": [
+          429.367271614783,
+          365.78606825944337
+        ],
+        "inside": true
+      },
+      {
+        "t": 0.25,
+        "uv": [
+          436.20311443465835,
+          362.83643735023566
+        ],
+        "inside": true
+      },
+      {
+        "t": 0.5,
+        "uv": [
+          439.0206475118034,
+          358.08252751848266
+        ],
+        "inside": true
+      },
+      {
+        "t": 0.75,
+        "uv": [
+          439.01360950679236,
+          351.9251228991861
+        ],
+        "inside": true
+      },
+      {
+        "t": 1,
+        "uv": [
+          438.76565552228004,
+          347.6375689044894
+        ],
+        "inside": true
+      },
+      {
+        "t": 1.25,
+        "uv": [
+          438.64646123583316,
+          345.9870751438648
+        ],
+        "inside": true
+      },
+      {
+        "t": 4.25,
+        "uv": [
+          438.2602370124697,
+          341.81951115519865
+        ],
+        "inside": true
+      },
+      {
+        "t": 4.5,
+        "uv": [
+          432.3593946036302,
+          349.0058865693039
+        ],
+        "inside": true
+      },
+      {
+        "t": 4.75,
+        "uv": [
+          427.9223253119223,
+          345.0142053804622
+        ],
+        "inside": true
+      }
+    ]
+  },
+  {
+    "input": "approach.mp4",
+    "sha256": "a660b4736662d0a9aca236e0067180f90fdc17178bd4f93c3aa855b70b1df53c",
+    "query": "소화기",
+    "prompt": "fire extinguisher",
+    "frames": 215,
+    "tracked": 184,
+    "confirmed_observations": 16,
+    "map_tracks": [
+      {
+        "id": 3,
+        "segment": 1,
+        "point": [
+          3.4610101300691563,
+          -0.5317669982471175,
+          12.64288924250292
+        ],
+        "evidence_s": 9
+      }
+    ],
+    "first_stop_s": 10.75
+  }
+]

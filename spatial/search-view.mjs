@@ -18,10 +18,10 @@ function drawTrace(path){
 }
 function resetControls(on){busy=on;for(const id of ['layout','condition','object','run'])$(id).disabled=on;}
 function describe(r,recorded){
-  const end={goal_stop:'紐⑺몴 STOP',search_exhausted:'�먯깋 �꾨즺 쨌 紐⑺몴 STOP �놁쓬',budget_exhausted:'�ㅽ뀦 �쒕룄 �꾨떖 쨌 紐⑺몴 STOP �놁쓬'}[r.end];
-  $('photo-label').textContent=r.end==='goal_stop'?'泥� STOP 쨌 濡쒕큸 RGB':'留덉�留� 愿�痢� 쨌 濡쒕큸 RGB';
-  $('audit').textContent=(recorded?'���λ맂 二쇳뻾':'諛⑷툑 �ㅽ뻾�� 二쇳뻾')+' 쨌 '+r.prompt+' 쨌 '+end+' 쨌 '+r.trace.length+' �ㅽ뀦'+
-    (r.end==='goal_stop'?' 쨌 '+(r.matched?'愿묒꽑�� 援먰넻 肄섏뿉 �우쓬':'援먰넻 肄� �쇱튂 �놁쓬')+(r.distance!=null?' 쨌 肄섍퉴吏� '+r.distance.toFixed(2)+' m':''):'');
+  const end={goal_stop:'목표 STOP',search_exhausted:'탐색 완료 · 목표 STOP 없음',budget_exhausted:'스텝 한도 도달 · 목표 STOP 없음'}[r.end];
+  $('photo-label').textContent=r.end==='goal_stop'?'첫 STOP · 로봇 RGB':'마지막 관측 · 로봇 RGB';
+  $('audit').textContent=(recorded?'저장된 주행':'방금 실행한 주행')+' · '+r.prompt+' · '+end+' · '+r.trace.length+' 스텝'+
+    (r.end==='goal_stop'?' · '+(r.matched?'광선이 교통 콘에 닿음':'교통 콘 일치 없음')+(r.distance!=null?' · 콘까지 '+r.distance.toFixed(2)+' m':''):'');
 }
 async function show(){
   const version=++revision;
@@ -31,21 +31,21 @@ async function show(){
 }
 $('layout').onchange=$('condition').onchange=show;
 $('run').onclick=async()=>{
-  if(busy||!selected)return;resetControls(true);revision++;$('audit').textContent='紐⑤뜽 以�鍮� 以묅��';
+  if(busy||!selected)return;resetControls(true);revision++;$('audit').textContent='모델 준비 중…';
   try{
     const {prompt}=await resolveGoal($('object').value),{runSearch}=await import('./search-bench.mjs');const path=[];
     const r=await runSearch({prompt,start:selected.start,placement:selected.placement,environment:selected.environment},(frame,p,a,n)=>{
       eye.drawImage(frame,0,0);path.push([p.x,p.z]);drawTrace(path);
-      $('photo-label').textContent='濡쒕큸 RGB';$('audit').textContent=prompt+' 쨌 �먯깋 以� 쨌 '+(n+1)+' �ㅽ뀦';
+      $('photo-label').textContent='로봇 RGB';$('audit').textContent=prompt+' · 탐색 중 · '+(n+1)+' 스텝';
     });
     describe(r,false);const im=new Image();im.src=r.photo;await im.decode();eye.drawImage(im,0,0);
   }catch(e){$('audit').textContent=e.message;}finally{resetControls(false);}
 };
 try{
-  const response=await fetch(url);if(!response.ok)throw Error('二쇳뻾 湲곕줉�� 遺덈윭�ㅼ� 紐삵뻽�댁슂.');
+  const response=await fetch(url);if(!response.ok)throw Error('주행 기록을 불러오지 못했어요.');
   rows=(await response.json()).runs;
   triangles=(await (await fetch(new URL('floor.json',import.meta.url))).json()).tris;
-  for(const i of new Set(rows.map(r=>r.layout))){const r=rows.find(r=>r.layout===i);$('layout').add(new Option((r.environment==='castle'?'Castle �ㅼ틪 쨌 ':'�� 諛� 쨌 ')+(r.sceneLayout??i+1),String(i)));}
+  for(const i of new Set(rows.map(r=>r.layout))){const r=rows.find(r=>r.layout===i);$('layout').add(new Option((r.environment==='castle'?'Castle 스캔 · ':'두 방 · ')+(r.sceneLayout??i+1),String(i)));}
   const requested=Number(new URLSearchParams(location.search).get('layout'));if(rows.some(r=>r.layout===requested))$('layout').value=String(requested);
   await show();
 }catch(e){$('audit').textContent=e.message;}

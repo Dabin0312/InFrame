@@ -1,0 +1,11 @@
+name: inframe-simulator
+channels:
+  - aihabitat
+  - conda-forge
+dependencies:
+  - python=3.9
+  - habitat-sim=0.3.3
+  - numpy
+  - imageio
+  - pillow
+  - trimesh=4.7.4

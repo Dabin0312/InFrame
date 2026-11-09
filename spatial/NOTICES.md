@@ -8,6 +8,10 @@ The downloadable report was produced by selecting the short MP4 through the same
 
 [Recorded browser output](approach-report.json) · [Source clip used for the file upload](approach.mp4) · [Policy comparison on independent recordings](../h4/)
 
+## Project teaser and framework
+
+The real-video project teaser uses seconds 37.00–43.00 of SparseVideoNav BVN recording `fe75cd3028c834ef`, trimmed and re-encoded for playback. Its overlaid observations, reconstructed camera path and 43.00 s STOP are from the [same held-out run](../h4/). The framework includes that recording's STOP frame (CC BY-NC-SA 4.0), derived 7-Scenes Fire and Castle illustrations from the [original project sources](../DATA-NOTICES.md), and the simulated Menagerie Go2 credited below. [Source recording](https://huggingface.co/datasets/OpenDriveLab/SparseVideoNav/blob/main/raw_videos/bvn/fe75cd3028c834ef.mp4) · [License](https://creativecommons.org/licenses/by-nc-sa/4.0/)
+
 ## Browser mapper and detector
 
 - AlvaAR by Alan Ross, GPL-3.0, revision 7796af500ee92001ac2a9888363ff64d7a3bee75. The release module embeds its WASM runtime. The desk clip is the upstream video example. [Corresponding source and build instructions](https://github.com/alanross/AlvaAR/tree/7796af500ee92001ac2a9888363ff64d7a3bee75) · [License](LICENSE-AlvaAR.txt)

@@ -4,3 +4,5 @@
 .maplegend{display:flex;gap:12px;flex-wrap:wrap;margin-top:7px;color:#75816d;font-size:11px}.maplegend b{color:#4e845e;font-weight:550}.maplegend em{color:#ad5533;font-style:normal}#policy-note{font-size:12px;margin-top:4px}.workspace #stopmode{max-width:70%}
 
 .examplelink{margin:10px 0 0;font-size:13px}.livestart strong{box-shadow:0 3px 16px #19291c28}.livehint{line-height:1.5}
+.query-field { display:inline-flex; align-items:center; gap:.6rem; font-weight:600 }
+#upload-goal { width:clamp(9rem,22vw,15rem); font:inherit; color:inherit; border:1px solid #a9bebb; border-radius:.6rem; background:white; padding:.65rem .8rem }

@@ -1,3 +1,4 @@
+import {resolveGoal} from './prompt.mjs';
 import {goals,VisualStop} from './goals.mjs';
 import {trackConfirmation} from './confirmation.mjs';
 import {ask,waitEvent} from './rpc.mjs';
@@ -8,6 +9,7 @@ const pc=policy.getContext('2d',{willReadFrequently:true});
 const semantic=document.createElement('canvas');semantic.width=320;semantic.height=240;
 const sc=semantic.getContext('2d',{willReadFrequently:true});
 const options={
+  fire:{url:'../spatial/fire-sign.mp4',name:'7-Scenes Fire · 미끄럼 주의 표지판',fov:58.94},
   chair:{url:'../spatial/chair-walk.mp4',name:'SparseVideoNav · 전시장 의자',fov:68},
   bin:{url:'../spatial/bin-walk.mp4',name:'SparseVideoNav · 흰 쓰레기통',fov:68},
   corridor:{url:'../spatial/approach.mp4',name:'SparseVideoNav · 소화기 접근',fov:68},
@@ -16,7 +18,7 @@ const options={
   castle:{url:'../project/castle.mp4',name:'Skokloster Castle · FRESH–015',fov:78}
 };
 let lastSource;
-function activeGoal(){return goals[data?.goalKey??'extinguisher'];}
+function activeGoal(){return data?.query??goals[data?.goalKey??'extinguisher'];}
 function syncGoalUI(key){
   const h4=key==='extinguisher',modeSelect=$('#stopmode');
   modeSelect.options[0].textContent=h4?'개선 H4 · 첫 STOP':'목표 확인 · 첫 STOP';
@@ -74,12 +76,21 @@ function firstObservation(id,seg){
   const confirmed=data.frames.findIndex(r=>has(r,true));
   return confirmed>=0?confirmed:data.frames.findIndex(r=>has(r,false));
 }
+function evidenceIndex(obj){
+  if(data.goalKey==='custom')return data.frames.findIndex(r=>r.seg===obj.seg&&Math.abs(r.t-obj.t)<.0001&&r.boxes.some(b=>b.track===obj.id));
+  return firstObservation(obj.id,obj.seg);
+}
 function targets(){
   const box=$('#targets');box.replaceChildren();
   for(const obj of data.targets){
-    const b=document.createElement('button');b.className='pill';b.textContent=activeGoal().label+' '+(obj.reference?'':activeGoal().prefix)+obj.id+' · '+seconds(obj.t)+' ↗';b.onclick=()=>review(obj.reference?Math.round(obj.t*16):firstObservation(obj.id,obj.seg));box.append(b);
+    const b=document.createElement('button');b.className='pill';b.textContent=activeGoal().label+' '+(obj.reference?'':activeGoal().prefix)+obj.id+' · '+seconds(obj.t)+' · 근거 사진 ↗';b.onclick=()=>review(obj.reference?Math.round(obj.t*16):evidenceIndex(obj));box.append(b);
   }
-  if(!box.children.length)box.textContent=data.frames.some(f=>f.boxes.some(b=>b.confirmed))?activeGoal().label+' 검출 · 지도 위치 미확정':activeGoal().label+' 미검출';
+  if(data.goalKey==='custom'){
+    const mapped=new Set(data.targets.map(t=>t.seg+'/'+t.id)),photos=new Map();
+    data.frames.forEach((r,i)=>{for(const b of r.boxes){const key=r.seg+'/'+b.track;if(b.confirmed&&!mapped.has(key)&&(!photos.has(key)||b.score>photos.get(key).score))photos.set(key,{i,t:r.t,score:b.score});}});
+    for(const e of photos.values()){const btn=document.createElement('button');btn.className='pill';btn.textContent=seconds(e.t)+' · 근거 사진 (위치 미확정)';btn.onclick=()=>review(e.i);box.append(btn);}
+  }
+  if(!box.children.length)box.textContent=data.frames.some(f=>f.boxes.some(b=>b.confirmed))?activeGoal().label+' 검출 · 지도 위치 미확정':activeGoal().label+' 확인된 관측 없음';
 }
 let mode='policy';
 function activeStop(){return mode==='policy'?data.stop:data.before;}
@@ -90,7 +101,7 @@ function stopPanel(){
   if(event){img.alt=activeGoal().label+' 첫 STOP 사진';img.src=event.annotatedPhoto??event.photo;const target=data.targets.find(g=>g.seg===event.seg&&g.id===event.track);
     const identity=event.track?activeGoal().label+' '+activeGoal().prefix+event.track+' · '+(target?'물체 지도 등록':'물체 위치 미확정')+' / ':'';
     $('#stopinfo').textContent=identity+(event.pose?'정지 위치 표시':'정지 위치 미확정');}
-  else{$('#nostop').textContent=current?'분석 중':'정책 STOP 없음';$('#stopinfo').textContent='';}
+  else{$('#nostop').textContent=current?'분석 중':'STOP 없음';$('#stopinfo').textContent='';}
 }
 function policyNote(){
   const fmt=e=>e?seconds(e.t):'없음';
@@ -107,13 +118,17 @@ async function loadClip(file,url,signal){
 async function start(file,key){
   current?.abort();const control=new AbortController(),signal=control.signal;current=control;reviewVersion++;
 
-  lastSource={file,key};const goalKey=$('#upload-goal').value,h4=goalKey==='extinguisher';syncGoalUI(goalKey);
+  let query;
+  try{query=await resolveGoal($('#upload-goal').value);}
+  catch(e){if(current===control){current=null;$('#cancel').hidden=true;$('#status').textContent=e.message;}return;}
+  if(signal.aborted)return;
+  lastSource={file,key};const goalKey=query.key,h4=goalKey==='extinguisher';syncGoalUI(goalKey);
   const conf=file?{name:file.name,fov:68}:options[key];
-  mode='policy';$('#stopmode').value=mode;data={version:3,before:null,source:conf.name,goalKey,goal:goals[goalKey].prompt,units:'monocular relative scale per submap',frames:[],points:[],targets:[],stop:null};
-  $('#source-name').textContent=conf.name;$('#session').hidden=false;$('#policy-note').textContent='';$('#cancel').hidden=false;
+  mode='policy';$('#stopmode').value=mode;data={version:4,before:null,source:conf.name,query,goalKey,goal:query.prompt,units:'monocular relative scale per submap',frames:[],points:[],targets:[],stop:null};
+  $('#source-name').textContent=conf.name+' · '+query.prompt;$('#session').hidden=false;$('#policy-note').textContent='';$('#cancel').hidden=false;
   $('#tick').disabled=true;$('#tick').value=0;$('#stopimg').hidden=true;$('#nostop').hidden=false;$('#nostop').textContent='정책 분석 중';
   $('#stopjump').hidden=$('#download').hidden=true;['#stopat','#stopinfo','#targets','#summary','#action','#at','#mapinfo'].forEach(s=>$(s).textContent='');
-  screen.getContext('2d').clearRect(0,0,screen.width,screen.height);mc.clearRect(0,0,640,440);$('#status').textContent='영상과 모델을 여는 중…';let mw,pw;
+  screen.getContext('2d').clearRect(0,0,screen.width,screen.height);mc.clearRect(0,0,640,440);$('#status').textContent=(goalKey==='custom'?'자유 입력 모델을 준비하는 중 · 첫 실행 약 77 MB':'영상과 모델을 여는 중…');let mw,pw;
   try{
     await loadClip(file,conf.url,signal);
     if(!Number.isFinite(video.duration)||!video.videoWidth)throw Error('영상의 길이를 읽을 수 없어요. H.264 MP4로 시도해 주세요.');
@@ -124,7 +139,19 @@ async function start(file,key){
     raw.width=screen.width=w;raw.height=screen.height=h;
     if(h4)pw=new Worker(new URL('../h4/worker.mjs',import.meta.url),{type:'module'});
     mw=new Worker(new URL('mapper.mjs',import.meta.url),{type:'module'});
-    const [geom]=await Promise.all([ask(mw,{type:'start',w,h,fov:conf.fov,goal:goalKey},signal),pw&&ask(pw,{type:'start'},signal)]);data.intrinsics=geom.k;
+    const [geom]=await Promise.all([ask(mw,{type:'start',w,h,fov:conf.fov,goal:goalKey,prompt:query.prompt},signal),pw&&ask(pw,{type:'start'},signal)]);data.intrinsics=geom.k;
+    if(goalKey==='custom'){
+      // A recorded clip permits a short reverse pass to initialize the monocular map
+      // before evaluating its first observations. Never run a detector or STOP here.
+      const lead=Math.min(Math.floor(video.duration*hz)-1,5*hz);
+      $('#status').textContent='첫 장면의 카메라 자세를 복원하는 중…';
+      for(let j=lead;j>=1;j--){
+        await waitEvent(video,'seeked',signal,()=>{video.currentTime=j/hz;});
+        rawctx.drawImage(video,0,0,w,h);const pixels=rawctx.getImageData(0,0,w,h).data.buffer;
+        await ask(mw,{type:'warmup',t:-j/hz,pixels},signal,[pixels]);
+      }
+      if(lead>0)await waitEvent(video,'seeked',signal,()=>{video.currentTime=0;});
+    }
     const confirm=trackConfirmation(),visualStop=new VisualStop();
     let atlas;if(h4&&!file&&key==='castle'){atlas=new Image();atlas.src='sample-rgb.png';await atlas.decode();}
     const ref=atlas?await fetch('../spatial/castle-reference.json').then(r=>r.json()):null;
@@ -183,10 +210,8 @@ async function start(file,key){
   }catch(e){if(current===control){$('#status').textContent=signal.aborted?'분석을 취소했어요.':String(e.message);$('#nostop').textContent='분석 종료';}}
   finally{mw?.terminate();pw?.terminate();if(current===control)current=null;if(!current)$('#cancel').hidden=true;}
 }
-$('#upload-goal').onchange=()=>{
-  if(lastSource)start(lastSource.file,lastSource.key);
-  else {const key=$('#upload-goal').value;$('#example').value=key==='extinguisher'?'corridor':key;syncGoalUI(key);$('#status').textContent=goals[$('#upload-goal').value].label+' 탐색 · 영상을 선택하세요.';}
-};
+$('#apply-goal').onclick=()=>start(lastSource?.file??null,lastSource?.key??$('#example').value);
+$('#upload-goal').onkeydown=e=>{if(e.key==='Enter')$('#apply-goal').click();};
 $('#file').onchange=e=>{if(e.target.files[0])start(e.target.files[0]);e.target.value='';};
 $('#sample').onclick=()=>start(null,$('#example').value);$('#cancel').onclick=()=>current?.abort();
 $('#tick').oninput=e=>review(+e.target.value);$('#stopjump').onclick=()=>review(activeStop()?.index);
@@ -195,10 +220,10 @@ $('#plane').onchange=()=>{const row=current?data?.frames.at(-1):data?.frames[sel
 $('#download').onclick=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(data)],{type:'application/json'}));a.download='inframe-map.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);};
 const drop=$('#drop');drop.ondragover=e=>{e.preventDefault();drop.classList.add('over');};drop.ondragleave=()=>drop.classList.remove('over');drop.ondrop=e=>{e.preventDefault();drop.classList.remove('over');if(e.dataTransfer.files[0])start(e.dataTransfer.files[0]);};
 
-map.onclick=e=>{if(current||!data)return;const rect=map.getBoundingClientRect(),scale=Math.min(rect.width/map.width,rect.height/map.height);const x=(e.clientX-rect.left-(rect.width-map.width*scale)/2)/scale,y=(e.clientY-rect.top-(rect.height-map.height*scale)/2)/scale;const hit=markers.find(m=>Math.hypot(m.p[0]-x,m.p[1]-y)<18);if(!hit)return;const o=hit.target;review(o.reference?Math.round(o.t*16):firstObservation(o.id,o.seg));};
+map.onclick=e=>{if(current||!data)return;const rect=map.getBoundingClientRect(),scale=Math.min(rect.width/map.width,rect.height/map.height);const x=(e.clientX-rect.left-(rect.width-map.width*scale)/2)/scale,y=(e.clientY-rect.top-(rect.height-map.height*scale)/2)/scale;const hit=markers.find(m=>Math.hypot(m.p[0]-x,m.p[1]-y)<18);if(!hit)return;const o=hit.target;review(o.reference?Math.round(o.t*16):evidenceIndex(o));};
 
 async function openReport(){
-  $('#upload-goal').value='extinguisher';syncGoalUI('extinguisher');lastSource={file:null,key:'corridor'};
+  $('#upload-goal').value='소화기';syncGoalUI('extinguisher');lastSource={file:null,key:'corridor'};
   current?.abort();const control=new AbortController(),signal=control.signal;current=control;reviewVersion++;
   try{
     const [response]=await Promise.all([fetch(new URL('approach-report.json',import.meta.url),{signal}),loadClip(null,options.corridor.url,signal)]);
@@ -217,7 +242,11 @@ $('#report').onclick=openReport;
 const query=new URLSearchParams(location.search),example=query.get('example'),initialGoal=query.get('goal');
 if(example==='approach')openReport();
 else if(Object.hasOwn(goals,initialGoal)){
-  $('#upload-goal').value=initialGoal;syncGoalUI(initialGoal);
+  $('#upload-goal').value=goals[initialGoal].label;syncGoalUI(initialGoal);
   $('#example').value=initialGoal==='extinguisher'?'corridor':initialGoal;
   if(example===initialGoal&&options[example])start(null,example);
+}
+else if(query.has('target')){
+  $('#upload-goal').value=query.get('target').slice(0,80);
+  if(Object.hasOwn(options,example))$('#example').value=example;
 }

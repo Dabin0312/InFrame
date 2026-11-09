@@ -38,3 +38,11 @@ The two-channel indoor detector uses the same YOLOE-11s weights, text encoder an
 The approach examples on the project page pair the gallery recording `3120aeb0b735e436` (frames at 12.00 and 28.00 s, a map derived with AlvaAR, and the associated chair detection; CC BY-NC-SA 4.0 as above) with the FRESH-015 Castle bin run (NavMesh, commanded velocities and robot-camera frame at 16.75 s). The Castle scan is credited in [project sources](../DATA-NOTICES.md) and the bin asset above. The gallery and Castle are separate scenes.
 
 The system diagram uses the registered Fire RGB frame, its Grounding DINO / SAM 2.1 masks, and a top view of its measured point cloud and object anchors. The upload thumbnail is the 12.00 s gallery frame credited above. The teacher path and four consecutive RGB frames (steps 40–43) come from Castle teacher demonstration C-train-000. Fire and Castle source conditions are provided in [project sources](../DATA-NOTICES.md).
+
+## Runtime text prompts
+
+The 416 px YOLOE-11s segmentation graph accepts an image and a 512-dimensional MobileCLIP-B(LT) embedding. The text encoder is stored in four chunks and evaluated locally once per run. Predefined goals retain their original exports. The free-prompt path uses instance masks, camera poses and a later-view reprojection check. The short reverse pass initializes the monocular mapper from the recording itself. [Model export](export-open.py) · [Ultralytics 8.3.200](https://github.com/ultralytics/ultralytics/tree/v8.3.200) · [MobileCLIP model terms](LICENSE-MobileCLIP.txt) · [MobileCLIP](https://github.com/apple/ml-mobileclip) · [CLIP tokenizer](https://github.com/openai/CLIP)
+
+The sign clip contains the first 80 RGB frames of Microsoft Research 7-Scenes Fire sequence 01, played at 16 fps. Its browser example uses only RGB. The separate metric validation uses registered depth, calibrated intrinsics and ORB-SLAM3 poses. [7-Scenes](https://www.microsoft.com/en-us/research/project/rgb-d-dataset-7-scenes/) · [Dataset terms](../DATA-LICENSE-7SCENES.rtf) · [Verification script](../evidence/verify-sign.py)
+
+The two-room simulation uses original procedural geometry. The search controller receives the robot pose, detections and contact feedback. Only the renderer and evaluator know which prop was placed where. [Policy](search-policy.mjs) · [Simulator](search-bench.mjs)

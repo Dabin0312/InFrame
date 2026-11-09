@@ -1,10 +1,55 @@
-const launch=document.querySelector('#launch'),sel=document.querySelector('#start-id');
-const floor=await fetch(new URL('./floor.json',import.meta.url)).then(r=>r.json());
-floor.starts.forEach((s,i)=>sel.add(new Option(s.id,i)));
-let loading=false;
-launch.onclick=async()=>{
-  if(loading)return;loading=true;launch.querySelector('strong').textContent='장면과 정책을 불러오는 중…';
-  try{const {init}=await import('./live.mjs');await init(floor);launch.hidden=true;}
-  catch(e){document.querySelector('#live-state').textContent=String(e.message);launch.querySelector('strong').textContent='다시 열기';}
-  finally{loading=false;}
-};
+import {startMap} from './start-map.mjs';
+
+const el = id => document.getElementById(id);
+const launch = el('launch'), presets = el('start-id'), heading = el('heading');
+const status = el('picked-position');
+async function setup() {
+  const response = await fetch(new URL('floor.json', import.meta.url));
+  if (!response.ok) throw Error('출발 지도를 불러올 수 없습니다.');
+  const floor = await response.json();
+  floor.starts.forEach((s,i) => presets.add(new Option(s.id,i)));
+  const custom = new Option('직접 선택','custom');
+  custom.disabled = true; presets.add(custom);
+  let selected, runtime, pending = false;
+  const map = startMap(el('start-map'), floor, xyz => {
+    select({id:'custom', xyz, yaw:heading.value==='recorded' ? 0 : Number(heading.value)}, 'custom');
+  }, () => {
+    status.textContent = '벽과 지도 바깥에서는 출발할 수 없어요. 색이 칠해진 바닥을 선택하세요.';
+  });
+  function select(start, choice) {
+    selected = start;
+    if(choice!=='custom') heading.value='recorded';
+    else if(heading.value==='recorded') heading.value='0';
+    el('preset-heading').disabled=choice==='custom';
+    presets.value = choice;
+    map.select(start);
+    const [x,,z] = start.xyz;
+    status.textContent = 'X '+x.toFixed(2)+' m　 Z '+z.toFixed(2)+' m';
+    if (runtime) {
+      launch.hidden = false;
+      launch.querySelector('strong').textContent = '▶　여기서 주행';
+      runtime.preview();
+      launch.classList.add('ready-preview');
+    }
+  }
+  presets.onchange = () => select(floor.starts[Number(presets.value)],presets.value);
+  heading.onchange = () => select({id:'custom',xyz:selected.xyz,yaw:Number(heading.value)},'custom');
+  select(floor.starts[0],'0');
+  launch.disabled = false;
+  launch.onclick = async () => {
+    if (pending) return;
+    pending = true;
+    launch.querySelector('strong').textContent = '정책을 불러오는 중…';
+    try {
+      if (!runtime) {
+        const {init} = await import('./live.mjs');
+        runtime = await init(floor, () => selected, map.pose);
+      } else runtime.reset();
+      launch.hidden = true;
+    } catch (error) {
+      el('live-state').textContent = error.message;
+      launch.querySelector('strong').textContent = '다시 열기';
+    } finally { pending = false; }
+  };
+}
+setup().catch(error => { status.textContent = error.message; });

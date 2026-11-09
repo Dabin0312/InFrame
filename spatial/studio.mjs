@@ -1,3 +1,4 @@
+import {trackConfirmation} from './confirmation.mjs';
 import {ask,waitEvent} from './rpc.mjs';
 const $=s=>document.querySelector(s),video=$('#clip'),screen=$('#camera'),map=$('#map'),mc=map.getContext('2d');
 const raw=document.createElement('canvas'),rawctx=raw.getContext('2d',{willReadFrequently:true});
@@ -39,7 +40,7 @@ function plot(row){
 }
 function display(row,image=video){
   const c=screen.getContext('2d');c.drawImage(image,0,0,screen.width,screen.height);
-  for(const b of row.boxes){const [x,y,w,h]=b.box;c.strokeStyle='#ffab57';c.lineWidth=2;c.strokeRect(x,y,w,h);c.fillStyle='#121a14';c.fillRect(x,Math.max(0,y-19),61,19);c.fillStyle='white';c.font='12px sans-serif';c.fillText('E'+b.track+' · '+Math.round(100*b.score)+'%',x+2,Math.max(13,y-5));}
+  for(const b of row.boxes.filter(b=>b.confirmed)){const [x,y,w,h]=b.box;c.strokeStyle='#ffab57';c.lineWidth=2;c.strokeRect(x,y,w,h);c.fillStyle='#121a14';c.fillRect(x,Math.max(0,y-19),61,19);c.fillStyle='white';c.font='12px sans-serif';c.fillText('E'+b.track+' · '+Math.round(100*b.score)+'%',x+2,Math.max(13,y-5));}
   $('#at').textContent=$('#clock').textContent=seconds(row.t);
   const act=mode==='before'?row.baseline:row.action,stop=activeStop();
   $('#action').textContent=act?(mode==='before'?'기존 H4 · ':'개선 H4 · ')+(act[2]?'STOP':act[0]>.001?'전진':act[1]>0?'좌회전':act[1]<0?'우회전':'대기'):(stop&&row.t>stop.t?'STOP 이후 촬영 구간':'행동 샘플 사이');
@@ -54,12 +55,21 @@ async function review(index){
   }
   if(version===reviewVersion&&!current)display(row);
 }
+function markConfirmed(row,confirm){
+  const ids=confirm(row.t,row.seg,row.boxes.map(b=>b.track));
+  for(const box of row.boxes)box.confirmed=ids.has(box.track);
+}
+function firstObservation(id,seg){
+  const has=(r,confirmed)=>r.seg===seg&&r.pose&&r.boxes.some(b=>b.track===id&&(!confirmed||b.confirmed));
+  const confirmed=data.frames.findIndex(r=>has(r,true));
+  return confirmed>=0?confirmed:data.frames.findIndex(r=>has(r,false));
+}
 function targets(){
   const box=$('#targets');box.replaceChildren();
   for(const obj of data.targets){
-    const b=document.createElement('button');b.className='pill';b.textContent='소화기 '+(obj.reference?'':'E')+obj.id+' · '+seconds(obj.t)+' ↗';b.onclick=()=>review(obj.reference?Math.round(obj.t*16):data.frames.findIndex(f=>f.seg===obj.seg&&f.pose&&f.boxes.some(x=>x.track===obj.id)));box.append(b);
+    const b=document.createElement('button');b.className='pill';b.textContent='소화기 '+(obj.reference?'':'E')+obj.id+' · '+seconds(obj.t)+' ↗';b.onclick=()=>review(obj.reference?Math.round(obj.t*16):firstObservation(obj.id,obj.seg));box.append(b);
   }
-  if(!box.children.length)box.textContent=data.frames.some(f=>f.boxes.length)?'소화기 검출 · 지도 위치 미확정':'소화기 미검출';
+  if(!box.children.length)box.textContent=data.frames.some(f=>f.boxes.some(b=>b.confirmed))?'소화기 검출 · 지도 위치 미확정':'소화기 미검출';
 }
 let mode='policy';
 function activeStop(){return mode==='policy'?data.stop:data.before;}
@@ -101,6 +111,7 @@ async function start(file,key){
     pw=new Worker(new URL('../h4/worker.mjs',import.meta.url),{type:'module'});
     mw=new Worker(new URL('mapper.mjs',import.meta.url),{type:'module'});
     const [geom]=await Promise.all([ask(mw,{type:'start',w,h,fov:conf.fov},signal),ask(pw,{type:'start'},signal)]);data.intrinsics=geom.k;
+    const confirm=trackConfirmation();
     let atlas;if(!file&&key==='castle'){atlas=new Image();atlas.src='sample-rgb.png';await atlas.decode();}
     const ref=atlas?await fetch('../spatial/castle-reference.json').then(r=>r.json()):null;
     if(ref){data.reference='Habitat registered camera poses and observations';data.units='metres, Habitat X/Y/Z';data.targets=[{id:'C',seg:1,p:ref.target,t:17.25,n:1,reference:true}];}
@@ -125,6 +136,7 @@ async function start(file,key){
         const delta=ref.yaw[next]-ref.yaw[j],heading=ref.yaw[j]+Math.atan2(Math.sin(delta),Math.cos(delta))*m;
         const c=Math.cos(heading),s=Math.sin(heading),pitch=.2,cp=Math.cos(pitch),sp=Math.sin(pitch);
         row.pose=[c,sp*s,-cp*s,0,0,-cp,-sp,0,-s,sp*c,-cp*c,0,...center,1];row.seg=1;row.poseSource='Habitat camera, interpolated';}
+      if(i%interval===0)markConfirmed(row,confirm);
       data.frames.push(row);if(!ref){data.points.push(...r.points);if(r.targets)data.targets=r.targets;}
       for(const [key,action,canvas] of [['before',row.baseline,policy],['stop',row.action,semantic]]){
         if(data[key]||!action?.[2])continue;
@@ -135,7 +147,7 @@ async function start(file,key){
     }
     $('#status').textContent='분석 완료';$('#tick').max=count-1;$('#tick').disabled=false;$('#download').hidden=false;
     
-    targets();$('#summary').textContent=ref?'시뮬레이터 기준 경로 · 정책 관측 70프레임 · 소화기 C':'위치 추적 '+data.frames.filter(f=>f.pose).length+' / '+count+'프레임 · 소화기 관측 '+data.frames.filter(f=>f.boxes.length).length+'프레임 · 지도에 등록한 관측 트랙 '+data.targets.length+'개';
+    targets();$('#summary').textContent=ref?'시뮬레이터 기준 경로 · 정책 관측 70프레임 · 소화기 C':'위치 추적 '+data.frames.filter(f=>f.pose).length+' / '+count+'프레임 · 소화기 관측 '+data.frames.filter(f=>f.boxes.some(b=>b.confirmed)).length+'프레임 · 지도에 등록한 관측 트랙 '+data.targets.length+'개';
     current=null;stopPanel();policyNote();
     await review(activeStop()?.index??Math.max(0,data.frames.findLastIndex(r=>r.pose)));
   }catch(e){if(current===control){$('#status').textContent=signal.aborted?'분석을 취소했어요.':String(e.message);$('#nostop').textContent='분석 종료';}}
@@ -149,14 +161,16 @@ $('#plane').onchange=()=>{const row=current?data?.frames.at(-1):data?.frames[sel
 $('#download').onclick=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(data)],{type:'application/json'}));a.download='inframe-map.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);};
 const drop=$('#drop');drop.ondragover=e=>{e.preventDefault();drop.classList.add('over');};drop.ondragleave=()=>drop.classList.remove('over');drop.ondrop=e=>{e.preventDefault();drop.classList.remove('over');if(e.dataTransfer.files[0])start(e.dataTransfer.files[0]);};
 
-map.onclick=e=>{if(current||!data)return;const rect=map.getBoundingClientRect(),scale=Math.min(rect.width/map.width,rect.height/map.height);const x=(e.clientX-rect.left-(rect.width-map.width*scale)/2)/scale,y=(e.clientY-rect.top-(rect.height-map.height*scale)/2)/scale;const hit=markers.find(m=>Math.hypot(m.p[0]-x,m.p[1]-y)<18);if(!hit)return;const o=hit.target;review(o.reference?Math.round(o.t*16):data.frames.findIndex(f=>f.seg===o.seg&&f.pose&&f.boxes.some(b=>b.track===o.id)));};
+map.onclick=e=>{if(current||!data)return;const rect=map.getBoundingClientRect(),scale=Math.min(rect.width/map.width,rect.height/map.height);const x=(e.clientX-rect.left-(rect.width-map.width*scale)/2)/scale,y=(e.clientY-rect.top-(rect.height-map.height*scale)/2)/scale;const hit=markers.find(m=>Math.hypot(m.p[0]-x,m.p[1]-y)<18);if(!hit)return;const o=hit.target;review(o.reference?Math.round(o.t*16):firstObservation(o.id,o.seg));};
 
 async function openReport(){
   current?.abort();const control=new AbortController(),signal=control.signal;current=control;reviewVersion++;
   try{
     const [response]=await Promise.all([fetch(new URL('approach-report.json',import.meta.url),{signal}),loadClip(null,options.corridor.url,signal)]);
     if(!response.ok)throw Error('공개 검증 결과를 읽지 못했어요.');
-    const result=await response.json();if(current!==control)return;data=result;mode='policy';$('#stopmode').value=mode;
+    const result=await response.json();if(current!==control)return;data=result;const confirm=trackConfirmation();
+    data.frames.forEach((row,i)=>{if(i%(data.mappingHz/4)===0)markConfirmed(row,confirm);});
+    mode='policy';$('#stopmode').value=mode;
     screen.width=data.intrinsics.width;screen.height=data.intrinsics.height;$('#source-name').textContent=options.corridor.name;
     $('#session').hidden=false;$('#cancel').hidden=true;$('#tick').disabled=false;$('#tick').max=data.frames.length-1;
     $('#download').hidden=false;$('#status').textContent='공개 실내 영상 · 저장된 브라우저 검증 결과';policyNote();

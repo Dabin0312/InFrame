@@ -1,14 +1,8 @@
+import {floorHeight,viewpointRange} from './navmesh.mjs';
 import * as T from './three.mjs';
 import {ask} from './rpc.mjs';
 const $=s=>document.querySelector(s);
 const dt=.25;
-function floorHeight(tris,x,z){
-  for(const [a,b,c] of tris){
-    const den=(b[2]-c[2])*(a[0]-c[0])+(c[0]-b[0])*(a[2]-c[2]);if(Math.abs(den)<1e-9)continue;
-    const u=((b[2]-c[2])*(x-c[0])+(c[0]-b[0])*(z-c[2]))/den,v=((c[2]-a[2])*(x-c[0])+(a[0]-c[0])*(z-c[2]))/den;
-    if(u>=-1e-5&&v>=-1e-5&&u+v<=1.00001)return u*a[1]+v*b[1]+(1-u-v)*c[1];
-  }return null;
-}
 async function model(){
   const loader=new T.GLTFLoader().setMeshoptDecoder(T.MeshoptDecoder);
   const gltf=await loader.loadAsync(new URL('go2.glb',import.meta.url).href);
@@ -21,7 +15,7 @@ async function model(){
   }
   return {body,legs};
 }
-export async function init(floor){
+export async function init(floor, getStart, onPose){
   const canvas=$('#orbit'),eye=$('#robot-eye'),ctx=eye.getContext('2d',{willReadFrequently:true});
   const detail=document.createElement('canvas');detail.width=320;detail.height=240;
   const semanticContext=detail.getContext('2d',{willReadFrequently:true});
@@ -58,7 +52,7 @@ export async function init(floor){
   canvas.onpointermove=e=>{if(!drag)return;angle-=(e.clientX-drag[0])*.012;tilt=Math.max(.2,Math.min(1.35,tilt+(e.clientY-drag[1])*.009));drag=[e.clientX,e.clientY];redraw();};
   canvas.onpointerup=canvas.onpointercancel=()=>drag=null;
   canvas.onkeydown=e=>{if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key)){e.preventDefault();angle+=(e.key==='ArrowLeft'?-.18:e.key==='ArrowRight'?.18:0);tilt=Math.max(.2,Math.min(1.35,tilt+(e.key==='ArrowUp'?.12:e.key==='ArrowDown'?-.12:0)));redraw();}};
-  function view(){onboard.position.copy(pose);onboard.position.y+=.46;onboard.rotation.set(-.2,yaw,0,'YXZ');capture.render(world,onboard);ctx.drawImage(capture.domElement,0,0);body.position.copy(pose);body.rotation.y=yaw;redraw();}
+  function view(){onPose(pose.x,pose.z,yaw);onboard.position.copy(pose);onboard.position.y+=.46;onboard.rotation.set(-.2,yaw,0,'YXZ');capture.render(world,onboard);ctx.drawImage(capture.domElement,0,0);body.position.copy(pose);body.rotation.y=yaw;redraw();}
   function outcome(msg){finished=true;$('#hold').disabled=true;$('#live-state').textContent=msg;}
   async function tick(id){
     if(id!==generation||finished)return;
@@ -77,7 +71,10 @@ export async function init(floor){
         const g=label.getContext('2d');g.drawImage(capture.domElement,0,0);const masks=g.getImageData(0,0,192,144).data;let visible=0;
         for(let j=0;j<masks.length;j+=4)if(masks[j]>120)visible++;
         originals.forEach((m,o)=>o.material=m);yes.dispose();no.dispose();
-        outcome('STOP · '+(visible>=8?'소화기 C가 보임':'소화기 C가 보이지 않음'));return;
+        const range=viewpointRange(floor.tris,pose.toArray(),floor.views);
+        const metric=range.kind==='within'?'관측점까지 바닥 경로 '+range.distance.toFixed(2)+' m':
+          range.kind==='outside'?'관측점 0.8 m 밖':'관측점 거리 미확정';
+        outcome('STOP · '+(visible>=8?'소화기 C가 보임':'소화기 C가 보이지 않음')+' · '+metric);return;
       }
       const count=4;let blocked=false;for(let i=0;i<count;i++){
         const turn=r*dt/count,mid=yaw+turn/2;yaw+=turn;const dx=-Math.sin(mid)*f*dt/count,dz=-Math.cos(mid)*f*dt/count;
@@ -91,11 +88,19 @@ export async function init(floor){
     }catch(e){if(id===generation)outcome(e.message);}
   }
   async function reset(){
-    const id=++generation;controller?.abort();worker?.terminate();clearTimeout(timer);controller=new AbortController();worker=new Worker(new URL('../h4/worker.mjs',import.meta.url),{type:'module'});
-    const start=floor.starts[+$('#start-id').value];pose=new T.Vector3(...start.xyz);yaw=start.yaw;steps=travel=0;paused=finished=false;trail=[pose.clone()];breadcrumb.geometry.dispose();breadcrumb.geometry=new T.BufferGeometry();legs.forEach(l=>{l.hip.rotation.y=.79;l.knee.rotation.y=-1.54;});
+    $('#rerun').disabled=false;const id=++generation;controller?.abort();worker?.terminate();clearTimeout(timer);controller=new AbortController();worker=new Worker(new URL('../h4/worker.mjs',import.meta.url),{type:'module'});
+    const start=getStart();pose=new T.Vector3(...start.xyz);yaw=start.yaw;steps=travel=0;paused=finished=false;trail=[pose.clone()];breadcrumb.geometry.dispose();breadcrumb.geometry=new T.BufferGeometry();legs.forEach(l=>{l.hip.rotation.y=.79;l.knee.rotation.y=-1.54;});
     $('#elapsed').textContent='0.00 s';$('#hold').textContent='일시 정지';$('#hold').disabled=false;$('#live-state').textContent='정책 준비 중';view();
     try{await ask(worker,{type:'start'},controller.signal);if(id===generation)tick(id);}catch(e){if(id===generation)outcome(e.message);}
   }
   $('#hold').onclick=()=>{paused=!paused;$('#hold').textContent=paused?'계속 주행':'일시 정지';};
-  $('#start-id').onchange=reset;$('#rerun').onclick=reset;$('#rerun').disabled=false;$('.chipcam').hidden=false;await reset();
+  $('#rerun').onclick=reset;$('#rerun').disabled=false;$('.chipcam').hidden=false;
+  function preview(){
+    generation++; controller?.abort(); worker?.terminate(); clearTimeout(timer); finished=true;
+    const start=getStart(); pose=new T.Vector3(...start.xyz); yaw=start.yaw;
+    breadcrumb.geometry.dispose(); breadcrumb.geometry=new T.BufferGeometry();
+    $('#elapsed').textContent='0.00 s'; $('#hold').disabled=true; $('#rerun').disabled=true;
+    $('#live-state').textContent='출발 대기'; view();
+  }
+  reset();return {reset,preview};
 }

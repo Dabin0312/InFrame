@@ -1,0 +1,51 @@
+{
+  "simulator": "Habitat-Sim",
+  "version": "0.3.3",
+  "platform": "macOS arm64 local",
+  "scene": "sample_room.glb",
+  "navmesh_generated": true,
+  "start_navigable": true,
+  "goal_navigable": true,
+  "path_found": true,
+  "path_length_m": 8.188,
+  "path_points_m": [
+    [
+      -2.799999952316284,
+      0.0,
+      2.700000047683716
+    ],
+    [
+      1.9000002145767212,
+      0.19999949634075165,
+      1.099999189376831
+    ],
+    [
+      2.000000238418579,
+      0.19999949634075165,
+      0.949999213218689
+    ],
+    [
+      2.700000047683716,
+      0.0,
+      -2.0
+    ]
+  ],
+  "wall_collision_test": {
+    "requested_position_m": [
+      5.0,
+      0.0,
+      0.0
+    ],
+    "actual_position_m": [
+      3.6500000953674316,
+      0.19999949634075165,
+      -2.023416811880452e-08
+    ],
+    "blocked": true
+  },
+  "renders": [
+    "start_rgb.png",
+    "goal_rgb.png",
+    "topdown_path.png"
+  ]
+}

@@ -2,11 +2,11 @@
 
 ## Public indoor validation
 
-OpenDriveLab, *SparseVideoNav*, BVN episode `d39b9a4ef7409c87`. The indoor RGB recording was not used to train InFrame's H4 navigation policy. Both clips are silent, resized to 640×480, and encoded at 16 Hz. The shorter clip begins 16 seconds into the source. Times shown in the viewer are relative to the selected file. The two MP4s, extracted photo, and sample-specific analysis are made available under CC BY-NC-SA 4.0. [Dataset](https://huggingface.co/datasets/OpenDriveLab/SparseVideoNav) · [Source recording](https://huggingface.co/datasets/OpenDriveLab/SparseVideoNav/blob/main/raw_videos/bvn/d39b9a4ef7409c87.mp4) · [License](https://creativecommons.org/licenses/by-nc-sa/4.0/)
+OpenDriveLab, *SparseVideoNav*, BVN episode `d39b9a4ef7409c87`. This recording diagnoses the original H4 and belongs to training for the updated STOP head. It is excluded from the new nine-recording holdout. Both clips are silent, resized to 640×480, and encoded at 16 Hz. The shorter clip begins 16 seconds into the source. Times shown in the viewer are relative to the selected file. The two MP4s, extracted photo, and sample-specific analysis are made available under CC BY-NC-SA 4.0. [Dataset](https://huggingface.co/datasets/OpenDriveLab/SparseVideoNav) · [Source recording](https://huggingface.co/datasets/OpenDriveLab/SparseVideoNav/blob/main/raw_videos/bvn/d39b9a4ef7409c87.mp4) · [License](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 
 The downloadable report was produced by selecting the short MP4 through the same file input used for personal videos. At 640×480 the final triangulated point reprojects inside its associated detector box in 17 of 17 observations. The median distance to the box centre is 7.3 pixels. This checks image-to-map consistency. Physical coordinate error requires independent 3D ground truth. The darker glass and the overlapping extinguishers can produce multiple observation tracks. A track ID identifies evidence linked over time.
 
-[Recorded browser output](approach-report.json) · [Source clip used for the file upload](approach.mp4) · [Inspection frame](inspection.jpg)
+[Recorded browser output](approach-report.json) · [Source clip used for the file upload](approach.mp4) · [Policy comparison on independent recordings](../h4/)
 
 ## Browser mapper and detector
 

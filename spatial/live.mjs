@@ -23,6 +23,8 @@ async function model(){
 }
 export async function init(floor){
   const canvas=$('#orbit'),eye=$('#robot-eye'),ctx=eye.getContext('2d',{willReadFrequently:true});
+  const detail=document.createElement('canvas');detail.width=320;detail.height=240;
+  const semanticContext=detail.getContext('2d',{willReadFrequently:true});
   const draw=new T.WebGLRenderer({canvas,antialias:true,alpha:true});draw.setPixelRatio(Math.min(devicePixelRatio,1.6));draw.setClearColor(0,0);
   const capture=new T.WebGLRenderer({antialias:false,preserveDrawingBuffer:true});capture.setSize(192,144,false);capture.setClearColor(0);
   const gltf=await new T.GLTFLoader().setMeshoptDecoder(T.MeshoptDecoder).loadAsync(new URL('castle.glb',import.meta.url).href);
@@ -63,7 +65,9 @@ export async function init(floor){
     if(paused){timer=setTimeout(()=>tick(id),80);return;}
     try{
       view();const pixels=ctx.getImageData(0,0,192,144).data.buffer;
-      const {action}=await ask(worker,{type:'frame',pixels},controller.signal,[pixels]);if(id!==generation)return;
+      semanticContext.drawImage(eye,0,0,320,240);
+      const semantic=semanticContext.getImageData(0,0,320,240).data.buffer;
+      const {action}=await ask(worker,{type:'frame',pixels,semantic},controller.signal,[pixels,semantic]);if(id!==generation)return;
       $('#elapsed').textContent=(steps*dt).toFixed(2)+' s';const [f,r,stop]=action;
       if(stop){
         // Render target IDs against full scene depth, with the same camera and pose.
@@ -87,7 +91,7 @@ export async function init(floor){
     }catch(e){if(id===generation)outcome(e.message);}
   }
   async function reset(){
-    const id=++generation;controller?.abort();worker?.terminate();clearTimeout(timer);controller=new AbortController();worker=new Worker(new URL('../demo/policy-worker.mjs',import.meta.url),{type:'module'});
+    const id=++generation;controller?.abort();worker?.terminate();clearTimeout(timer);controller=new AbortController();worker=new Worker(new URL('../h4/worker.mjs',import.meta.url),{type:'module'});
     const start=floor.starts[+$('#start-id').value];pose=new T.Vector3(...start.xyz);yaw=start.yaw;steps=travel=0;paused=finished=false;trail=[pose.clone()];breadcrumb.geometry.dispose();breadcrumb.geometry=new T.BufferGeometry();legs.forEach(l=>{l.hip.rotation.y=.79;l.knee.rotation.y=-1.54;});
     $('#elapsed').textContent='0.00 s';$('#hold').textContent='일시 정지';$('#hold').disabled=false;$('#live-state').textContent='정책 준비 중';view();
     try{await ask(worker,{type:'start'},controller.signal);if(id===generation)tick(id);}catch(e){if(id===generation)outcome(e.message);}

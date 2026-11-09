@@ -9,9 +9,9 @@ InFrame은 실내 영상에서 소화기를 지도에 등록하고, 로봇이 �
 
 ## Try your own data
 
-[브라우저 데모](https://dabin0312.github.io/InFrame/demo/)에서 실내 영상 파일을 선택하거나 **샘플로 실행**을 누르세요. 최근 RGB 네 장을 입력으로 전진 속도, 회전 속도, 첫 STOP 시각을 계산합니다. 영상은 기기 안에서 처리되며 시점별 결과는 JSON으로 저장할 수 있습니다. 녹화 영상으로 얻는 값은 해당 장면에서의 정책 예측입니다.
+[공개 실내 영상의 결과 열기](https://dabin0312.github.io/InFrame/demo/?example=approach) · [내 영상으로 실행](https://dabin0312.github.io/InFrame/demo/) · [Go2 주행 직접 실행](https://dabin0312.github.io/InFrame/#live)
 
-직접 찍은 영상으로 카메라 궤적과 지도를 만들 때는 [단안 SLAM 촬영·실행 가이드](stages/02-visual-slam/README.md)를 사용하세요.
+촬영한 MP4를 선택하면 카메라 영상, 그 영상에서 복원한 단안 SLAM 지도, 정지 장면을 함께 볼 수 있습니다. 지도에서 소화기를 선택하면 관측한 프레임으로 이동합니다. **H4 정책 STOP**과 여러 시점에서 소화기를 확인한 **점검 정지 제안**을 각각 볼 수 있습니다. 영상은 브라우저에서 처리하며 관측과 지도는 JSON으로 저장할 수 있습니다.
 
 ## Method
 

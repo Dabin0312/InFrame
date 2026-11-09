@@ -1,5 +1,6 @@
 import * as T from './engine.js';
-import { target } from './navigation.js';
+// Fixed geometry for the camera simulator. Navigation recovers the object from RGB-D.
+const target = {x:2.7,z:-2.5};
 
 const materials = new Map();
 function material(color) {
@@ -43,6 +44,23 @@ function contact(parent,x,z,width,depth,opacity) {
 }
 function floorMark(parent,x,z,width,depth,color,y=.015) {
   const m=box(parent,x,y,z,width,.006,depth,color);m.castShadow=false;return m;
+}
+function floorFinish(room) {
+  const tile=document.createElement('canvas');tile.width=tile.height=1536;
+  const ctx=tile.getContext('2d');
+  let seed=137;const rand=()=>((seed=Math.imul(seed,1664525)+1013904223>>>0)/4294967296);
+  ctx.fillStyle='#a5aba9';ctx.fillRect(0,0,1536,1536);
+  for(let i=0;i<65000;i++){
+    const gray=Math.floor(70+rand()*145);
+    ctx.fillStyle='rgba('+gray+','+gray+','+gray+','+(.11+rand()*.37)+')';
+    const x=rand()*1536,y=rand()*1536,r=1+rand()**3*5;
+    ctx.beginPath();ctx.moveTo(x-r,y);ctx.lineTo(x+r*.6,y-r*.7);
+    ctx.lineTo(x+r,y+r);ctx.lineTo(x-r*.4,y+r*.5);ctx.fill();
+  }
+  const texture=new T.CanvasTexture(tile);texture.colorSpace=T.SRGBColorSpace;
+  texture.anisotropy=4;
+  const surface=mesh(room,new T.PlaneGeometry(8,8),new T.MeshStandardMaterial({map:texture,roughness:.94}),0,.007,0);
+  surface.rotation.x=-Math.PI/2;surface.castShadow=false;
 }
 function windowWall(parent){
   // Each pane is inset between dark metal jambs; the pale strips are reflections.
@@ -170,6 +188,7 @@ export class World {
       box(this.room,x,-.19,4.142,.40,.054,.014,'#41467b',.008);
     }
     box(this.room,0,-.072,0,8.16,.15,8.16,'#b6bbdf',.036);
+    floorFinish(this.room);
     for(let n=-4;n<=4;n++){floorMark(this.room,n,0,.013,8,'#8c98c3');floorMark(this.room,0,n,8,.013,'#8c98c3');}
     for(const side of [-1,1]) {
       floorMark(this.room,0,side*3.75,7.5,.034,'#f2efdf');

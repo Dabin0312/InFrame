@@ -1,5 +1,7 @@
-import { obstacles, target, clamp } from './navigation.js';
+import {target,clamp} from './navigation.js?room=1';
 
+// Geometry of the source room is used only for this optional software renderer.
+const obstacles=[{x:-.5,z:0,width:1.8,depth:1.2},{x:1.3,z:.2,width:.8,depth:1.3},{x:2.7,z:-2.5,width:.36,depth:.36}];
 const colors={back:'#c7caff',side:'#999fe9',roof:'#eeefff',floor:'#b0b8ea',rim:'#7176bd',crate:'#9cabc8',edge:'#32355d',goal:'#ff5140'};
 export class CanvasWorld {
   constructor(canvas){this.ctx=canvas.getContext('2d');this.canvas=canvas;}

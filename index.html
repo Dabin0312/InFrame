@@ -8,8 +8,8 @@
   <meta name="description" content="실내 영상에서 카메라 궤적과 3D 지도가 만들어지는 과정, 소화기를 향해 이동한 로봇이 멈춘 순간의 시야.">
   <link rel="icon" href="mark.svg">
   <link rel="preload" href="geist.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="korean.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="style.css"><link rel="stylesheet" href="sequence.css">
+  <link rel="preload" href="korean.woff2?room=1" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="style.css"><link rel="stylesheet" href="sequence.css?room=1">
 </head>
 <body id="top">
 <a class="skip" href="#playground">시연으로 이동</a>
@@ -31,13 +31,18 @@
       </div>
       <div id="scan-view" class="scan-view">
         <figure class="rgb-pane">
-          <video id="indoor" src="indoor.mp4" poster="indoor.jpg" muted playsinline preload="auto" aria-label="TUM 연구실을 촬영한 컬러 영상"></video>
-          <figcaption><span class="feed-dot"></span>실내 카메라</figcaption>
+          <video id="indoor" src="indoor.mp4?room=1" poster="indoor.jpg?room=1" muted playsinline preload="auto" aria-label="한 작업실을 여러 시점에서 기록한 RGB-D 카메라 영상"></video>
+          <video id="drive-video" src="drive.mp4" muted playsinline preload="metadata" aria-label="같은 작업실 안에서 경로를 따라가는 로봇의 시야" hidden></video>
+          <img id="reverse-view" src="reverse.jpg" alt="정지 위치에서 뒤를 돌아본 카메라 영상" hidden>
+          <div id="object-box" hidden aria-hidden="true"></div>
+          <figcaption><span class="feed-dot"></span><span id="feed-name">실내 카메라</span></figcaption>
           <div class="camera-time" id="camera-time"></div>
+          <span class="decision" id="decision" role="status" hidden></span>
         </figure>
         <figure class="map-pane" id="map-pane">
           <canvas id="scan-canvas" aria-label="영상과 같은 시각의 공간 표면과 카메라 궤적"></canvas>
-          <figcaption id="map-caption"><span class="trajectory-key"></span>카메라 궤적</figcaption>
+          <figcaption id="map-caption"><span class="trajectory-key"></span><span id="map-key">촬영 궤적</span></figcaption>
+          <button id="map-flip" class="flip-control" hidden>뒤돌아보기</button>
           <button class="layer" id="map-layer" aria-pressed="false">SLAM 지도점</button>
         </figure>
       </div>
@@ -48,7 +53,7 @@
         <button class="tag target-tag" id="target-tag" aria-label="소화기로 이동" hidden>소화기</button>
         <div class="stage-top">
           <div class="scene-name"><span class="live-dot"></span>목표 · 소화기</div>
-          <div class="episode-tools"><button id="flip" hidden>뒤돌아보기</button><div id="episode-state" role="status" hidden></div></div><div class="views" role="group" aria-label="시점">
+          <div class="views" role="group" aria-label="시점">
             <button id="overview" aria-pressed="true">공간 지도</button><button id="first-person" aria-pressed="false">1인칭</button>
           </div>
         </div>
@@ -71,7 +76,7 @@
           <button id="judge" class="stop"><i aria-hidden="true"></i> 정지 판정</button>
         </div>
       </div>
-      <div id="replay" class="replay" hidden><button id="play" aria-label="경로 일시정지">Ⅱ</button><input type="range" id="time" min="0" max="1000" value="0" aria-label="경로 재생 위치"><output id="replay-distance">0.00 / 8.19 m</output><button id="ending">정지 장면</button></div>
+      <div id="replay" class="replay" hidden><button id="play" aria-label="경로 일시정지">Ⅱ</button><input type="range" id="time" min="0" max="1000" value="0" aria-label="경로 재생 위치"><output id="replay-distance">0.00 m</output><button id="ending">정지 장면</button></div>
       <div id="compare" class="compare" hidden><span>정지 방향</span><button id="toward" aria-pressed="true">목표 쪽</button><button id="away" aria-pressed="false">반대쪽</button><output id="compare-result"></output></div>
       <div class="under" id="manual-help" hidden><p id="controls-help"><span class="desktop-hint"><kbd>WASD</kbd> 이동 <kbd>← →</kbd> 회전 · </span><span class="touch-hint">조이스틱 이동 · </span>바닥을 눌러 이동</p><output id="coordinates"></output></div>
       </div>
@@ -82,12 +87,14 @@
         <button id="manual" hidden>직접 주행</button>
       </div>
     </div>
-    <div class="sequence-note"><p id="sequence-caption" aria-live="polite">카메라가 움직이면 같은 공간을 여러 각도에서 관측합니다.</p><span id="data-source">TUM fr1/xyz</span></div>
+    <div class="sequence-note"><p id="sequence-caption" aria-live="polite">카메라가 작업대를 돌아 이동하며 바닥과 장애물, 소화기를 관측합니다.</p><span id="data-source">작업실 · RGB-D 시뮬레이션</span></div>
     <noscript><p>실내 영상과 지도, 주행 경로를 재생하려면 자바스크립트를 켜 주세요.</p></noscript>
   </section>
   <section id="records" class="lower"><div class="section-title"><h2>실험 기록</h2></div>
-    <div class="results"><article><div class="record-top"><h3>단안 영상 추적</h3><span>ORB-SLAM3</span></div><img src="tracking.svg" width="600" height="180" loading="lazy" alt="희소 지도점과 카메라 궤적"><strong class="metric">794 <small>/ 798 프레임</small></strong><p><a href="https://cvg.cit.tum.de/data/datasets/rgbd-dataset">TUM fr1/xyz</a>에서 추적한 프레임. 희소 지도점 3,381개.</p></article>
-    <article><div class="record-top"><h3>목표까지의 주행 경로</h3><span>Habitat-Sim</span></div><img src="plan.svg" width="600" height="180" loading="lazy" alt="장비 상자를 돌아 목표까지 이어지는 최단 경로"><strong class="metric">8.188 <small>m</small></strong><p>소화기 관측 지점까지의 최단 경로. 벽 너머로 이동을 요청하면 경계에서 정지했습니다.</p></article></div>
+    <div class="results">
+      <article><div class="record-top"><h3>카메라 추적</h3><span>ORB-SLAM3 · RGB-D</span></div><img src="tracking.svg?room=1" width="600" height="180" loading="lazy" alt="작업실에서 추정한 카메라 궤적과 지도점"><strong class="metric" id="metric-frames"></strong><p id="tracking-detail"></p></article>
+      <article><div class="record-top"><h3>소화기까지의 경로</h3><span>10 cm 점유 격자</span></div><img src="plan.svg?room=1" width="600" height="180" loading="lazy" alt="관측된 바닥 위의 로봇 경로와 소화기 위치"><strong class="metric" id="metric-distance"></strong><p id="stop-detail"></p></article>
+    </div>
   </section>
   <section id="evaluation" class="lower evaluation"><div class="section-title"><h2>평가 계획</h2><p>현장 촬영 후 검증 예정</p></div><dl>
     <div><dt>학습</dt><dd>지도에서 구한 시범 경로로 학습하고, 전방 영상·목표 종류·최근 행동으로 주행합니다.</dd></div>
@@ -96,6 +103,6 @@
     <div><dt>주행 평가</dt><dd>미학습 출발 자세 20개와 목표 3종을 조합해 총 60회 중 42회 이상 성공을 목표로 합니다.</dd></div>
   </dl></section>
 </main>
-<footer class="wrap"><a class="brand" href="#top"><span class="brand-icon" aria-hidden="true"></span>In Frame</a><span class="credit">영상 · <a href="https://cvg.cit.tum.de/data/datasets/rgbd-dataset">TUM RGB-D, Sturm et al.</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></span></footer>
-<script type="module" src="sequence.js"></script>
+<footer class="wrap"><a class="brand" href="#top"><span class="brand-icon" aria-hidden="true"></span>In Frame</a><a href="https://github.com/Dabin0312/InFrame#in-frame">실행 기록 ↗</a></footer>
+<script type="module" src="sequence.js?room=1"></script>
 </body></html>

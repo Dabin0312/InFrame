@@ -1,36 +1,23 @@
-// Coordinates are metres. Positive z points toward the open side of the cutaway.
-export const bounds = 3.65;
-export const start = { x: -2.8, z: 2.7, yaw: 1.24 };
-export const target = { x: 2.7, z: -2.5 };
-export const observation = { x: 2.7, z: -2 };
-export const obstacles = [
-  { x: -.5, z: 0, width: 1.8, depth: 1.2 },
-  { x: 1.3, z: .2, width: .8, depth: 1.3 },
-  { ...target, width: .36, depth: .36 }
-];
-export const reference = [
-  [start.x, 0, start.z], [1.9000002, .1999995, 1.0999992],
-  [2.0000002, .1999995, .9499992], [observation.x, 0, observation.z]
-];
+import {episode} from './episode.js';
+const route=episode.route;
+export const start={x:route[0][0],z:route[0][1],yaw:Math.atan2(route[1][0]-route[0][0],route[0][1]-route[1][1])};
+export const target={x:episode.target[0],z:episode.target[2]};
+export const observation={x:route.at(-1)[0],z:route.at(-1)[1]};
+export const reference=route.map(([x,z])=>[x,0,z]);
 export const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
 export const distance = (a, b) => Math.hypot(a.x-b.x, a.z-b.z);
 export const heading = (a, b) => Math.atan2(b.x-a.x, a.z-b.z);
 export const angleDelta = (a, b) => Math.atan2(Math.sin(b-a), Math.cos(b-a));
-const radius = .235;
-
-export function canStand(x, z, clearance = radius) {
-  if (Math.abs(x) > bounds || Math.abs(z) > bounds) return false;
-  return obstacles.every(box => {
-    const dx = Math.max(0, Math.abs(x-box.x)-box.width/2);
-    const dz = Math.max(0, Math.abs(z-box.z)-box.depth/2);
-    return Math.hypot(dx, dz) >= clearance - 1e-8;
-  });
+const {rows,origin,resolution}=episode;
+function cell(x,z){
+  return [Math.floor((x-origin[0])/resolution),Math.floor((z-origin[1])/resolution)];
 }
-
+function at(x,z){const [i,j]=cell(x,z);return rows[j]?.[i]}
+export function canStand(x,z){return at(x,z)==='.'}
 export function move(pose, dx, dz) {
   const before = { ...pose };
-  const nextX = clamp(pose.x + dx, -bounds, bounds);
-  const nextZ = clamp(pose.z + dz, -bounds, bounds);
+  const nextX = pose.x + dx;
+  const nextZ = pose.z + dz;
   if (canStand(nextX, nextZ)) {
     pose.x = nextX;
     pose.z = nextZ;
@@ -45,7 +32,7 @@ function clearSegment(a, b) {
   const steps = Math.max(1, Math.ceil(distance(a,b)/.025));
   for (let i = 1; i <= steps; i++) {
     const ratio = i / steps;
-    if (!canStand(a.x+(b.x-a.x)*ratio, a.z+(b.z-a.z)*ratio, radius + Math.min(.02, distance(a,b)*Math.min(ratio,1-ratio)*.3))) return false;
+    if (!canStand(a.x+(b.x-a.x)*ratio, a.z+(b.z-a.z)*ratio)) return false;
   }
   return true;
 }
@@ -54,17 +41,17 @@ function clearSegment(a, b) {
 export function pathTo(from, to) {
   if (!canStand(to.x, to.z)) return [];
   if (clearSegment(from, to)) return [to];
-  const size = 37, step = .2, offset = 3.6;
-  const point = id => ({ x: (id % size)*step-offset, z: Math.floor(id/size)*step-offset });
-  const gridId = (x,z) => x + z*size;
-  const coords = v => clamp(Math.round((v+offset)/step), 0, size-1);
-  const first = gridId(coords(from.x), coords(from.z));
+  const size=rows[0].length, height=rows.length;
+  const point=id=>({x:origin[0]+(id%size+.5)*resolution,z:origin[1]+(Math.floor(id/size)+.5)*resolution});
+  const gridId=(x,z)=>x+z*size;
+  const [sx,sz]=cell(from.x,from.z);
+  const first=gridId(sx,sz);
   const paths = new Map();
   const queue = [];
   // Start from a reachable grid centre, including poses close to an obstacle edge.
   for (let z=-1; z<=1; z++) for (let x=-1; x<=1; x++) {
     const gx = first % size+x, gz = Math.floor(first/size)+z;
-    if (gx<0 || gx>=size || gz<0 || gz>=size) continue;
+    if (gx<0 || gx>=size || gz<0 || gz>=height) continue;
     const id=gridId(gx,gz);
     if (clearSegment(from, point(id))) { paths.set(id,-1); queue.push(id); }
   }
@@ -84,7 +71,7 @@ export function pathTo(from, to) {
     }
     for (const [ox,oz] of [[0,-1],[1,0],[0,1],[-1,0],[1,-1],[1,1],[-1,1],[-1,-1]]) {
       const x=id%size+ox, z=Math.floor(id/size)+oz;
-      if (x<0 || x>=size || z<0 || z>=size) continue;
+      if (x<0 || x>=size || z<0 || z>=height) continue;
       const next=gridId(x,z);
       if (paths.has(next) || !clearSegment(here,point(next))) continue;
       paths.set(next,id); queue.push(next);
@@ -100,7 +87,7 @@ export function seesTarget(pose, horizontalFov, verticalFov, pitch) {
   const steps = Math.ceil(dist/.04);
   for (let i=1; i<steps; i++) {
     const x=pose.x+(target.x-pose.x)*i/steps, z=pose.z+(target.z-pose.z)*i/steps;
-    if (obstacles.slice(0,2).some(b=>Math.abs(x-b.x)<b.width/2 && Math.abs(z-b.z)<b.depth/2)) return false;
+    if (distance({x,z},target)>.30 && at(x,z)==='#') return false;
   }
   return true;
 }
@@ -113,6 +100,6 @@ export function sampleReference(progress, backward=false) {
   const a=reference[index], b=reference[index+1], t=remaining/lengths[index];
   let yaw=Math.atan2(b[0]-a[0],a[2]-b[2]);
   const raw=clamp((progress-.86)/.14,0,1), turn=raw*raw*(3-2*raw);
-  yaw+=angleDelta(yaw,backward?Math.PI:0)*turn;
+  yaw+=angleDelta(yaw,backward?(heading(observation,target)+Math.PI):heading(observation,target))*turn;
   return { x:a[0]+(b[0]-a[0])*t, z:a[2]+(b[2]-a[2])*t, yaw };
 }

@@ -1,5 +1,6 @@
-import { start, target, observation, obstacles, reference, pathLength, sampleReference, canStand, pathTo, move, seesTarget, distance, heading, clamp, angleDelta } from './navigation.js';
-import { CanvasWorld } from './fallback.js';
+import {episode} from './episode.js';
+import { start, target, observation, reference, pathLength, sampleReference, canStand, pathTo, move, seesTarget, distance, heading, clamp, angleDelta } from './navigation.js?room=1';
+import { CanvasWorld } from './fallback.js?room=1';
 
 const $ = id => document.getElementById(id);
 const stage = $('stage'), mini = $('minimap'), slider = $('time');
@@ -13,7 +14,7 @@ let panelWidth=1, panelHeight=1, inView=true, frame=0, lastTime=null;
 let waypoints=[], faceGoal=false, destination=null, lastPointer=null, turning=0;
 let stickX=0,stickForward=0,lastCoord='',messageTimer;
 const keys=new Set();
-let guided=false, loadStarted=false, episodeText='';
+let loadStarted=false;
 const stick=$('stick'),thumb=stick.querySelector('i');
 const touchPad=document.querySelector('.touch-controls');
 
@@ -32,7 +33,7 @@ function useSoftwareCanvas(){
 }
 async function loadWorld(){
   try {
-    const {World}=await import('./world.js');
+    const {World}=await import('./world.js?room=1');
     const next=document.createElement('canvas');next.id='map';
     next.setAttribute('aria-label',activeCanvas.getAttribute('aria-label'));
     const accelerated=new World(next);
@@ -62,19 +63,14 @@ function drawMini(){
   const pixel=n=>size*(.08+(n+4)*.105);
   c.clearRect(0,0,size,size);
   c.fillStyle='#dadcf7';c.fillRect(pixel(-4),pixel(-4),size*.84,size*.84);
-  for(const ob of obstacles.slice(0,2)){
-    c.fillStyle='#979dca';
-    c.fillRect(pixel(ob.x-ob.width/2),pixel(ob.z-ob.depth/2),size*.105*ob.width,size*.105*ob.depth);
-  }
-  if(!guided||visibleGoal()){c.fillStyle='#ed4944';c.beginPath();c.arc(pixel(target.x),pixel(target.z),5,0,2*Math.PI);c.fill()}
-  if(guided){
-    c.strokeStyle='#2d7462';c.lineWidth=3;c.beginPath();
-    for(let i=0;i<=60;i++){
-      const p=sampleReference(state.progress*i/60);
-      if(i)c.lineTo(pixel(p.x),pixel(p.z));else c.moveTo(pixel(p.x),pixel(p.z));
+  c.fillStyle='#919da3';
+  episode.rows.forEach((row,z)=>{
+    for(let x=0;x<row.length;x++){
+      if(row[x]!=='#')continue;
+      c.fillRect(pixel(episode.origin[0]+x*episode.resolution),pixel(episode.origin[1]+z*episode.resolution),2,2);
     }
-    c.stroke();
-  }
+  });
+  if(visibleGoal()){c.fillStyle='#ed4944';c.beginPath();c.arc(pixel(target.x),pixel(target.z),5,0,2*Math.PI);c.fill()}
   const {pose}=state;c.save();c.translate(pixel(pose.x),pixel(pose.z));c.rotate(pose.yaw);
   c.fillStyle='#625bf52c';c.beginPath();c.moveTo(0,0);c.arc(0,0,27,-2.15,-.99);c.closePath();c.fill();
   c.fillStyle='#3d32bb';c.beginPath();c.moveTo(0,-10);c.lineTo(6,6);c.lineTo(-6,6);c.closePath();c.fill();c.restore();
@@ -83,19 +79,19 @@ function paint(){
   if(!panelWidth || !panelHeight)return;
   const label=world.render(state);
   const tag=$('target-tag');
-  tag.hidden=state.eye||!label||(guided&&!visibleGoal());
+  tag.hidden=state.eye||!label;
   if(!tag.hidden){tag.style.left=label.x+'px';tag.style.top=(label.y-11)+'px'}
   const player=$('player-tag');
   player.hidden=tag.hidden || distance(state.pose,target)<1.05;
   if(!player.hidden){player.style.left=label.player[0]+'px';player.style.top=(label.player[1]+9)+'px'}
-  if(state.eye||guided)drawMini();
+  if(state.eye)drawMini();
   const signed=n=>(n>=0?'+':'−')+Math.abs(n).toFixed(2);
   const coords='X '+signed(state.pose.x)+'  /  Z '+signed(state.pose.z)+' m';
   if(coords!==lastCoord){$('coordinates').textContent=coords;lastCoord=coords}
   if(state.mode==='free')return;
   slider.value=Math.round(state.progress*1000);
   const read=(Math.min(1,state.progress/.86)*pathLength).toFixed(2);
-  $('replay-distance').value=read+' / 8.19 m';
+  $('replay-distance').value=read+' / '+pathLength.toFixed(2)+' m';
   slider.setAttribute('aria-valuetext',read+'미터');
   if(!$('compare').hidden)$('compare-result').value=visibleGoal()?'시야 안':'시야 밖';
 }
@@ -204,8 +200,11 @@ $('reset').onclick=()=>{
   state.mapAngle=0;state.progress=0;state.reversed=false;sync();focusStage();
 };
 $('judge').onclick=()=>{
-  interact();halt();const visible=visibleGoal(),near=distance(state.pose,observation)<=.8;
-  let text='관측 지점까지 '+distance(state.pose,observation).toFixed(1)+' m · 더 가까이 이동하세요.';
+  interact();halt();const visible=visibleGoal(),goalDistance=distance(state.pose,target);
+  const access=[state.pose,...pathTo(state.pose,observation)];
+  const walkingDistance=access.length>1?access.slice(1).reduce((sum,to,i)=>sum+distance(access[i],to),0):Infinity;
+  const near=goalDistance<=.8 && walkingDistance<=.8;
+  let text='소화기까지 '+goalDistance.toFixed(2)+' m · 표시된 관측 지점으로 이동하세요.';
   if(near)text=visible?'성공 · 소화기가 정지 화면에 보입니다.':'정지 · 소화기가 보이도록 방향을 돌려 보세요.';
   state.eye=true;sync();showMessage(text,near&&visible);focusStage();
 };
@@ -219,7 +218,7 @@ for(const [id,reversed] of [['toward',false],['away',true]]){
 
 const movementKeys=new Set(['KeyW','KeyS','KeyA','KeyD','KeyQ','KeyE','ArrowUp','ArrowDown','ArrowLeft','ArrowRight']);
 window.addEventListener('keydown',event=>{
-  if(guided || $('mission').hidden || !inView || event.ctrlKey||event.altKey||event.metaKey||!movementKeys.has(event.code))return;
+  if($('mission').hidden || !inView || event.ctrlKey||event.altKey||event.metaKey||!movementKeys.has(event.code))return;
   if(document.activeElement!==stage && !(document.activeElement===document.body && event.code.startsWith('Key')))return;
   event.preventDefault();takeControl();clearPath();focusStage();
   if(!keys.has(event.code)){keys.add(event.code);manualMotion(1/60);paint()}
@@ -230,7 +229,7 @@ stage.addEventListener('blur',releaseInputs);
 window.addEventListener('blur',releaseInputs);
 document.addEventListener('visibilitychange',()=>{releaseInputs();if(!document.hidden)requestFrame()});
 stage.addEventListener('pointerdown',event=>{
-  if(guided || event.button!==0 || event.target!==activeCanvas)return;
+  if(event.button!==0 || event.target!==activeCanvas)return;
   interact();focusStage();dismiss();
   lastPointer={id:event.pointerId,x:event.clientX,y:event.clientY,lastX:event.clientX,lastY:event.clientY,drag:false};
   activeCanvas.setPointerCapture(event.pointerId);
@@ -287,27 +286,11 @@ resize();sync();
 export function prepareMission(){
   if(!loadStarted){loadStarted=true;loadWorld()}
 }
-export function showEpisode(progress, reversed=false){
-  guided=true;prepareMission();interact();halt();dismiss();
-  state.mode='auto';state.progress=progress;state.reversed=reversed;
-  state.eye=progress>=.59;state.routePoints=recordedRoute;
-  settleReplay();
-  if(panelWidth<2 || panelHeight<2)resize();
-  sync();mini.hidden=false;
-  const sees=visibleGoal();
-  const stopped=progress>=1;
-  const near=distance(state.pose,observation)<=.8;
-  const label=stopped?(near && sees?'STOP · 소화기 시야 안':'STOP · 소화기 시야 밖'):(sees?'소화기 관측 · 접근 중':'소화기 탐색 중');
-  const status=$('episode-state');
-  status.hidden=false;
-  if(episodeText!==label){status.textContent=label;episodeText=label}
-  status.classList.toggle('stopped',stopped && near && sees);
-}
 export function manualMode(){
-  prepareMission();guided=false;interact();halt();dismiss();
+  prepareMission();interact();halt();dismiss();
   state.mode='free';state.pose={...start};state.progress=0;state.reversed=false;
-  state.eye=false;state.pitch=-.14;state.mapAngle=0;$('episode-state').hidden=true;
+  state.eye=false;state.pitch=-.14;state.mapAngle=0;
   resize();sync();focusStage();
 }
-export function leaveMission(){guided=false;halt();dismiss()}
+export function leaveMission(){halt();dismiss()}
 

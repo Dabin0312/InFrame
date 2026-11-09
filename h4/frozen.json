@@ -1,0 +1,29 @@
+{
+  "model": "3475a821511c8598f3f1d5e43d66daa26eb8d3b4ea59191db6189ea69afcd6dc",
+  "original": "9ee426e2901a99aa99a0195d7d6eef477e18c6f36cf9276e7c622c8c00b1610e",
+  "semantic_encoder": "175709048d8be731e67d16201dd0619bedd83f0aa86c987f2d2190977d51a3dd",
+  "split": "e004ef3fdcfee669f5582fb530bc164f4c89d03c04aca1b739581c16fb364b1e",
+  "labels": "b18436083dd97b5c590ffdc5c0add683f8f7a5815eb84f4b6e5b4cfbcfe7c65c",
+  "fit": {
+    "fit_episodes": 9,
+    "development_episodes": 3,
+    "labelled_frames": 1056,
+    "positive_frames": 68,
+    "threshold_shift": 2.5,
+    "dev": {
+      "13b14187aa2e2563": {
+        "t": 16.25,
+        "valid": true
+      },
+      "58d59fafe3058f0a": {
+        "t": 17.0,
+        "valid": true
+      },
+      "48fe6180149c7ae9": {
+        "t": null,
+        "valid": null
+      }
+    }
+  },
+  "operating_point_logit": 0
+}

@@ -1,0 +1,10 @@
+{
+  "definition": "Silent RGB reviewed without prediction overlays. A physical extinguisher body is recognizable in the central 4:3 view and large enough for inspection (roughly 10 percent of image height with an identifiable body or handle). The approach may offer several valid stop frames. Closed cabinets, icons, distant red blobs and posters do not suffice. Interval endpoints are inclusive, in clip seconds. Ignore intervals are excluded from fitting.",
+  "positive":{
+    "d39b9a4ef7409c87":[[25,29.5]],"9eb77168e17dccc4":[[14.5,17]],"4bea17b46b4d0099":[],
+    "0f7822d5c6262200":[[29,32]],"2bfdafcd092b3719":[],"4bc22d4fcaabfdf6":[[17.5,23.75]],
+    "61e27d5592ca99ab":[],"128f121b02e5cdbb":[],"69d43c1de8dfed45":[],
+    "13b14187aa2e2563":[[16.25,20.75]],"58d59fafe3058f0a":[[16.75,20]],"48fe6180149c7ae9":[]
+  },
+  "ignore":{"d39b9a4ef7409c87":[[23,24.75]],"9eb77168e17dccc4":[[14,14.25],[17.25,18]],"0f7822d5c6262200":[[27.5,28.75],[32.25,33.5]],"4bc22d4fcaabfdf6":[[0,2],[5.5,7.5],[15.5,17.25],[24,25.5]],"61e27d5592ca99ab":[[57,66.5]],"128f121b02e5cdbb":[[5,22]],"2bfdafcd092b3719":[[35,41]],"69d43c1de8dfed45":[[19,24]],"4bea17b46b4d0099":[[16,19.5]]}
+}

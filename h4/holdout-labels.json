@@ -1,0 +1,14 @@
+{
+  "criterion": "First action STOP at 4 Hz inside an inclusive interval where a physical extinguisher is identifiable in the central 4:3 view, roughly 10% of view height or more. Frame-based inspection labels; no physical range or collision ground truth. Reviewed without model predictions after model freeze. A closed cabinet alone does not qualify.",
+  "cases": {
+    "0e818bb4e38bd4e1": {"name":"에스컬레이터 옆 · 거울", "windows":[[21.75,23.75],[26.75,28.75]], "reference":28},
+    "143fddd387a858fb": {"name":"광고 기둥 옆 · 닫힌 보관함", "windows":[], "reference":30},
+    "3b712e0cb8d4eb48": {"name":"에스컬레이터 옆 · 화분", "windows":[[24.25,28.75]], "reference":27},
+    "449de789f96c6405": {"name":"매장 진열대 · 닫힌 보관함", "windows":[], "reference":26},
+    "bc5db029913aff5a": {"name":"쇼핑몰 복도 · 안내대", "windows":[[22.5,24.75]], "reference":24},
+    "fe75cd3028c834ef": {"name":"전시 복도 · 출입구", "windows":[[42.75,45]], "reference":44.5},
+    "9b66f27d048f1d3d": {"name":"야외 대조 · 교통 콘", "windows":[], "reference":22},
+    "f023b53394172496": {"name":"식당 작업대 · 청소 도구 옆", "windows":[[16.5,19]], "reference":17},
+    "bc3a157ab9d4a7b1": {"name":"화장실 · 세면대", "windows":[], "reference":21}
+  }
+}

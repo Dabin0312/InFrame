@@ -1,0 +1,233 @@
+{
+  "train": [
+    "d39b9a4ef7409c87",
+    "9eb77168e17dccc4",
+    "4bea17b46b4d0099",
+    "0f7822d5c6262200",
+    "2bfdafcd092b3719",
+    "4bc22d4fcaabfdf6",
+    "61e27d5592ca99ab",
+    "128f121b02e5cdbb",
+    "69d43c1de8dfed45"
+  ],
+  "dev": [
+    "13b14187aa2e2563",
+    "58d59fafe3058f0a",
+    "48fe6180149c7ae9"
+  ],
+  "test": [
+    "0e818bb4e38bd4e1",
+    "143fddd387a858fb",
+    "3b712e0cb8d4eb48",
+    "449de789f96c6405",
+    "bc5db029913aff5a",
+    "fe75cd3028c834ef",
+    "9b66f27d048f1d3d",
+    "f023b53394172496",
+    "bc3a157ab9d4a7b1"
+  ],
+  "test_goal_in_instruction": [
+    "0e818bb4e38bd4e1",
+    "143fddd387a858fb",
+    "3b712e0cb8d4eb48",
+    "449de789f96c6405",
+    "bc5db029913aff5a",
+    "fe75cd3028c834ef"
+  ],
+  "test_control_instructions": [
+    "9b66f27d048f1d3d",
+    "f023b53394172496",
+    "bc3a157ab9d4a7b1"
+  ],
+  "prior_recordings": [
+    "0f7822d5c6262200",
+    "128f121b02e5cdbb",
+    "136eee22f57af684",
+    "13b14187aa2e2563",
+    "1dcedf9197723f79",
+    "21088b0c9dd0f994",
+    "2bfdafcd092b3719",
+    "30bc3a8216dadac7",
+    "4148af4029ed7664",
+    "48fe6180149c7ae9",
+    "4bc22d4fcaabfdf6",
+    "4bea17b46b4d0099",
+    "58d59fafe3058f0a",
+    "61e27d5592ca99ab",
+    "62a4a39b06210107",
+    "664ac2f5f5b9b916",
+    "694cfa97c7fd90d7",
+    "699f4337556252f7",
+    "69d43c1de8dfed45",
+    "709731b8660b944d",
+    "7149da79e00a7bd2",
+    "7e6b59e7d6a891df",
+    "82867cc7c9ab2023",
+    "839ff4ea6e9cd553",
+    "8b85d63b341b88b0",
+    "94c13e91ef971f66",
+    "97d0dd2caa175b65",
+    "9eb77168e17dccc4",
+    "a58264f69924742a",
+    "a900492925f4ca3a",
+    "b05bda10687efd75",
+    "b420bc7e03000968",
+    "b52508f034d8295a",
+    "bdb397bd49552ebf",
+    "be0636fc0a1290b1",
+    "d39b9a4ef7409c87",
+    "db3c2cc443220e88",
+    "f5655abe9d646035",
+    "f928cf4709f84344"
+  ],
+  "records": {
+    "d39b9a4ef7409c87": {
+      "source_original_video": "images/12_29_chenlian_DJI_20251229193831_0061_D",
+      "image_path": "images/836290912fe2fd62",
+      "video_path": "raw_videos/bvn/d39b9a4ef7409c87.mp4",
+      "duration_seconds": 29.4294,
+      "instruction": "Move forward to the trash bin, and then attempt to seek for the fire extinguisher and stand in front of it"
+    },
+    "9eb77168e17dccc4": {
+      "source_original_video": "images/12_20_day_video-20251220-154524",
+      "image_path": "images/18704d985abc07c2",
+      "video_path": "raw_videos/bvn/9eb77168e17dccc4.mp4",
+      "duration_seconds": 20.3,
+      "instruction": "move along the way to find a fire extinguisher and then wait near by the fire extinguisher."
+    },
+    "4bea17b46b4d0099": {
+      "source_original_video": "images/12_25_chenzhen_DJI_20251225173808_0003_D",
+      "image_path": "images/dbc9e7aabe200a66",
+      "video_path": "raw_videos/bvn/4bea17b46b4d0099.mp4",
+      "duration_seconds": 23.590233,
+      "instruction": "go straight to the red fire extinguisher,and then try to find a trash can and move toward it and stop there."
+    },
+    "0f7822d5c6262200": {
+      "source_original_video": "images/12_20_night_video-20251220-232343",
+      "image_path": "images/ced70c599bcfaa07",
+      "video_path": "raw_videos/bvn/0f7822d5c6262200.mp4",
+      "duration_seconds": 33.667,
+      "instruction": "you are in the subway station, please try your best to find a fire extinguisher and walk to it and then stop."
+    },
+    "2bfdafcd092b3719": {
+      "source_original_video": "images/12_27_qiuxiancheng_DJI_20251227190020_0052_D",
+      "image_path": "images/e08a6a7f0d4c957b",
+      "video_path": "raw_videos/bvn/2bfdafcd092b3719.mp4",
+      "duration_seconds": 40.875,
+      "instruction": "Attempt to locate two red fire extinguishers, and then move forward to go to them and stand in front of them"
+    },
+    "4bc22d4fcaabfdf6": {
+      "source_original_video": "images/12_22_lyx_video-20251222-120646",
+      "image_path": "images/159570944b6c05b1",
+      "video_path": "raw_videos/bvn/4bc22d4fcaabfdf6.mp4",
+      "duration_seconds": 40.467,
+      "instruction": "search forward and find four fire extinguishers that sit together, then try to search for an exit door and stop by it"
+    },
+    "61e27d5592ca99ab": {
+      "source_original_video": "images/12_26_xieqitong_DJI_20251226145451_0111_D",
+      "image_path": "images/92b30b5f82ced568",
+      "video_path": "raw_videos/bvn/61e27d5592ca99ab.mp4",
+      "duration_seconds": 66.033,
+      "instruction": "walk straight through the grand hall with polished marble floors and then try to find a red fire extinguisher and stop by it."
+    },
+    "128f121b02e5cdbb": {
+      "source_original_video": "images/12_26_caochunxia_DJI_20251226181320_0013_D",
+      "image_path": "images/92f1043bafc4851c",
+      "video_path": "raw_videos/bvn/128f121b02e5cdbb.mp4",
+      "duration_seconds": 30.998,
+      "instruction": "Please try to go straight to the red fire extinguisher, and then look for the red fire cabinet, and then turn left until you see the red fire cabinet and stop"
+    },
+    "69d43c1de8dfed45": {
+      "source_original_video": "images/12_22_hai_video-20251222-194045",
+      "image_path": "images/ec2a85adc186299e",
+      "video_path": "raw_videos/bvn/69d43c1de8dfed45.mp4",
+      "duration_seconds": 33.834,
+      "instruction": "please move forward to find a fire extinguisher and then attempt to find a cart and stop by the cart."
+    },
+    "13b14187aa2e2563": {
+      "source_original_video": "images/12_21_hai_video-20251221-163133",
+      "image_path": "images/2552f2bf36895a2b",
+      "video_path": "raw_videos/bvn/13b14187aa2e2563.mp4",
+      "duration_seconds": 20.967,
+      "instruction": "you are at the corner, try searching around to find a fire extinguisher and stop by it."
+    },
+    "58d59fafe3058f0a": {
+      "source_original_video": "images/12_20_day_video-20251220-170420",
+      "image_path": "images/c6c90163c7647bde",
+      "video_path": "raw_videos/bvn/58d59fafe3058f0a.mp4",
+      "duration_seconds": 31.367,
+      "instruction": "please explore a fire extinguisher first and then explore a yellow warning sign and then stop ."
+    },
+    "48fe6180149c7ae9": {
+      "source_original_video": "images/12_27_linwenjian_DJI_20251227120602_0045_D",
+      "image_path": "images/ae31164726f8f5ce",
+      "video_path": "raw_videos/bvn/48fe6180149c7ae9.mp4",
+      "duration_seconds": 37.471,
+      "instruction": "March to the blue cart, and then attempt to locate a fire extinguisher cabinet, and finally step along to go there and stop by it"
+    },
+    "0e818bb4e38bd4e1": {
+      "source_original_video": "images/12_25_wuyifeng_DJI_20251225221037_0133_D",
+      "image_path": "images/59b4820c2dc7c886",
+      "video_path": "raw_videos/bvn/0e818bb4e38bd4e1.mp4",
+      "duration_seconds": 29.162467,
+      "instruction": "Move forward to seek for the gray trash bin in front, and then turn right to attempt to locate the red fire extinguisher and halt nearby"
+    },
+    "143fddd387a858fb": {
+      "source_original_video": "images/12_28_liwangyu_DJI_20251228212714_0109_D",
+      "image_path": "images/a78d8db1624617ea",
+      "video_path": "raw_videos/bvn/143fddd387a858fb.mp4",
+      "duration_seconds": 34.3343,
+      "instruction": "Go straight till you can see the billboard, and then attempt to seek for a red fire extinguisher, and finally reach the vicinity of the red fire extinguisher and halt nearby"
+    },
+    "3b712e0cb8d4eb48": {
+      "source_original_video": "images/12_29_caochunxia_DJI_20251229194045_0096_D",
+      "image_path": "images/e5c631109c8acbb7",
+      "video_path": "raw_videos/bvn/3b712e0cb8d4eb48.mp4",
+      "duration_seconds": 28.595233,
+      "instruction": "Move forward to attempt to find the trash bin, and then turn right to step along to seek for the charging pile, and finally turn left to go straight to the red fire extinguisher and stand in front of it"
+    },
+    "449de789f96c6405": {
+      "source_original_video": "images/12_30_yangshihuai_DJI_20251230202055_0107_D",
+      "image_path": "images/30af83a27e40e0d9",
+      "video_path": "raw_videos/bvn/449de789f96c6405.mp4",
+      "duration_seconds": 27.494133,
+      "instruction": "Please try to get to the intersection, and then seek for the fire extinguisher, and finally go straight to the fire extinguisher and stop nearby"
+    },
+    "bc5db029913aff5a": {
+      "source_original_video": "images/12_29_chenlian_DJI_20251229211745_0108_D",
+      "image_path": "images/90063aab89929603",
+      "video_path": "raw_videos/bvn/bc5db029913aff5a.mp4",
+      "duration_seconds": 24.858167,
+      "instruction": "March to the advertising sign, and then attempt to seek for the fire extinguisher, and then go to it and stop by it"
+    },
+    "fe75cd3028c834ef": {
+      "source_original_video": "images/12_30_liuzhiqiang_DJI_20251230143650_0142_D",
+      "image_path": "images/a3f62acbb42ea76a",
+      "video_path": "raw_videos/bvn/fe75cd3028c834ef.mp4",
+      "duration_seconds": 44.6446,
+      "instruction": "Step along to seek for the red fire extinguisher and halt by it"
+    },
+    "9b66f27d048f1d3d": {
+      "source_original_video": "images/12_20_day_video-20251220-172318",
+      "image_path": "images/ac74023807730089",
+      "video_path": "raw_videos/bvn/9b66f27d048f1d3d.mp4",
+      "duration_seconds": 24.034,
+      "instruction": "move forward to seek for a red cone and go for it and stop."
+    },
+    "f023b53394172496": {
+      "source_original_video": "images/12_20_day_video-20251220-161653",
+      "image_path": "images/7118ce8845f89075",
+      "video_path": "raw_videos/bvn/f023b53394172496.mp4",
+      "duration_seconds": 20.5,
+      "instruction": "you should enter the room to locate a mop and move to it and stop."
+    },
+    "bc3a157ab9d4a7b1": {
+      "source_original_video": "images/12_20_night_video-20251220-202938",
+      "image_path": "images/455020d2ce0d98ef",
+      "video_path": "raw_videos/bvn/bc3a157ab9d4a7b1.mp4",
+      "duration_seconds": 23.634,
+      "instruction": "please walk around to search for a faucet and move to it then stop."
+    }
+  },
+  "task": "First policy STOP on an inspection-readable physical extinguisher in the central 4:3 observation. Score independently on silent RGB with no model overlays. Include every registered test recording. Report premature stops, misses, no-target controls and mapping coverage. No geodesic success metric for recorded RGB."
+}

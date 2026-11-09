@@ -1,11 +1,14 @@
 # InFrame
 
-**실내 의미 지도와 전방 RGB를 이용한 소화기 탐색 및 정지.**  
-InFrame은 실내 영상에서 소화기를 지도에 등록하고, 로봇이 점검 사진을 남길 수 있는 자리까지 이동하도록 학습하는 ObjectNav 프로젝트입니다.
+**실내 의미 지도와 전방 RGB에 기반한 목표 객체 탐색 및 정지(ObjectNav).**
+
+InFrame은 지정된 종류의 물체가 보이는 자리까지 이동하고, 첫 STOP 사진을 지도 위의 개체와 연결합니다. 소화기는 첫 검증 범주입니다. 현재 공개 모델의 검출·정지 가중치는 소화기에 맞춰져 있으며, 의자·쓰레기통에 대한 주행 평가는 후속 과제입니다.
 
 [Project page](https://dabin0312.github.io/InFrame/) · [Try your own data](https://dabin0312.github.io/InFrame/demo/) · [주행 영상](https://dabin0312.github.io/InFrame/#run) · [Data & models](https://github.com/Dabin0312/InFrame/releases/tag/v0.7.0)
 
-[![Skokloster Castle에서 소화기 C를 향해 이동하는 로봇의 시점](project/view-52.jpg)](https://dabin0312.github.io/InFrame/#run)
+[![InFrame 시스템 프레임워크. 지도 구성, 교사 학습, RGB 정책, 모의 Go2와 실기 검증 계획](project/framework.png)](https://dabin0312.github.io/InFrame/#method)
+
+[편집용 Figma 원본](https://www.figma.com/design/51O4U6yauUxvwLy8aRX9rI/InFrame?node-id=2-2) · [영상과 같은 공간의 지도 보기](https://dabin0312.github.io/InFrame/#run)
 
 ## Try your own data
 

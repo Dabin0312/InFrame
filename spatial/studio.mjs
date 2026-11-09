@@ -39,7 +39,7 @@ function display(row,image=video){
   const c=screen.getContext('2d');c.drawImage(image,0,0,screen.width,screen.height);
   for(const b of row.boxes){const [x,y,w,h]=b.box;c.strokeStyle='#ffab57';c.lineWidth=2;c.strokeRect(x,y,w,h);c.fillStyle='#121a14';c.fillRect(x,Math.max(0,y-19),61,19);c.fillStyle='white';c.font='12px sans-serif';c.fillText('E'+b.track+' · '+Math.round(100*b.score)+'%',x+2,Math.max(13,y-5));}
   $('#at').textContent=$('#clock').textContent=seconds(row.t);
-  $('#action').textContent=row.action?(row.action[2]?'STOP':row.action[0]>.001?'전진':row.action[1]>0?'좌회전':row.action[1]<0?'우회전':'대기'):(data.stop&&row.t>data.stop.t?'STOP 이후 촬영 구간':'행동 샘플 사이');
+  $('#action').textContent=row.action?'H4 · '+(row.action[2]?'STOP':row.action[0]>.001?'전진':row.action[1]>0?'좌회전':row.action[1]<0?'우회전':'대기'):(data.stop&&row.t>data.stop.t?'STOP 이후 촬영 구간':'행동 샘플 사이');
   $('#mapinfo').textContent=data.reference?'시뮬레이터 기준 지도 · 기록된 카메라 위치':'지도 '+row.seg+' · 특징점 '+data.points.filter(p=>p.seg===row.seg).length+' · '+(row.pose?'위치 추적':'위치 미확정');plot(row);
 }
 async function review(index){
@@ -64,7 +64,7 @@ function stopPanel(){
   const event=activeStop(),img=$('#stopimg');img.hidden=!event;$('#nostop').hidden=!!event;
   $('#stopat').textContent=event?seconds(event.t):'';
   $('#stopjump').hidden=!event||!!current;
-  if(event){img.src=photos[mode];$('#stopinfo').textContent=event.referenceVisible?'목표 확인 · 장면 마스크':event.targetDetectedInCrop?'소화기 검출':'소화기 미검출';}
+  if(event){img.alt=mode==='policy'?'H4 정책이 첫 STOP을 출력한 RGB':'점검 정지 조건을 처음 충족한 영상 프레임';$('#stopjump').textContent=mode==='policy'?'H4 STOP 시점으로 ↗':'점검 시점으로 ↗';img.src=photos[mode];$('#stopinfo').textContent=event.referenceVisible?'목표 확인 · 장면 마스크':event.targetDetectedInCrop?'소화기 검출':'소화기 미검출';}
   else{$('#nostop').textContent=current?'분석 중':mode==='policy'?'H4 정책의 STOP 없음':'점검 정지 조건 미충족';$('#stopinfo').textContent='';}
 }
 function inspectionTarget(boxes,history,mapped,w,h){

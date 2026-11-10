@@ -1,0 +1,54 @@
+{
+  "parent_sha256": "d06c6e2a0a3e4c09e625cb77460c3d148edc6f77d544696910f20f3b6cfca4db",
+  "training_sequences": 3690,
+  "validation_sequences": 410,
+  "seed": 94,
+  "split_seed": 314,
+  "selected_epoch": 25,
+  "validation": {
+    "epoch": 25,
+    "recall": [
+      0.8255528255528255,
+      0.8958041958041958,
+      0.7153284671532847,
+      0.8421052631578947
+    ],
+    "confusion": [
+      [
+        336,
+        62,
+        7,
+        2
+      ],
+      [
+        122,
+        1281,
+        20,
+        7
+      ],
+      [
+        27,
+        9,
+        98,
+        3
+      ],
+      [
+        6,
+        3,
+        3,
+        64
+      ]
+    ],
+    "loss": 0.21184618035694222
+  },
+  "names": [
+    "chair",
+    "trash can",
+    "fire extinguisher",
+    "toaster",
+    "bicycle",
+    "teddy bear",
+    "refrigerator",
+    "coffee maker"
+  ]
+}

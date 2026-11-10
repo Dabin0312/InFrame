@@ -1,0 +1,21 @@
+const {chromium} = require('playwright-core');
+const fs = require('node:fs');
+const path = require('node:path');
+
+async function evaluate(directory) {
+  if (!directory) throw Error('Usage: node evaluate.cjs NEW_DIRECTORY');
+  fs.mkdirSync(directory);
+  const browser = await chromium.launch({channel:'chrome', args:process.platform==='darwin'?['--use-angle=metal']:[]});
+  try {
+    const page = await browser.newPage();
+    await page.goto((process.env.BASE_URL || 'http://localhost:8000') + '/demo/');
+    await page.evaluate(async () => {window.env = await (await import('../h4nav/run.mjs')).experiment();});
+    for (const layout of ['gallery', 'fresh', 'transfer']) {
+      for (const [i, prompt] of ['chair', 'trash can', 'fire extinguisher', 'microwave', 'trash can'].entries()) {
+        const result = await page.evaluate(config => window.env.run(config), {layout, prompt, removed: i === 4 ? 1 : -1});
+        fs.writeFileSync(path.join(directory, layout + '-' + i + '.json'), JSON.stringify(result));
+      }
+    }
+  } finally { await browser.close(); }
+}
+evaluate(process.argv[2]).catch(error => {console.error(error); process.exitCode=1;});

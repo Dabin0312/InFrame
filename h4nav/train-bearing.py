@@ -13,7 +13,7 @@ from torch.nn import functional as F
 from peripheral import BearingHead, PeripheralVision
 
 
-def teacher(samples):
+def teacher(samples, target_index=2):
     tris = json.loads((Path(__file__).parent.parent / "spatial/floor.json").read_text())["tris"]
     scale = 5
     points = np.asarray(tris)[:, :, [0, 2]]
@@ -40,7 +40,7 @@ def teacher(samples):
     graph = sparse.coo_matrix((cost, (starts, ends)), shape=(len(xs), len(xs))).tocsr()
     tree = cKDTree(space)
     positions = np.array([[s["x"], s["z"]] for s in samples])
-    targets = np.array([s["anchors"][2] for s in samples])
+    targets = np.array([s["anchors"][target_index] for s in samples])
     start = tree.query(positions)[1]
     end = tree.query(targets)[1]
     # Two broad interior regions, obtained from floor extent and clearance, cover the long gallery.

@@ -1,6 +1,6 @@
 # Castle · 목표 조건 H4
 
-[같은 출발점에서 목표 바꿔보기](https://dabin0312.github.io/InFrame/demo/search.html) · [개선 전후 경로와 사진](compare.html) · [쓰레기통 유무 비교](compare.html?study=bin&scene=blind7&case=4) · [소화기 검증 기록](peripheral-report.json) · [이전 35쌍](compare.html?study=recovery) · [초기 H4 실험](report.json) · [학습 기록](fit.json)
+[같은 출발점에서 목표 바꿔보기](https://dabin0312.github.io/InFrame/demo/search.html) · [개선 전후 경로와 사진](compare.html) · [벽면 구역에서 쓰레기통 찾기](compare.html?study=panel&scene=bin21&case=1) · [쓰레기통 유무 비교](compare.html?study=bin&scene=blind7&case=4) · [소화기 검증 기록](peripheral-report.json) · [이전 35쌍](compare.html?study=recovery) · [초기 H4 실험](report.json) · [학습 기록](fit.json)
 
 같은 시뮬레이터, 출발 좌표, 카메라 방향에서 목표 이름만 바꾼다. `worker.mjs`는 시작 시 이름을 받고 매 스텝 전방 RGB를 받는다. MobileCLIP이 이름을 임베딩하고 YOLOE가 같은 RGB에서 해당 이름의 후보를 찾는다. H4는 RGB 네 장과 후보 네 개, 텍스트 임베딩으로 전진·좌회전·우회전·STOP 중 최대 점수 행동을 실행한다. NavMesh, 자세, 물체 좌표, ID 마스크는 환경·교사·채점에서만 사용한다.
 
@@ -89,3 +89,23 @@ python h4nav/build-bin-report.py /tmp/h4-bin-before /tmp/h4-bin-after /tmp/h4-bi
 ```
 
 평가는 저장소의 고정 체크포인트를 사용한다. 학습을 다시 한 경우 로컬 복사본에서 `h4nav/bin-h4.onnx`와 `bin-fit.json`을 새 출력으로 교체해 비교할 수 있다. [배치·시드](bin-holdout.json) · [학습 기록](bin-fit.json) · [빈 벽 진단 기록](bin-diagnosis.json) · [전체 주행 기록](bin-report.json)
+
+
+## 벽면에서 시작하는 탐색
+
+기존 H4가 쓰레기통을 놓친 다섯 주행을 같은 카메라 자세에서 다시 렌더링했다. 17번과 21번은 제자리 회전, 19번과 24번은 시야 가장자리의 목표 상실, 23번은 접근 도중 스텝 한도에 도달한 사례다. [프레임별 가시 픽셀·경계 상자](panel-diagnosis.json) · [다섯 원본 장면](panel-diagnosis.png)
+
+새 CNN은 별도 시드의 Castle RGB 5,425장으로 가려짐을 반영한 쓰레기통 마스크, 가시성, 열린 통로와 목표 쪽의 이동 방향을 학습했다. 775장은 체크포인트 선택에 사용했다. 교사는 학습용 NavMesh에서 방향을 계산한다. 실행 시 H4는 전방 RGB, 이름에서 얻은 임베딩, 이 RGB에서 산출한 시각 후보, 자기 행동 이력을 사용한다. ONNX 내부에서 카메라를 돌며 유망한 통로 방향을 기억하고, 관측한 쓰레기통의 방향을 잠시 유지한다. 회전·전진 시간과 우회 동작은 정해진 값이다. 기존 H4의 STOP 점수에 새 마스크의 크기·중심·가시성 조건을 적용했다. 이 분기는 쓰레기통 텍스트와 가까운 목표에 적용된다.
+
+새 배치 24곳에는 벽면 패널 구역 16곳과 실내 전역·경계 각 4곳이 들어 있다. 같은 출발 자세와 배치에서 의자, 쓰레기통, 소화기와 쓰레기통 제거 조건을 각각 120스텝 한도로 돌린다. 판정에는 정책이 내린 첫 STOP을 쓴다. 평가 후의 구역 이탈은 출발 구역의 사각 범위를 벗어난 위치가 경로에 있는지로 표시한다. [실행 화면](../demo/search.html?study=panel&scene=bin21&case=1) · [검증 배치](panel-holdout.json) · [모델·배치 해시](panel-fit.json)
+
+저장소 루트에서 HTTP 서버를 실행하고 기존 주행 환경에서 다음 명령으로 재현한다. 학습 단계를 생략하면 공개된 ONNX 두 개를 바로 비교할 수 있다.
+
+```sh
+node h4nav/collect.cjs panel /tmp/panel-train
+python h4nav/train-panel.py /tmp/panel-train /tmp/panel-fit
+python h4nav/export-panel.py /tmp/panel-fit/search-vision.pt h4nav/bin-h4.onnx h4nav/base-h4.pt /tmp/panel-fit/panel-h4.onnx
+node h4nav/evaluate.cjs /tmp/panel-before bin panel
+node h4nav/evaluate.cjs /tmp/panel-after panel panel
+python h4nav/build-panel-report.py /tmp/panel-before /tmp/panel-after /tmp/panel-report
+```

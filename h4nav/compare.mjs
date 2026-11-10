@@ -53,6 +53,13 @@ async function main(){
     $('diagnosisImg').src=d.photo;
     $('studyInfo').textContent=report.description;
     $('json').href=study.file;
+    if(study.id==='panel'){
+      $('diagnosis').querySelector('summary').textContent='기존 다섯 배치에서 쓰레기통이 보였던 순간';
+      $('diagnosisImg').alt='기존 H4의 벽면 구역 다섯 주행과 쓰레기통이 가장 크게 보인 실제 RGB';
+      $('diagnosisImg').style.maxWidth='100%';
+      const counts=report.metrics.strata.panel;
+      $('breakdown').textContent+='　·　벽면 구역 쓰레기통 '+counts.present.before+' → '+counts.present.after+' / '+counts.present.total+'회';
+    }
     if(study.id==='bin'){
       $('diagnosis').querySelector('summary').textContent='배치 7에서 빈 벽을 보고 멈춘 이유';
       $('diagnosisImg').alt='12번째 벽면 사진과 H4의 내부 쓰레기통 특징 강도';
@@ -64,6 +71,7 @@ async function main(){
   }
   const params=new URLSearchParams(location.search),layout=params.get('scene');
   if(Object.hasOwn(report.layouts,layout))$('layout').value=layout;
+  else if(Object.hasOwn(report.layouts,study.layout))$('layout').value=study.layout;
   const requested=params.get('case');$('trial').value=requested!==null&&Array.from($('trial').options).some(o=>o.value===requested)?requested:String(study.selected);
   let revision=0;
   async function show(){
@@ -72,7 +80,7 @@ async function main(){
     if(ticket!==revision)return;
     const {before,after}=group.find(x=>x.case===i);
     const toggle=$('toggleBin');
-    toggle.hidden=study.id!=='bin'||![1,4].includes(i);
+    toggle.hidden=!['bin','panel'].includes(study.id)||![1,4].includes(i);
     if(!toggle.hidden){
       toggle.textContent=i===1?'같은 배치에서 쓰레기통 제거 보기':'같은 배치에서 쓰레기통 있음 보기';
       toggle.onclick=()=>{$('trial').value=i===1?'4':'1';$('trial').dispatchEvent(new Event('change'));};

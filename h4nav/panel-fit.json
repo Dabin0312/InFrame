@@ -1,0 +1,10 @@
+{
+  "epoch": 13,
+  "train": 5425,
+  "validation": 775,
+  "loss": 0.32094405726952985,
+  "seed": 872165,
+  "parent_sha256": "aea48c80c294e0421f1faf4f07f36966f486a9641de329dbf69e3097e0b5c7e0",
+  "model_sha256": "05e689ea94d6729f9413100efa0049a180e864a7ea1448302a3e78f9c3321891",
+  "holdout_sha256": "2dcc4eb4c9761cfdbefbc659e2fff8db28899552959ac57c969c0da455ef190b"
+}

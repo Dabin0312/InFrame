@@ -2,7 +2,10 @@
 import fs from 'node:fs';
 import {floorHeight} from '../spatial/navmesh.mjs';
 const {tris}=JSON.parse(fs.readFileSync(new URL('../spatial/floor.json',import.meta.url)));
-const seed=41821099;
+const suite=process.argv[3]??'bin';
+if(!['bin','panel'].includes(suite)) throw Error('Expected bin or panel suite');
+const seed=suite==='panel'?78041657:41821099;
+const groupSize=suite==='panel'?4:8;
 let state=seed;
 const random=()=>((state=(Math.imul(state,1664525)+1013904223)>>>0)/4294967296);
 const round=v=>+v.toFixed(4);
@@ -15,7 +18,7 @@ function point(){
 const layouts={};
 for(let i=1;i<=24;i++){
  let start;
- const group=i<=8?'gallery':i<=16?'perimeter':'panel';
+ const group=i<=groupSize?'gallery':i<=2*groupSize?'perimeter':'panel';
  if(group==='gallery'){
    const [x,z]=point();start={x,z,yaw:round((2*random()-1)*Math.PI)};
  }else if(group==='perimeter'){
@@ -30,6 +33,6 @@ for(let i=1;i<=24;i++){
    const p=point(),d=Math.hypot(p[0]-start.x,p[1]-start.z);
    if(d>=2.0&&d<=7&&anchors.every(q=>Math.hypot(p[0]-q[0],p[1]-q[1])>=1.35))anchors.push(p);
  }
- layouts['bin'+i]={group,start,anchors};
+ layouts[suite+i]={group,start,anchors};
 }
 fs.writeFileSync(process.argv[2],JSON.stringify({seed,stepLimit:120,layouts},null,2)+'\n');

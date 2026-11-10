@@ -10,7 +10,10 @@ async function init(prompt,width,height){
   if(detector)await detector.release();embedding?.dispose();
   detector=await openDetector(prompt,w,h);
   embedding=new ort.Tensor('float32',detector.embedding,[1,512]);
-  student??=await ort.InferenceSession.create(new URL(new URL(self.location.href).searchParams.get('policy')==='baseline'?'baseline.onnx':'student.onnx',import.meta.url).href,{executionProviders:['wasm']});
+  const checkpoints={baseline:'baseline.onnx',current:'student.onnx',peripheral:'peripheral.onnx'};
+  const id=new URL(self.location.href).searchParams.get('policy')??'peripheral';
+  student??=await ort.InferenceSession.create(new URL(checkpoints[id],import.meta.url).href,{executionProviders:['wasm']});
+  memory=new Float32Array(id==='peripheral'?44:40);
   ctx=new OffscreenCanvas(w,h).getContext('2d');small=new OffscreenCanvas(80,60).getContext('2d',{willReadFrequently:true});
 }
 function key(data){let k=2166136261;for(const byte of data)k=Math.imul(k^byte,16777619);return k>>>0;}
@@ -29,6 +32,13 @@ async function act(pixels){
   history.forEach((o,i)=>{seq.set(o.rgb,14400*i);proposals.set(o.proposal,5*i);});
   const rgb=new ort.Tensor('uint8',seq,[1,4,60,80,3]),obs=new ort.Tensor('float32',proposals,[1,4,5]);
   const inputs={rgb,goal_embedding:embedding,rgb_goal_proposals:obs};
+  if(student.inputNames.includes('camera')){
+    const camera=new Uint8Array(w*h*3);
+    for(let i=0;i<w*h;i++){
+      camera[3*i]=pixels[4*i];camera[3*i+1]=pixels[4*i+1];camera[3*i+2]=pixels[4*i+2];
+    }
+    inputs.camera=new ort.Tensor('uint8',camera,[1,h,w,3]);
+  }
   if(student.inputNames.includes('memory')){
     const last=new Float32Array(4);last[previousAction+1]=1;
     inputs.previous_action=new ort.Tensor('float32',last,[1,4]);
@@ -41,7 +51,7 @@ async function act(pixels){
     if(!logits.every(Number.isFinite))throw Error('정책의 행동 점수를 읽을 수 없습니다.');
     previousAction=logits.indexOf(Math.max(...logits));
     return {action:previousAction,logits,proposal:Array.from(f.proposal)};
-  }finally{rgb.dispose();obs.dispose();inputs.previous_action?.dispose();inputs.memory?.dispose();}
+  }finally{rgb.dispose();obs.dispose();inputs.previous_action?.dispose();inputs.memory?.dispose();inputs.camera?.dispose();}
 }
 self.onmessage=async({data})=>{
   try{

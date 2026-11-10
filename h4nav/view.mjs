@@ -1,9 +1,10 @@
 import {resolveGoal} from '../spatial/prompt.mjs';
+import {openStudy} from './study.mjs';
 import {experiment} from './run.mjs';
 const $=id=>document.getElementById(id),map=$('map').getContext('2d'),eye=$('photo').getContext('2d');
 const names={'chair':'의자','trash can':'쓰레기통','fire extinguisher':'소화기','microwave':'전자레인지'};
 const colors=['#007c73','#b96321','#7156ad'];
-let records=[],floor,current,selected=-1,version=0,env,busy=false;
+let records=[],floor,current,selected=-1,version=0,env,busy=false,study,generation=0;
 const rows=()=>records.filter(r=>r.layout===$('layout').value);
 function locks(on){busy=on;for(const id of ['object','layout','removed','run'])$(id).disabled=on;for(const b of $('runs').children)b.disabled=on;}
 function draw(r,trace=[...r.trace,r.endpoint],others=true){
@@ -19,7 +20,12 @@ function draw(r,trace=[...r.trace,r.endpoint],others=true){
   for(const [p,fill] of [[r.start,'white'],[trace.at(-1),'#172e2c']]){if(!p)continue;map.fillStyle=fill;map.beginPath();map.arc(...xy(p.x,p.z),5,0,Math.PI*2);map.fill();map.strokeStyle='#193d34';map.lineWidth=1.7;map.stroke();}
 }
 const goalName=r=>names[r.prompt]??r.prompt;
-function end(r){return r.firstStop?(r.scoreKey<0?'STOP · 대응 개체 미등록':r.success?'STOP · 목표 확인':'STOP · 기준 밖'):'STOP 없음';}
+function end(r){
+  if(!r.firstStop)return 'STOP 없음';
+  if((r.removed>=0&&r.removed===r.scoreKey)||r.prompt==='microwave')return '오정지 · 등록 목표 없음';
+  if(r.scoreKey<0)return 'STOP · 대응 개체 미등록';
+  return r.success?'STOP · 목표 확인':'STOP · 기준 밖';
+}
 function summary(r,source){
   const view=r.audit.legacyView;const legacy=view?' · 등록 관측점 '+({within:'0.8 m 이내',outside:'0.8 m 밖',unresolved:'거리 미확정'}[view]??view)+(view==='outside'&&Number.isFinite(r.audit.viewDistance)?' (직선 '+r.audit.viewDistance.toFixed(2)+' m)':''):'';
   $('state').textContent=source+' · '+goalName(r)+' · '+end(r)+' · '+r.steps+'스텝 · 주행 '+r.travel.toFixed(2)+' m'+
@@ -30,26 +36,37 @@ async function photo(r){const id=++version,im=new Image();im.src=r.photo;await i
 function buttons(){
   const box=$('runs');box.replaceChildren();rows().forEach((r,i)=>{const b=document.createElement('button'),img=new Image(),title=document.createElement('b'),note=document.createElement('small');img.src=r.photo;img.alt=r.firstStop?'첫 정지 사진':'마지막 관측';title.textContent=goalName(r)+(r.removed>=0?' · 제거':'');note.textContent=end(r);b.append(img,title,note);b.setAttribute('aria-pressed',String(i===selected));b.onclick=()=>show(i);box.append(b);});
 }
-async function show(i){current=rows()[i];if(!current)return;selected=i;$('object').value=goalName(current);$('removed').checked=current.removed===1;draw(current);buttons();summary(current,'저장된 주행');await photo(current);}
-$('layout').onchange=()=>show(0);
+async function show(i){current=rows()[i];if(!current)return;selected=i;$('compareLink').href='../h4nav/compare.html?study='+(study.peripheral?'peripheral':'recovery')+'&scene='+current.layout+'&case='+i;$('object').value=goalName(current);$('removed').value=String(current.removed);draw(current);buttons();summary(current,'저장된 주행');await photo(current);}
+async function selectLayout(layout,index){
+  const id=++generation;locks(true);
+  try{
+    const pairs=await study.pairs(layout);
+    if(id!==generation)return;
+    records=pairs.map(p=>p.after);await show(index);
+  }catch(e){$('state').textContent=e.message;}finally{if(id===generation)locks(false);}
+}
+$('layout').onchange=()=>selectLayout($('layout').value,0);
 $('run').onclick=async()=>{
   if(busy||!current)return;locks(true);version++;$('state').textContent='목표 이름과 H4를 준비하는 중…';
   try{
-    const q=await resolveGoal($('object').value),layout=$('layout').value,removed=$('removed').checked?1:-1;
-    env??=await experiment();const path=[];const run={...current,removed,scoreKey:['chair','trash can','fire extinguisher'].indexOf(q.prompt)};
+    const q=await resolveGoal($('object').value),layout=$('layout').value,removed=Number($('removed').value);
+    env??=await experiment({policy:study.peripheral?'peripheral':'current'});const path=[];const run={...current,removed,scoreKey:['chair','trash can','fire extinguisher'].indexOf(q.prompt)};
     const result=await env.run({layout,prompt:q.prompt,removed},(frame,p,i)=>{eye.drawImage(frame,0,0,320,240);path.push(p);draw(run,path,false);$('caption').textContent='로봇 전방 RGB';$('state').textContent=q.prompt+' · '+(i+1)+'스텝 · '+['전진','좌회전','우회전','STOP'][p.a];});
     current=result;selected=-1;buttons();summary(result,'방금 실행한 H4');draw(result);await photo(result);
   }catch(e){$('state').textContent=e.message;}finally{locks(false);}
 };
 window.addEventListener('pagehide',()=>{env?.close();env=null;});
 try{
-  const read=async url=>{const r=await fetch(new URL(url,import.meta.url));if(!r.ok)throw Error('검증 기록을 읽을 수 없어요.');return r.json();};
-  const [report,geometry]=await Promise.all([read('comparison.json'),read('../spatial/floor.json')]);records=report.pairs.map(pair=>pair.after);floor=geometry;
-  const layouts=$('layout');
-  for(const [id,title] of Object.entries(report.layouts)){
-    if(!Array.from(layouts.options).some(o=>o.value===id)) layouts.add(new Option(title,id));
-  }
-  const requested=new URLSearchParams(location.search).get('scene');if(records.some(r=>r.layout===requested))$('layout').value=requested;
-  const requestedCase=new URLSearchParams(location.search).get('case');
-  await show(/^[0-4]$/.test(requestedCase)?Number(requestedCase):0);locks(false);
+  study=await openStudy();floor=study.floor;
+  const layouts=$('layout'),params=new URLSearchParams(location.search);
+  layouts.replaceChildren(...Object.entries(study.report.layouts).map(([id,title])=>new Option(title,id)));
+  const requested=params.get('scene');
+  if(Object.hasOwn(study.report.layouts,requested))layouts.value=requested;
+  else layouts.value=study.peripheral?'unseen2':'fresh';
+  const requestedCase=params.get('case');
+  const index=requestedCase!==null&&/^[0-5]$/.test(requestedCase)&&Number(requestedCase)<(study.peripheral?6:5)?Number(requestedCase):study.peripheral?2:0;
+  const id=study.peripheral?'peripheral':'recovery';
+  $('compareLink').href='../h4nav/compare.html?study='+id+'&scene='+layouts.value+'&case='+index;
+  $('reportLink').href='../h4nav/'+(study.peripheral?'peripheral-report.json':'comparison.json');
+  await selectLayout(layouts.value,index);
 }catch(e){$('state').textContent=e.message;}

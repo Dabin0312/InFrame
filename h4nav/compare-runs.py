@@ -6,7 +6,7 @@ import math
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-OBJECTS = ['chair', 'trash can', 'fire extinguisher', 'microwave', 'trash can']
+OBJECTS = ['chair', 'trash can', 'fire extinguisher', 'microwave', 'trash can', 'fire extinguisher']
 LAYOUTS = {'gallery':'중앙 통로', 'transfer':'기존 재배치', 'fresh':'FRESH-015'}
 def digest(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
@@ -14,8 +14,8 @@ def digest(path):
 def validate_run(run, case, limit):
     trace, audit = run['trace'], run['audit']
     assert trace and len(trace) == run['steps'] <= limit
-    assert run['prompt'] == OBJECTS[case] and run['removed'] == (1 if case == 4 else -1)
-    assert run['scoreKey'] == [0,1,2,-1,1][case]
+    assert run['prompt'] == OBJECTS[case] and run['removed'] == (1 if case == 4 else 2 if case == 5 else -1)
+    assert run['scoreKey'] == [0,1,2,-1,1,2][case]
     assert run['photo'].startswith('data:image/png;base64,')
     poses = trace[1:] + [run['endpoint']]
     widths = [math.hypot(a['x']-b['x'], a['z']-b['z']) for a,b in zip(trace,poses)]
@@ -36,7 +36,7 @@ def validate_run(run, case, limit):
         assert center==audit['centered']
         assert run['success']==(run['firstStop'] and audit['distance']<=1.35 and center and audit['visiblePixels']>=80)
     else:
-        assert audit['distance'] is None and audit['visiblePixels']==0
+        assert not run['success'] and audit['distance'] is None and audit['visiblePixels']==0
 
 def main():
     parser=argparse.ArgumentParser()

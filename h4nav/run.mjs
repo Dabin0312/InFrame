@@ -12,14 +12,16 @@ const layouts={
   develop:[[.5,8.1],[4.2,9.4],[2.4,11.8]]
 };
 export const layoutNames={gallery:'Castle · 중앙 통로',fresh:'Castle · FRESH-015',transfer:'Castle · 재배치'};
-export async function experiment({policy='current'}={}){
-  if(!['current','baseline'].includes(policy)) throw Error('Unknown H4 checkpoint');
-  const response=await fetch(new URL('holdout.json',import.meta.url));
-  if(!response.ok) throw Error('검증 배치를 읽을 수 없습니다.');
-  const suite=await response.json();
-  for(const [key,item] of Object.entries(suite.layouts)){
-    starts[key]=item.start;
-    layouts[key]=item.anchors;
+export async function experiment({policy='peripheral'}={}){
+  if(!['current','baseline','peripheral'].includes(policy)) throw Error('Unknown H4 checkpoint');
+  for(const name of ['holdout.json','edge-holdout.json','confirmation.json']){
+    const response=await fetch(new URL(name,import.meta.url));
+    if(!response.ok) throw Error('검증 배치를 읽을 수 없습니다.');
+    const suite=await response.json();
+    for(const [key,item] of Object.entries(suite.layouts)){
+      starts[key]=item.start;
+      layouts[key]=item.anchors;
+    }
   }
   const sim=await castle(160,120);
   const workerURL=new URL('worker.mjs',import.meta.url);workerURL.searchParams.set('policy',policy);

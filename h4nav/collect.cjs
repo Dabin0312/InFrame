@@ -5,12 +5,26 @@ const [profile, directory] = process.argv.slice(2);
 const configs = { broad: [1650, 18371], near: [2450, 84013] };
 
 async function collect() {
-  if (!directory || !(Object.hasOwn(configs, profile)||profile==='recovery')) throw Error('Usage: node collect.cjs broad|near|recovery NEW_DIRECTORY');
+  if (!directory || !(Object.hasOwn(configs, profile)||['recovery','peripheral'].includes(profile))) throw Error('Usage: node collect.cjs broad|near|recovery|peripheral NEW_DIRECTORY');
   fs.mkdirSync(directory);
   const browser = await chromium.launch({channel: 'chrome', args: process.platform==='darwin'?['--use-angle=metal']:[]});
   try {
     const page = await browser.newPage();
     await page.goto((process.env.BASE_URL || 'http://localhost:8000') + '/demo/');
+    if (profile === 'peripheral') {
+      const distances=[];
+      await page.exposeFunction('sample', ({i,rgb,mask,distance})=>{
+        fs.writeFileSync(path.join(directory,i+'.png'),Buffer.from(rgb,'base64'));
+        fs.writeFileSync(path.join(directory,i+'-mask.png'),Buffer.from(mask,'base64'));
+        distances.push(distance);
+      });
+      await page.evaluate(async ()=>{
+        const {collectPeripheral}=await import('../h4nav/collect-peripheral.mjs');
+        await collectPeripheral(window.sample);
+      });
+      fs.writeFileSync(path.join(directory,'distances.json'),JSON.stringify(distances));
+      return;
+    }
     if (profile === 'recovery') {
       const episodes = [];
       await page.exposeFunction('record', sequence => episodes.push(sequence));

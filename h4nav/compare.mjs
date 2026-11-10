@@ -1,14 +1,17 @@
+import {openStudy} from './study.mjs';
 const $ = id => document.getElementById(id);
-const names = ['의자','쓰레기통','소화기','전자레인지 · 없음','쓰레기통 · 제거'];
+const names = ['의자','쓰레기통','소화기','전자레인지 · 없음','쓰레기통 · 제거','소화기 · 제거'];
 const colours = ['#984c33','#087d6e'];
 function status(r){
-  return r.firstStop ? (r.success ? '첫 STOP · 목표 확인' : '첫 STOP · 기준 밖') : '마지막 관측 · STOP 없음';
+  if(!r.firstStop)return '마지막 관측 · STOP 없음';
+  if(r.audit.distance==null)return '오정지 · 등록 목표 없음';
+  return r.success ? '첫 STOP · 목표 확인' : '첫 STOP · 기준 밖';
 }
 function photo(r, key) {
   const img = $(key+'Photo');
   img.src = r.photo; img.alt = status(r);
   const details = [status(r), r.steps+'스텝', '이동 '+r.travel.toFixed(2)+' m', '막힌 전진 '+r.bumped+'회'];
-  if(r.firstStop && r.audit.distance!=null) details.push('물체까지 '+r.audit.distance.toFixed(2)+' m', '목표 '+r.audit.visiblePixels+' px');
+  if(r.audit.distance!=null) details.push('물체까지 '+r.audit.distance.toFixed(2)+' m', '목표 '+r.audit.visiblePixels+' px');
   if(r.firstStop && r.audit.legacyView) details.push('등록 관측점 0.8 m '+({within:'이내',outside:'밖',unresolved:'미확정'}[r.audit.legacyView]));
   $(key+'Text').textContent = details.join(' · ');
 }
@@ -36,23 +39,35 @@ function draw(tris,rows){
 }
 async function main(){
   const embedded=JSON.parse($('embedded').textContent);
-  const read=async u=>{const res=await fetch(u);if(!res.ok)throw Error('검증 파일을 불러올 수 없습니다.');return res.json();};
-  const [report, floor]=embedded??await Promise.all([read('comparison.json'),read('../spatial/floor.json')]);
+  const {report,floor,pairs,peripheral}=await openStudy(embedded);
   const {holdoutPositive:p,holdoutAbsent:n}=report.metrics;
-  $('summary').textContent='새 출발점·배치 4곳에서 목표 도달 '+p.before+' → '+p.after+' / '+p.total+'회. 없는 목표에서 잘못된 STOP '+n.before+' → '+n.after+' / '+n.total+'회.';
+  $('summary').textContent='새 출발점·배치 '+(report.holdoutCount??4)+'곳에서 목표 도달 '+p.before+' → '+p.after+' / '+p.total+'회. 없는 목표에서 잘못된 STOP '+n.before+' → '+n.after+' / '+n.total+'회.';
   for(const [id,label] of Object.entries(report.layouts))$('layout').add(new Option(label,id));
-  names.forEach((name,i)=>$('trial').add(new Option(name,i)));
+  names.slice(0,peripheral?6:5).forEach((name,i)=>$('trial').add(new Option(name,i)));
+  if(peripheral){
+    const d=report.diagnosis;
+    $('breakdown').textContent=report.metrics.byCase.slice(0,3).map((m,i)=>names[i]+' '+m.before+' → '+m.after+' / '+m.total+'회').join('　·　');
+    $('diagnosis').hidden=false;
+    $('diagnosisText').textContent=d.caption;
+    $('diagnosisImg').src=d.photo;
+    $('studyInfo').textContent=report.description;
+    $('json').href='peripheral-report.json';
+    $('evidence').hidden=false;
+  }
   const params=new URLSearchParams(location.search),layout=params.get('scene');
   if(Object.hasOwn(report.layouts,layout))$('layout').value=layout;
-  const requested=params.get('case');$('trial').value=/^[0-4]$/.test(requested)?requested:'1';
-  function show(){
-    const id=$('layout').value,i=Number($('trial').value),group=report.pairs.filter(x=>x.layout===id);
+  const requested=params.get('case');$('trial').value=requested!==null&&Array.from($('trial').options).some(o=>o.value===requested)?requested:(peripheral?'2':'1');
+  let revision=0;
+  async function show(){
+    const ticket=++revision,id=$('layout').value,i=Number($('trial').value);
+    const group=await pairs(id);
+    if(ticket!==revision)return;
     const {before,after}=group.find(x=>x.case===i);
     draw(floor.tris,[before,after]);photo(before,'old');photo(after,'new');
     $('facts').textContent='출발 X '+before.start.x.toFixed(2)+' m · Z '+before.start.z.toFixed(2)+' m · 방향 '+(before.start.yaw*180/Math.PI).toFixed(1)+'° · 두 정책 첫 RGB 해시 '+before.firstFrameSHA256.slice(0,12)+' 동일';
-    $('live').href='../demo/search.html?scene='+id+'&case='+i;
+    $('live').href='../demo/search.html?study='+(peripheral?'peripheral':'recovery')+'&scene='+id+'&case='+i;
     $('table').replaceChildren(...group.map(p=>{const tr=document.createElement('tr');for(const label of [names[p.case],status(p.before),status(p.after)]){const td=document.createElement('td');td.textContent=label;tr.append(td);}return tr;}));
   }
-  $('layout').onchange=$('trial').onchange=show;show();
+  $('layout').onchange=$('trial').onchange=()=>show().catch(e=>{$('facts').textContent=e.message;});await show();
 }
 main().catch(err=>{$('summary').textContent=err.message;});

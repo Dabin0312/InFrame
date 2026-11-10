@@ -1,6 +1,6 @@
 # Castle · 목표 조건 H4
 
-[같은 출발점에서 목표 바꿔보기](https://dabin0312.github.io/InFrame/demo/search.html) · [개선 전후 경로와 사진](compare.html) · [35쌍의 기록](comparison.json) · [초기 H4 실험](report.json) · [학습 기록](fit.json)
+[같은 출발점에서 목표 바꿔보기](https://dabin0312.github.io/InFrame/demo/search.html) · [개선 전후 경로와 사진](compare.html) · [최종 검증 기록](peripheral-report.json) · [이전 35쌍](compare.html?study=recovery) · [초기 H4 실험](report.json) · [학습 기록](fit.json)
 
 같은 시뮬레이터, 출발 좌표, 카메라 방향에서 목표 이름만 바꾼다. `worker.mjs`는 시작 시 이름을 받고 매 스텝 전방 RGB를 받는다. MobileCLIP이 이름을 임베딩하고 YOLOE가 같은 RGB에서 해당 이름의 후보를 찾는다. H4는 RGB 네 장과 후보 네 개, 텍스트 임베딩으로 전진·좌회전·우회전·STOP 중 최대 점수 행동을 실행한다. NavMesh, 자세, 물체 좌표, ID 마스크는 환경·교사·채점에서만 사용한다.
 
@@ -52,3 +52,24 @@ python h4nav/compare-runs.py /tmp/h4-before /tmp/h4-after /tmp/comparison.json
 ```
 
 새 출발 자세·배치 네 개를 학습 전에 [고정](holdout.json)했다. 이전 검증에 쓰인 중앙 통로·재배치 장면의 두 실패는 개발에 사용했다. 같은 건물과 같은 3D 물체를 쓰며, 새 배치는 출발 자세와 물체의 배치를 바꾼다. 모델을 고정한 뒤 배치마다 세 종류의 목표, 없는 전자레인지, 등록 쓰레기통을 제거한 조건을 120스텝씩 비교한다. 모든 케이스에서 첫 RGB 해시·자세·장면·목표와 평가 규칙이 두 정책 사이에 일치하는지 검사한다. [회복층 학습 기록](recovery-fit.json)
+
+## 화면 가장자리에서의 목표 획득
+
+[같은 출발 자세의 지도·RGB](compare.html?study=peripheral&scene=unseen2&case=2) · [미사용 배치에서 직접 실행](../demo/search.html?study=peripheral&scene=blind1&case=2) · [오프라인 비교 화면](peripheral-viewer.zip)
+
+기준 모델은 경계 회복을 학습한 `student.onnx`다. `peripheral.onnx`는 이를 포함하고, 목표 이름의 임베딩이 소화기와 가까울 때 원래 해상도(160×120)의 시각 특징을 함께 사용한다. 시각 헤드는 작은 물체의 마스크와 접근·정지 행동을 배운다. 방향 헤드는 훈련 중 교사가 계산한 통행 가능한 경로의 국소 방향과 탐색 방향을 RGB에서 예측한다. 실행 중에는 좌표, 경로, 가시성 정답을 전달하지 않는다. 의자와 쓰레기통은 기존 목표 조건 H4로 주행한다.
+
+소화기 분기는 기존 4프레임 H4의 행동 점수를 제한된 범위에서 반영한다. 전진 명령 뒤 영상 변화가 없으면 내부 상태가 회전과 측면 이동을 유지한다. 네 프레임에서 두 시점이 반복되면 학습한 회전 인식기가 기존 H4 회복 출력을 12스텝 동안 사용하게 한다. 이 전환 시간과 우회 동작의 순서는 고정값이다.
+
+```sh
+node h4nav/collect.cjs peripheral /tmp/h4-edge-rgb
+node h4nav/collect.cjs recovery /tmp/h4-recovery-sequences
+python h4nav/train-peripheral.py /tmp/h4-edge-rgb h4nav/base-h4.pt h4nav/motion.pt /tmp/h4-peripheral --recovery-sequences /tmp/h4-recovery-sequences/sequences.json
+node h4nav/evaluate.cjs /tmp/h4-old current peripheral
+node h4nav/evaluate.cjs /tmp/h4-new peripheral peripheral
+python h4nav/build-peripheral-report.py /tmp/h4-old /tmp/h4-new /tmp/h4-report
+```
+
+재학습에는 PyTorch, NumPy, OpenCV, Pillow, SciPy, ONNX가 필요하다. 실행기는 저장소의 두 고정 체크포인트를 비교한다. 새 가중치를 실험하려면 로컬 복사본의 `h4nav/peripheral.onnx`와 `peripheral-fit.json`에 학습 출력을 넣는다.
+
+무작위 카메라 7,200개를 6,300개 학습·900개 검증으로 나눴다. 교대 회전은 별도의 회복 시퀀스 560개에서 학습하고 80개에서 검증했다. 기존 문제 배치와 1차 여섯 배치는 개발 기록으로 남겼다. 최종 여덟 배치는 별도 시드로 고정했다. 배치마다 세 목표, 전자레인지 부재, 쓰레기통 제거, 소화기 제거를 각각 120스텝 한도로 실행한다. [배치 정의](confirmation.json) · [시각·방향·회전 학습 기록](peripheral-fit.json) · [기존 정책 행동 분해](peripheral-diagnosis.json)

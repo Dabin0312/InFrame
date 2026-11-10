@@ -50,6 +50,7 @@ export async function openDetector(prompt,w,h){
     }
     boxes.dispose();proto.dispose();return out;
   };
+  detect.embedding=Float32Array.from(emb.data);
   detect.release=async()=>{emb.dispose();await net.release();};
   return detect;
 }

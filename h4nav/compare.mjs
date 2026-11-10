@@ -39,33 +39,47 @@ function draw(tris,rows){
 }
 async function main(){
   const embedded=JSON.parse($('embedded').textContent);
-  const {report,floor,pairs,peripheral}=await openStudy(embedded);
+  const study=await openStudy(embedded);
+  const {report,floor,pairs}=study;
   const {holdoutPositive:p,holdoutAbsent:n}=report.metrics;
   $('summary').textContent='새 출발점·배치 '+(report.holdoutCount??4)+'곳에서 목표 도달 '+p.before+' → '+p.after+' / '+p.total+'회. 없는 목표에서 잘못된 STOP '+n.before+' → '+n.after+' / '+n.total+'회.';
   for(const [id,label] of Object.entries(report.layouts))$('layout').add(new Option(label,id));
-  names.slice(0,peripheral?6:5).forEach((name,i)=>$('trial').add(new Option(name,i)));
-  if(peripheral){
+  study.cases.forEach(i=>$('trial').add(new Option(names[i],i)));
+  if(report.diagnosis){
     const d=report.diagnosis;
     $('breakdown').textContent=report.metrics.byCase.slice(0,3).map((m,i)=>names[i]+' '+m.before+' → '+m.after+' / '+m.total+'회').join('　·　');
     $('diagnosis').hidden=false;
     $('diagnosisText').textContent=d.caption;
     $('diagnosisImg').src=d.photo;
     $('studyInfo').textContent=report.description;
-    $('json').href='peripheral-report.json';
-    $('evidence').hidden=false;
+    $('json').href=study.file;
+    if(study.id==='bin'){
+      $('diagnosis').querySelector('summary').textContent='배치 7에서 빈 벽을 보고 멈춘 이유';
+      $('diagnosisImg').alt='12번째 벽면 사진과 H4의 내부 쓰레기통 특징 강도';
+      $('diagnosisImg').style.maxWidth='660px';
+    }
+    $('routesFile').href=study.id+'-routes.png';
+    $('offlineFile').href=study.id+'-viewer.zip';
+    $('evidence').hidden=location.protocol==='file:';
   }
   const params=new URLSearchParams(location.search),layout=params.get('scene');
   if(Object.hasOwn(report.layouts,layout))$('layout').value=layout;
-  const requested=params.get('case');$('trial').value=requested!==null&&Array.from($('trial').options).some(o=>o.value===requested)?requested:(peripheral?'2':'1');
+  const requested=params.get('case');$('trial').value=requested!==null&&Array.from($('trial').options).some(o=>o.value===requested)?requested:String(study.selected);
   let revision=0;
   async function show(){
     const ticket=++revision,id=$('layout').value,i=Number($('trial').value);
     const group=await pairs(id);
     if(ticket!==revision)return;
     const {before,after}=group.find(x=>x.case===i);
+    const toggle=$('toggleBin');
+    toggle.hidden=study.id!=='bin'||![1,4].includes(i);
+    if(!toggle.hidden){
+      toggle.textContent=i===1?'같은 배치에서 쓰레기통 제거 보기':'같은 배치에서 쓰레기통 있음 보기';
+      toggle.onclick=()=>{$('trial').value=i===1?'4':'1';$('trial').dispatchEvent(new Event('change'));};
+    }
     draw(floor.tris,[before,after]);photo(before,'old');photo(after,'new');
     $('facts').textContent='출발 X '+before.start.x.toFixed(2)+' m · Z '+before.start.z.toFixed(2)+' m · 방향 '+(before.start.yaw*180/Math.PI).toFixed(1)+'° · 두 정책 첫 RGB 해시 '+before.firstFrameSHA256.slice(0,12)+' 동일';
-    $('live').href='../demo/search.html?study='+(peripheral?'peripheral':'recovery')+'&scene='+id+'&case='+i;
+    $('live').href='../demo/search.html?study='+study.id+'&scene='+id+'&case='+i;
     $('table').replaceChildren(...group.map(p=>{const tr=document.createElement('tr');for(const label of [names[p.case],status(p.before),status(p.after)]){const td=document.createElement('td');td.textContent=label;tr.append(td);}return tr;}));
   }
   $('layout').onchange=$('trial').onchange=()=>show().catch(e=>{$('facts').textContent=e.message;});await show();

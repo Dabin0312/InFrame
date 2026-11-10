@@ -5,12 +5,24 @@ const [profile, directory] = process.argv.slice(2);
 const configs = { broad: [1650, 18371], near: [2450, 84013] };
 
 async function collect() {
-  if (!directory || !(Object.hasOwn(configs, profile)||['recovery','peripheral'].includes(profile))) throw Error('Usage: node collect.cjs broad|near|recovery|peripheral NEW_DIRECTORY');
+  if (!directory || !(Object.hasOwn(configs, profile)||['recovery','peripheral','bin'].includes(profile))) throw Error('Usage: node collect.cjs broad|near|recovery|peripheral|bin NEW_DIRECTORY');
   fs.mkdirSync(directory);
   const browser = await chromium.launch({channel: 'chrome', args: process.platform==='darwin'?['--use-angle=metal']:[]});
   try {
     const page = await browser.newPage();
     await page.goto((process.env.BASE_URL || 'http://localhost:8000') + '/demo/');
+    if (profile === 'bin') {
+      const labels=[];
+      await page.exposeFunction('samplePair',({i,present,absent,mask,...label})=>{
+        for(const [name,image] of Object.entries({present,absent,mask})){
+          fs.writeFileSync(path.join(directory,i+'-'+name+'.png'),Buffer.from(image.split(',')[1],'base64'));
+        }
+        labels.push(label);
+      });
+      await page.evaluate(async()=>{const m=await import('../h4nav/collect-bin.mjs');await m.collectBins(window.samplePair);});
+      fs.writeFileSync(path.join(directory,'labels.json'),JSON.stringify(labels));
+      return;
+    }
     if (profile === 'peripheral') {
       const distances=[];
       await page.exposeFunction('sample', ({i,rgb,mask,distance})=>{

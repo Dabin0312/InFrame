@@ -11,7 +11,7 @@
 <h1>H4 주행 비교</h1>
 <p id="summary" role="status">검증 기록을 불러오는 중…</p>
 <p id="breakdown" class="stats"></p>
-<div class="controls"><label>출발점·배치 <select id="layout"></select></label><label>목표 <select id="trial"></select></label></div>
+<div class="controls"><label>출발점·배치 <select id="layout"></select></label><label>목표 <select id="trial"></select></label><button id="toggleBin" type="button" hidden style="align-self:center;border:1px solid #bdccc4;border-radius:6px;background:white;color:#006f61;font:inherit;font-size:14px;padding:8px 12px;cursor:pointer"></button></div>
 <div class="plots"><figure><h2>같은 출발 자세</h2><canvas id="map" width="600" height="450" aria-label="개선 전후 경로와 정지 위치"></canvas><figcaption><span class="key before">━ 개선 전</span>　<span class="key after">┅ 개선 후</span>　○ 출발　◆ 목표<br>■ 첫 STOP　× 스텝 한도</figcaption></figure>
 <figure><h2>개선 전</h2><img id="oldPhoto" alt=""><figcaption id="oldText"></figcaption></figure>
 <figure><h2>개선 후</h2><img id="newPhoto" alt=""><figcaption id="newText"></figcaption></figure></div>
@@ -20,5 +20,5 @@
 <details id="diagnosis" hidden><summary>이전 배치 2에서 왜 반대로 돌았나</summary><p id="diagnosisText"></p><img id="diagnosisImg" alt="오른쪽 가장자리에 소화기가 보이는 106번째 입력" style="max-width:400px"></details>
 <p class="note" id="studyInfo">두 정책은 같은 RGB 카메라와 목표 이름으로 주행합니다. 개선 H4는 직전 행동과 네 프레임의 변화를 순환층에 누적해 이동 행동의 점수를 보정합니다. 목표 좌표, 자세, 충돌 신호는 정책에 들어가지 않습니다.</p>
 <p class="small">목표까지 1.35 m 이내에서 첫 STOP을 내고, 가림을 반영한 목표 마스크가 80픽셀 이상이며 화면 가운데 절반에 중심이 들어오면 성공입니다. 기본 배치의 등록 관측점 0.8 m 조건은 별도로 표시합니다. 120스텝에 도달한 사진은 마지막 관측입니다. <a id="json" href="comparison.json">검증 데이터 ↗</a></p>
-<p id="evidence" class="small" hidden><a href="peripheral-routes.png">경로·사진 한 장으로 보기 ↗</a>　<a href="peripheral-viewer.zip" download>오프라인 비교 화면 ↓</a></p>
+<p id="evidence" class="small" hidden><a id="routesFile" href="peripheral-routes.png">경로·사진 한 장으로 보기 ↗</a>　<a id="offlineFile" href="peripheral-viewer.zip" download>오프라인 비교 화면 ↓</a></p>
 </main><script id="embedded" type="application/json">null</script><script type="module" src="compare.mjs"></script></body></html>

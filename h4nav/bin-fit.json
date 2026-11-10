@@ -1,0 +1,13 @@
+{
+  "epoch": 10,
+  "train_pairs": 2975,
+  "validation_pairs": 425,
+  "true_positive": 81,
+  "false_positive": 5,
+  "false_negative": 6,
+  "removed_false_positive": 0,
+  "sampling_seed": 36980911,
+  "split_seed": 6997,
+  "model_sha256": "aea48c80c294e0421f1faf4f07f36966f486a9641de329dbf69e3097e0b5c7e0",
+  "parent_sha256": "9d41cc2200621c2283f952593135c57902db07205a2e15d3f2a513bb03265875"
+}

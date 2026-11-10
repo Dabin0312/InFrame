@@ -1,6 +1,6 @@
 # Castle · 목표 조건 H4
 
-[같은 출발점에서 목표 바꿔보기](https://dabin0312.github.io/InFrame/demo/search.html) · [개선 전후 경로와 사진](compare.html) · [최종 검증 기록](peripheral-report.json) · [이전 35쌍](compare.html?study=recovery) · [초기 H4 실험](report.json) · [학습 기록](fit.json)
+[같은 출발점에서 목표 바꿔보기](https://dabin0312.github.io/InFrame/demo/search.html) · [개선 전후 경로와 사진](compare.html) · [쓰레기통 유무 비교](compare.html?study=bin&scene=blind7&case=4) · [소화기 검증 기록](peripheral-report.json) · [이전 35쌍](compare.html?study=recovery) · [초기 H4 실험](report.json) · [학습 기록](fit.json)
 
 같은 시뮬레이터, 출발 좌표, 카메라 방향에서 목표 이름만 바꾼다. `worker.mjs`는 시작 시 이름을 받고 매 스텝 전방 RGB를 받는다. MobileCLIP이 이름을 임베딩하고 YOLOE가 같은 RGB에서 해당 이름의 후보를 찾는다. H4는 RGB 네 장과 후보 네 개, 텍스트 임베딩으로 전진·좌회전·우회전·STOP 중 최대 점수 행동을 실행한다. NavMesh, 자세, 물체 좌표, ID 마스크는 환경·교사·채점에서만 사용한다.
 
@@ -73,3 +73,19 @@ python h4nav/build-peripheral-report.py /tmp/h4-old /tmp/h4-new /tmp/h4-report
 재학습에는 PyTorch, NumPy, OpenCV, Pillow, SciPy, ONNX가 필요하다. 실행기는 저장소의 두 고정 체크포인트를 비교한다. 새 가중치를 실험하려면 로컬 복사본의 `h4nav/peripheral.onnx`와 `peripheral-fit.json`에 학습 출력을 넣는다.
 
 무작위 카메라 7,200개를 6,300개 학습·900개 검증으로 나눴다. 교대 회전은 별도의 회복 시퀀스 560개에서 학습하고 80개에서 검증했다. 기존 문제 배치와 1차 여섯 배치는 개발 기록으로 남겼다. 최종 여덟 배치는 별도 시드로 고정했다. 배치마다 세 목표, 전자레인지 부재, 쓰레기통 제거, 소화기 제거를 각각 120스텝 한도로 실행한다. [배치 정의](confirmation.json) · [시각·방향·회전 학습 기록](peripheral-fit.json) · [기존 정책 행동 분해](peripheral-diagnosis.json)
+
+## 쓰레기통 유무에 따른 첫 STOP
+
+같은 카메라와 장면에서 등록 쓰레기통만 넣고 뺀 3,400쌍의 RGB로 H4의 STOP 출력을 학습했다. 카메라 쌍 2,975개는 학습에, 425개는 체크포인트 선택에 사용했다. 소형 CNN이 쓰레기통의 위치와 근접·가시성을 학습하고, 시각 근거 점수가 기존 STOP과 이동 행동의 점수 차이를 조정한다. 이 연산과 목표 임베딩을 기존 H4와 하나의 ONNX 그래프로 묶었다. 실행 입력은 기존 모델과 같다.
+
+새 출발 자세와 배치 24개는 실내 전역, 주행 경계, 벽면 패널 구역에서 8개씩 표집했다. 모든 위치에서 쓰레기통 찾기를 두 번 실행하며, 두 번째 실행에서 등록 쓰레기통을 제거한다. 의자와 소화기도 같은 출발 자세에서 실행한다. 이 실험의 검증 범위는 같은 Castle과 같은 등록 물체의 재배치다.
+
+```sh
+node h4nav/collect.cjs bin /tmp/h4-bin-pairs
+python h4nav/train-bin-stop.py /tmp/h4-bin-pairs h4nav/peripheral.onnx h4nav/base-h4.pt /tmp/h4-bin-fit
+node h4nav/evaluate.cjs /tmp/h4-bin-before peripheral bin
+node h4nav/evaluate.cjs /tmp/h4-bin-after bin bin
+python h4nav/build-bin-report.py /tmp/h4-bin-before /tmp/h4-bin-after /tmp/h4-bin-report
+```
+
+평가는 저장소의 고정 체크포인트를 사용한다. 학습을 다시 한 경우 로컬 복사본에서 `h4nav/bin-h4.onnx`와 `bin-fit.json`을 새 출력으로 교체해 비교할 수 있다. [배치·시드](bin-holdout.json) · [학습 기록](bin-fit.json) · [빈 벽 진단 기록](bin-diagnosis.json) · [전체 주행 기록](bin-report.json)

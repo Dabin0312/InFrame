@@ -12,9 +12,18 @@ const layouts={
   develop:[[.5,8.1],[4.2,9.4],[2.4,11.8]]
 };
 export const layoutNames={gallery:'Castle · 중앙 통로',fresh:'Castle · FRESH-015',transfer:'Castle · 재배치'};
-export async function experiment(){
+export async function experiment({policy='current'}={}){
+  if(!['current','baseline'].includes(policy)) throw Error('Unknown H4 checkpoint');
+  const response=await fetch(new URL('holdout.json',import.meta.url));
+  if(!response.ok) throw Error('검증 배치를 읽을 수 없습니다.');
+  const suite=await response.json();
+  for(const [key,item] of Object.entries(suite.layouts)){
+    starts[key]=item.start;
+    layouts[key]=item.anchors;
+  }
   const sim=await castle(160,120);
-  const worker=new Worker(new URL('worker.mjs',import.meta.url),{type:'module'}),on=new AbortController();
+  const workerURL=new URL('worker.mjs',import.meta.url);workerURL.searchParams.set('policy',policy);
+  const worker=new Worker(workerURL,{type:'module'}),on=new AbortController();
   async function run({layout='gallery',prompt,removed=-1,scoreKey,maxSteps=120},listener=()=>{}){
     if(!Object.hasOwn(layouts,layout))throw Error('Unknown layout');
     sim.place(layouts[layout],removed);const p={...starts[layout]},trace=[];let stop=false,bumped=0,travel=0,firstFrameSHA256;
@@ -32,7 +41,7 @@ export async function experiment(){
     sim.render(p);const photo=sim.ctx.canvas.toDataURL('image/png');
     const k=scoreKey??prompts.indexOf(prompt);
     const audit=sim.score(p,k);
-    return {layout,anchors:layouts[layout],start:starts[layout],endpoint:{...p},firstFrameSHA256,removed,prompt,scoreKey:k,travel,bumped,steps:trace.length,firstStop:stop,
+    return {policy,layout,anchors:layouts[layout],start:starts[layout],endpoint:{...p},firstFrameSHA256,removed,prompt,scoreKey:k,travel,bumped,steps:trace.length,firstStop:stop,
       success:stop&&audit.success,audit,trace,photo,end:stop?'stop':'step_limit',actions};
   }
   return {run,categories,close(){on.abort();worker.terminate();sim.dispose();}};

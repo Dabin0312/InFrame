@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>H4 주행 비교 · InFrame</title>
+<style>
+*{box-sizing:border-box}body{font:16px/1.55 system-ui,-apple-system,sans-serif;color:#173b35;margin:0;background:#fafbf8}main{margin:auto;max-width:1150px;padding:32px 28px 60px}nav{display:flex;justify-content:space-between;font-weight:700}a{color:#006f61}h1{font-size:clamp(36px,5vw,60px);letter-spacing:-.065em;line-height:1.05;margin:35px 0 12px}p{margin:8px 0 16px}.controls{display:flex;flex-wrap:wrap;gap:20px;margin:22px 0}label{font-size:14px;font-weight:650}select{font:inherit;padding:8px;border:1px solid #bdccc4;border-radius:6px;background:white;color:inherit}h2{font-size:20px;margin:6px 0 12px}.plots{display:grid;grid-template-columns:1.25fr 1fr 1fr;gap:12px;align-items:start}figure{margin:0}canvas,img{width:100%;height:auto;background:#edf1ed;display:block;border-radius:8px}figcaption{font-size:14px;line-height:1.5;padding:8px 0}.key{white-space:nowrap;font-weight:700}.before{color:#984c33}.after{color:#087d6e}.stats{color:#405c50;font-size:14px}.note{padding-top:18px;border-top:1px solid #ced7cf;color:#455c52}.small{font-size:13px}table{border-collapse:collapse;width:100%;font-size:14px}td,th{text-align:left;padding:6px;border-bottom:1px solid #dde4db}details{margin:20px 0}summary{cursor:pointer;font-weight:650}@media(max-width:760px){main{padding:20px 14px}.plots{grid-template-columns:1fr 1fr}.plots figure:first-child{grid-column:1/-1}.controls{gap:6px}}
+</style>
+</head><body><main>
+<nav><a href="../">InFrame</a><a id="live" href="../demo/search.html">H4 직접 실행 ↗</a></nav>
+<h1>H4 주행 비교</h1>
+<p id="summary" role="status">검증 기록을 불러오는 중…</p>
+<div class="controls"><label>출발점·배치 <select id="layout"></select></label><label>목표 <select id="trial"></select></label></div>
+<div class="plots"><figure><h2>같은 출발 자세</h2><canvas id="map" width="600" height="450" aria-label="개선 전후 경로와 정지 위치"></canvas><figcaption><span class="key before">━ 개선 전</span>　<span class="key after">┅ 개선 후</span>　○ 출발　◆ 목표<br>■ 첫 STOP　× 스텝 한도</figcaption></figure>
+<figure><h2>개선 전</h2><img id="oldPhoto" alt=""><figcaption id="oldText"></figcaption></figure>
+<figure><h2>개선 후</h2><img id="newPhoto" alt=""><figcaption id="newText"></figcaption></figure></div>
+<p id="facts" class="stats"></p>
+<details><summary>이 배치의 모든 결과</summary><table><thead><tr><th>목표</th><th>개선 전</th><th>개선 후</th></tr></thead><tbody id="table"></tbody></table></details>
+<p class="note">두 정책은 같은 RGB 카메라와 목표 이름으로 주행합니다. 개선 H4는 직전 행동과 네 프레임의 변화를 순환층에 누적해 이동 행동의 점수를 보정합니다. 목표 좌표, 자세, 충돌 신호는 정책에 들어가지 않습니다.</p>
+<p class="small">목표까지 1.35 m 이내에서 첫 STOP을 내고, 가림을 반영한 목표 마스크가 80픽셀 이상이며 화면 가운데 절반에 중심이 들어오면 성공입니다. 기본 배치의 등록 관측점 0.8 m 조건은 별도로 표시합니다. 120스텝에 도달한 사진은 마지막 관측입니다. <a href="comparison.json">검증 데이터 ↗</a></p>
+</main><script id="embedded" type="application/json">null</script><script type="module" src="compare.mjs"></script></body></html>

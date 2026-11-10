@@ -44,7 +44,12 @@ $('run').onclick=async()=>{
 window.addEventListener('pagehide',()=>{env?.close();env=null;});
 try{
   const read=async url=>{const r=await fetch(new URL(url,import.meta.url));if(!r.ok)throw Error('검증 기록을 읽을 수 없어요.');return r.json();};
-  const [report,geometry]=await Promise.all([read('report.json'),read('../spatial/floor.json')]);records=report.runs;floor=geometry;
+  const [report,geometry]=await Promise.all([read('comparison.json'),read('../spatial/floor.json')]);records=report.pairs.map(pair=>pair.after);floor=geometry;
+  const layouts=$('layout');
+  for(const [id,title] of Object.entries(report.layouts)){
+    if(!Array.from(layouts.options).some(o=>o.value===id)) layouts.add(new Option(title,id));
+  }
   const requested=new URLSearchParams(location.search).get('scene');if(records.some(r=>r.layout===requested))$('layout').value=requested;
-  await show(0);locks(false);
+  const requestedCase=new URLSearchParams(location.search).get('case');
+  await show(/^[0-4]$/.test(requestedCase)?Number(requestedCase):0);locks(false);
 }catch(e){$('state').textContent=e.message;}

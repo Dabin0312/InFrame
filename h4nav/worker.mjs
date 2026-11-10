@@ -4,12 +4,13 @@ import {openDetector} from '../spatial/open-detector.mjs';
 ort.env.wasm.numThreads=1;
 ort.env.wasm.wasmPaths=new URL('../demo/vendor/',import.meta.url).href;
 let detector,student,embedding,history=[],channels,w,h,ctx,small;
+let previousAction=-1,memory=new Float32Array(40);
 async function init(prompt,width,height){
-  w=width;h=height;history=[];channels=new Map();
+  w=width;h=height;history=[];previousAction=-1;memory.fill(0);channels=new Map();
   if(detector)await detector.release();embedding?.dispose();
   detector=await openDetector(prompt,w,h);
   embedding=new ort.Tensor('float32',detector.embedding,[1,512]);
-  student??=await ort.InferenceSession.create(new URL('student.onnx',import.meta.url).href,{executionProviders:['wasm']});
+  student??=await ort.InferenceSession.create(new URL(new URL(self.location.href).searchParams.get('policy')==='baseline'?'baseline.onnx':'student.onnx',import.meta.url).href,{executionProviders:['wasm']});
   ctx=new OffscreenCanvas(w,h).getContext('2d');small=new OffscreenCanvas(80,60).getContext('2d',{willReadFrequently:true});
 }
 function key(data){let k=2166136261;for(const byte of data)k=Math.imul(k^byte,16777619);return k>>>0;}
@@ -27,12 +28,20 @@ async function act(pixels){
   const seq=new Uint8Array(4*14400),proposals=new Float32Array(20);
   history.forEach((o,i)=>{seq.set(o.rgb,14400*i);proposals.set(o.proposal,5*i);});
   const rgb=new ort.Tensor('uint8',seq,[1,4,60,80,3]),obs=new ort.Tensor('float32',proposals,[1,4,5]);
+  const inputs={rgb,goal_embedding:embedding,rgb_goal_proposals:obs};
+  if(student.inputNames.includes('memory')){
+    const last=new Float32Array(4);last[previousAction+1]=1;
+    inputs.previous_action=new ort.Tensor('float32',last,[1,4]);
+    inputs.memory=new ort.Tensor('float32',memory,[1,1,memory.length]);
+  }
   try{
-    const {action_logits}=await student.run({rgb,goal_embedding:embedding,rgb_goal_proposals:obs});
+    const {action_logits,next_memory}=await student.run(inputs);
+    if(next_memory){memory=Float32Array.from(next_memory.data);next_memory.dispose();}
     const logits=Array.from(action_logits.data);action_logits.dispose();
     if(!logits.every(Number.isFinite))throw Error('정책의 행동 점수를 읽을 수 없습니다.');
-    return {action:logits.indexOf(Math.max(...logits)),logits,proposal:Array.from(f.proposal)};
-  }finally{rgb.dispose();obs.dispose();}
+    previousAction=logits.indexOf(Math.max(...logits));
+    return {action:previousAction,logits,proposal:Array.from(f.proposal)};
+  }finally{rgb.dispose();obs.dispose();inputs.previous_action?.dispose();inputs.memory?.dispose();}
 }
 self.onmessage=async({data})=>{
   try{

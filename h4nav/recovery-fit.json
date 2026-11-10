@@ -1,0 +1,16 @@
+{
+  "sequence_seed": 303819,
+  "split_seed": 218,
+  "train": 560,
+  "validation": 80,
+  "steps_per_sequence": 58,
+  "selected_epoch": 76,
+  "valid_recall_keep_forward_left_right": [
+    0.9990049600601196,
+    1.0,
+    1.0,
+    1.0
+  ],
+  "parent_pt_sha256": "dcc72c3c1e45bfde732caf3a674816802382ba745ec365c2da459a08737f5993",
+  "onnx_sha256": "deb6b912339ef719c7eae685d115f262959858425775eef261d22a4fdfd32e45"
+}

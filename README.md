@@ -2,9 +2,9 @@
 
 **실내 의미 지도와 전방 RGB에 기반한 목표 객체 탐색 및 정지(ObjectNav).**
 
-InFrame은 지정된 종류의 물체가 보이는 자리까지 이동하고, 첫 STOP 사진을 지도 위의 개체와 연결합니다. 업로드한 영상에서는 물체 이름을 직접 입력할 수 있습니다. Castle의 동일 출발 자세에서 지도 기반 주행을 비교하고, 촬영한 영상에서는 목표별 관측과 첫 STOP을 확인합니다.
+InFrame은 지정된 종류의 물체가 보이는 자리까지 이동하고, 첫 STOP 사진을 지도 위의 개체와 연결합니다. 업로드한 영상에서는 물체 이름을 직접 입력할 수 있습니다. Castle의 동일 출발 자세에서 목표 이름에 따른 H4 주행을 비교하고, 촬영한 영상에서는 목표별 관측과 첫 STOP을 확인합니다.
 
-[Project page](https://dabin0312.github.io/InFrame/) · [Try your own data](https://dabin0312.github.io/InFrame/demo/) · [주행 영상](https://dabin0312.github.io/InFrame/#run) · [Data & models](https://github.com/Dabin0312/InFrame/releases/tag/v0.7.0)
+[Project page](https://dabin0312.github.io/InFrame/) · [Try your own data](https://dabin0312.github.io/InFrame/demo/) · [목표 이름으로 H4 주행](https://dabin0312.github.io/InFrame/demo/search.html) · [주행 영상](https://dabin0312.github.io/InFrame/#run) · [Data & models](https://github.com/Dabin0312/InFrame/releases/tag/v0.7.0)
 
 <picture>
   <source media="(max-width: 700px)" srcset="project/framework-mobile.png">
@@ -23,9 +23,7 @@ InFrame은 지정된 종류의 물체가 보이는 자리까지 이동하고, �
 
 **내 영상**에서 `wet floor sign`이나 `painting`을 입력하면 MobileCLIP이 이름을 인코딩하고 YOLOE가 해당 물체를 분할합니다. 여러 시점에서 위치를 확인한 관측에는 지도점과 근거 사진을 연결합니다. 한국어 이름은 기본 번역 목록 또는 브라우저의 한영 번역기를 사용합니다.
 
-**목표 위치 없이 탐색하는 심**에서는 전방 RGB에서 찾은 물체에 접근해 정지합니다. 같은 방에서 교통 콘의 위치를 바꾸거나 치운 주행을 다시 실행할 수 있습니다. [탐색 경로와 정지 사진](https://dabin0312.github.io/InFrame/demo/search.html) · [표지판의 다른 시점 재투영](evidence/sign-reprojection.jpg)
-
-**Castle**의 세 목표는 별도 비교 실험입니다. H4는 소화기 시범으로 학습했고, 의자·쓰레기통은 등록된 관측점과 시각 정지 규칙을 사용합니다.
+**Castle의 목표 조건 H4**는 전방 RGB 네 장과 입력한 이름으로 전진·회전·STOP을 결정합니다. 의자·쓰레기통·소화기를 같은 출발 자세에서 비교하고, 전자레인지 또는 장면에서 치운 쓰레기통으로 부재 조건을 실행할 수 있습니다. 목표 좌표는 채점에만 사용합니다. [경로와 정지 사진](https://dabin0312.github.io/InFrame/demo/search.html) · [모델과 실행 방법](h4nav/) · [지도 기반 비교 주행](https://dabin0312.github.io/InFrame/#goal-comparison)
 
 ## Method
 

@@ -1,6 +1,6 @@
 # Castle · 목표 조건 H4
 
-[같은 출발점에서 목표 바꿔보기](https://dabin0312.github.io/InFrame/demo/search.html) · [개선 전후 경로와 사진](compare.html) · [벽면 구역에서 쓰레기통 찾기](compare.html?study=panel&scene=bin21&case=1) · [쓰레기통 유무 비교](compare.html?study=bin&scene=blind7&case=4) · [소화기 검증 기록](peripheral-report.json) · [이전 35쌍](compare.html?study=recovery) · [초기 H4 실험](report.json) · [학습 기록](fit.json)
+[같은 출발점에서 목표 바꿔보기](https://dabin0312.github.io/InFrame/demo/search.html) · [개선 전후 경로와 사진](compare.html) · [의자 탐색 비교](compare.html?study=chair&scene=panel7&case=0) · [벽면 구역에서 쓰레기통 찾기](compare.html?study=panel&scene=bin21&case=1) · [쓰레기통 유무 비교](compare.html?study=bin&scene=blind7&case=4) · [소화기 검증 기록](peripheral-report.json) · [이전 35쌍](compare.html?study=recovery) · [초기 H4 실험](report.json) · [학습 기록](fit.json)
 
 같은 시뮬레이터, 출발 좌표, 카메라 방향에서 목표 이름만 바꾼다. `worker.mjs`는 시작 시 이름을 받고 매 스텝 전방 RGB를 받는다. MobileCLIP이 이름을 임베딩하고 YOLOE가 같은 RGB에서 해당 이름의 후보를 찾는다. H4는 RGB 네 장과 후보 네 개, 텍스트 임베딩으로 전진·좌회전·우회전·STOP 중 최대 점수 행동을 실행한다. NavMesh, 자세, 물체 좌표, ID 마스크는 환경·교사·채점에서만 사용한다.
 
@@ -108,4 +108,23 @@ python h4nav/export-panel.py /tmp/panel-fit/search-vision.pt h4nav/bin-h4.onnx h
 node h4nav/evaluate.cjs /tmp/panel-before bin panel
 node h4nav/evaluate.cjs /tmp/panel-after panel panel
 python h4nav/build-panel-report.py /tmp/panel-before /tmp/panel-after /tmp/panel-report
+```
+
+## 의자가 보이는 방향으로 접근하고 정지하기
+
+[7번과 22번의 실패 프레임](chair-diagnosis.png) · [같은 출발점의 경로·정지 사진](compare.html?study=chair&scene=panel7&case=0) · [새 배치 24곳의 주행 기록](chair-report.json) · [오프라인 비교 화면](chair-viewer.zip)
+
+기존 H4는 7번에서 전진이 막힌 뒤 화면 중앙에 보이던 의자를 놓쳤다. 22번에서는 목표가 보이지 않는 첫 화면에서 STOP을 냈다. 새 분기는 RGB에서 의자의 마스크·가시성·도착 여부와 이동 방향을 학습한다. H4 내부에서 직전에 본 의자의 방향을 기억하고 네 프레임의 행동 점수를 조향·정지 판단에 반영한다. 탐색 회전과 우회 동작의 길이는 고정값이다. 목표 좌표와 가시성 정답은 학습·채점에만 쓴다. 이 분기는 의자에 가까운 이름 임베딩에서 동작한다.
+
+별도 시드로 카메라 자세 6,200개를 생성했다. 같은 자세에서 의자를 제거한 사진은 원본과 같은 분할에 넣었다. RGB 6,615장으로 학습하고 963장으로 체크포인트를 골랐다. 최종 검증은 Castle의 통로·경계·벽면 구역에서 새 출발점과 물체 배치를 각각 8개씩 고정했다. 각 배치에서 두 정책에 같은 시작 자세로 의자, 의자 제거, 쓰레기통, 소화기 네 조건을 실행한다. 개발에 사용한 7번·22번은 따로 표시한다. [검증 배치](chair-holdout.json) · [체크포인트 기록](chair-fit.json)
+
+저장소 루트에서 HTTP 서버를 실행한 뒤 아래 명령으로 재현한다. 공개된 체크포인트를 사용하면 두 개의 평가 명령부터 실행할 수 있다.
+
+```sh
+node h4nav/collect.cjs chair /tmp/chair-train
+python h4nav/train-panel.py /tmp/chair-train /tmp/chair-fit --target chair
+python h4nav/export-panel.py /tmp/chair-fit/search-vision.pt h4nav/panel-h4.onnx h4nav/base-h4.pt /tmp/chair-fit/chair-h4.onnx --target chair
+node h4nav/evaluate.cjs /tmp/chair-before panel chair
+node h4nav/evaluate.cjs /tmp/chair-after chair chair
+python h4nav/build-panel-report.py /tmp/chair-before /tmp/chair-after /tmp/chair-report --study chair
 ```

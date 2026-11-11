@@ -6,7 +6,7 @@ import math
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-OBJECTS = ['chair', 'trash can', 'fire extinguisher', 'microwave', 'trash can', 'fire extinguisher']
+OBJECTS = ['chair', 'trash can', 'fire extinguisher', 'microwave', 'trash can', 'fire extinguisher', 'chair']
 LAYOUTS = {'gallery':'중앙 통로', 'transfer':'기존 재배치', 'fresh':'FRESH-015'}
 def digest(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
@@ -14,8 +14,8 @@ def digest(path):
 def validate_run(run, case, limit):
     trace, audit = run['trace'], run['audit']
     assert trace and len(trace) == run['steps'] <= limit
-    assert run['prompt'] == OBJECTS[case] and run['removed'] == (1 if case == 4 else 2 if case == 5 else -1)
-    assert run['scoreKey'] == [0,1,2,-1,1,2][case]
+    assert run['prompt'] == OBJECTS[case] and run['removed'] == (1 if case == 4 else 2 if case == 5 else 0 if case == 6 else -1)
+    assert run['scoreKey'] == [0,1,2,-1,1,2,0][case]
     assert run['photo'].startswith('data:image/png;base64,')
     poses = trace[1:] + [run['endpoint']]
     widths = [math.hypot(a['x']-b['x'], a['z']-b['z']) for a,b in zip(trace,poses)]

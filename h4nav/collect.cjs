@@ -5,20 +5,23 @@ const [profile, directory] = process.argv.slice(2);
 const configs = { broad: [1650, 18371], near: [2450, 84013] };
 
 async function collect() {
-  if (!directory || !(Object.hasOwn(configs, profile)||['recovery','peripheral','bin','panel'].includes(profile))) throw Error('Usage: node collect.cjs broad|near|recovery|peripheral|bin|panel NEW_DIRECTORY');
+  if (!directory || !(Object.hasOwn(configs, profile)||['recovery','peripheral','bin','panel','chair'].includes(profile))) throw Error('Usage: node collect.cjs broad|near|recovery|peripheral|bin|panel|chair NEW_DIRECTORY');
   fs.mkdirSync(directory);
   const browser = await chromium.launch({channel: 'chrome', args: process.platform==='darwin'?['--use-angle=metal']:[]});
   try {
     const page = await browser.newPage();
     await page.goto((process.env.BASE_URL || 'http://localhost:8000') + '/demo/');
-    if (profile === 'panel') {
+    if (profile === 'panel' || profile === 'chair') {
       const labels=[];
       await page.exposeFunction('samplePanel',({i,rgb,mask,...label})=>{
         for(const [name,image] of Object.entries({rgb,mask}))
           fs.writeFileSync(path.join(directory,i+'-'+name+'.png'),Buffer.from(image.split(',')[1],'base64'));
         labels[i]=label;
       });
-      await page.evaluate(async()=>{await(await import('../h4nav/collect-panel.mjs')).collectPanel(window.samplePanel);});
+      await page.evaluate(async id=>{
+        const options=id==='chair'?{count:6200,seed:568241,targetIndex:0}:{};
+        await(await import('../h4nav/collect-panel.mjs')).collectPanel(window.samplePanel,options);
+      },profile);
       fs.writeFileSync(path.join(directory,'labels.json'),JSON.stringify(labels));
       return;
     }

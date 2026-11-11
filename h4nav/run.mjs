@@ -12,9 +12,9 @@ const layouts={
   develop:[[.5,8.1],[4.2,9.4],[2.4,11.8]]
 };
 export const layoutNames={gallery:'Castle · 중앙 통로',fresh:'Castle · FRESH-015',transfer:'Castle · 재배치'};
-export async function experiment({policy='panel'}={}){
-  if(!['current','baseline','peripheral','bin','panel'].includes(policy)) throw Error('Unknown H4 checkpoint');
-  for(const name of ['holdout.json','edge-holdout.json','confirmation.json','bin-holdout.json','panel-holdout.json']){
+export async function experiment({policy='chair'}={}){
+  if(!['current','baseline','peripheral','bin','panel','chair'].includes(policy)) throw Error('Unknown H4 checkpoint');
+  for(const name of ['holdout.json','edge-holdout.json','confirmation.json','bin-holdout.json','panel-holdout.json','chair-holdout.json']){
     const response=await fetch(new URL(name,import.meta.url));
     if(!response.ok) throw Error('검증 배치를 읽을 수 없습니다.');
     const suite=await response.json();

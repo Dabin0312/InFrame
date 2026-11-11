@@ -11,10 +11,10 @@ async function init(prompt,width,height){
   if(detector)await detector.release();embedding?.dispose();
   detector=await openDetector(prompt,w,h);
   embedding=new ort.Tensor('float32',detector.embedding,[1,512]);
-  const checkpoints={baseline:'baseline.onnx',current:'student.onnx',peripheral:'peripheral.onnx',bin:'bin-h4.onnx',panel:'panel-h4.onnx'};
-  const id=new URL(self.location.href).searchParams.get('policy')??'panel';
+  const checkpoints={baseline:'baseline.onnx',current:'student.onnx',peripheral:'peripheral.onnx',bin:'bin-h4.onnx',panel:'panel-h4.onnx',chair:'chair-h4.onnx'};
+  const id=new URL(self.location.href).searchParams.get('policy')??'chair';
   student??=await ort.InferenceSession.create(new URL(checkpoints[id],import.meta.url).href,{executionProviders:['wasm']});
-  memory=new Float32Array(['panel','bin','peripheral'].includes(id)?44:40);
+  memory=new Float32Array(['chair','panel','bin','peripheral'].includes(id)?44:40);
   ctx=new OffscreenCanvas(w,h).getContext('2d');small=new OffscreenCanvas(80,60).getContext('2d',{willReadFrequently:true});
 }
 function key(data){let k=2166136261;for(const byte of data)k=Math.imul(k^byte,16777619);return k>>>0;}

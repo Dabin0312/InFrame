@@ -6,7 +6,7 @@ from torch.nn import functional as F
 
 
 class SearchVision(nn.Module):
-    def __init__(self):
+    def __init__(self, outputs=5):
         super().__init__()
 
         def conv(a, b, stride):
@@ -21,7 +21,7 @@ class SearchVision(nn.Module):
             nn.Linear(40 * 4 * 5 + 40, 128),
             nn.LayerNorm(128),
             nn.SiLU(),
-            nn.Linear(128, 5),
+            nn.Linear(128, outputs),
         )
 
     def forward(self, camera):

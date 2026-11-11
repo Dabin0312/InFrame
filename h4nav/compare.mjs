@@ -1,6 +1,6 @@
 import {openStudy} from './study.mjs';
 const $ = id => document.getElementById(id);
-const names = ['의자','쓰레기통','소화기','전자레인지 · 없음','쓰레기통 · 제거','소화기 · 제거'];
+const names = ['의자','쓰레기통','소화기','전자레인지 · 없음','쓰레기통 · 제거','소화기 · 제거','의자 · 제거'];
 const colours = ['#984c33','#087d6e'];
 function status(r){
   if(!r.firstStop)return '마지막 관측 · STOP 없음';
@@ -53,6 +53,11 @@ async function main(){
     $('diagnosisImg').src=d.photo;
     $('studyInfo').textContent=report.description;
     $('json').href=study.file;
+    if(study.id==='chair'){
+      $('diagnosis').querySelector('summary').textContent='기존 의자 주행 7번과 22번의 카메라 관측';
+      $('diagnosisImg').alt='등록 의자가 시야를 벗어난 순간과 출발 즉시 오정지한 벽면';
+      $('diagnosisImg').style.maxWidth='100%';
+    }
     if(study.id==='panel'){
       $('diagnosis').querySelector('summary').textContent='기존 다섯 배치에서 쓰레기통이 보였던 순간';
       $('diagnosisImg').alt='기존 H4의 벽면 구역 다섯 주행과 쓰레기통이 가장 크게 보인 실제 RGB';
@@ -80,10 +85,13 @@ async function main(){
     if(ticket!==revision)return;
     const {before,after}=group.find(x=>x.case===i);
     const toggle=$('toggleBin');
-    toggle.hidden=!['bin','panel'].includes(study.id)||![1,4].includes(i);
+    const targetCase=study.id==='chair'?0:1;
+    const absentCase=study.id==='chair'?6:4;
+    toggle.hidden=!['bin','panel','chair'].includes(study.id)||![targetCase,absentCase].includes(i);
     if(!toggle.hidden){
-      toggle.textContent=i===1?'같은 배치에서 쓰레기통 제거 보기':'같은 배치에서 쓰레기통 있음 보기';
-      toggle.onclick=()=>{$('trial').value=i===1?'4':'1';$('trial').dispatchEvent(new Event('change'));};
+      const target=names[targetCase];
+      toggle.textContent='같은 배치에서 '+target+(i===targetCase?' 제거 보기':' 있음 보기');
+      toggle.onclick=()=>{$('trial').value=String(i===targetCase?absentCase:targetCase);$('trial').dispatchEvent(new Event('change'));};
     }
     draw(floor.tris,[before,after]);photo(before,'old');photo(after,'new');
     $('facts').textContent='출발 X '+before.start.x.toFixed(2)+' m · Z '+before.start.z.toFixed(2)+' m · 방향 '+(before.start.yaw*180/Math.PI).toFixed(1)+'° · 두 정책 첫 RGB 해시 '+before.firstFrameSHA256.slice(0,12)+' 동일';

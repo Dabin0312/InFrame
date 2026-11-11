@@ -1,6 +1,6 @@
 """Distil exploration and pursuit bearings from Castle training cameras."""
 
-import argparse, json, runpy
+import argparse, json, math, runpy
 from pathlib import Path
 import numpy as np
 import torch
@@ -15,22 +15,29 @@ def main():
     args.add_argument("out", type=Path)
     args.add_argument("--epochs", type=int, default=18)
     args.add_argument("--device", default="mps")
+    args.add_argument("--target", choices=["bin", "chair"], default="bin")
     a = args.parse_args()
+    chair = a.target == "chair"
+    target_index = 0 if chair else 1
     a.out.mkdir(parents=True, exist_ok=True)
-    rows = json.loads((a.data / "labels.json").read_text())
+    labels = json.loads((a.data / "labels.json").read_text())
+    frame_ids = [i for i, r in enumerate(labels) if r is not None]
+    rows = [labels[i] for i in frame_ids]
     samples = [dict(**r["p"], anchors=r["anchors"]) for r in rows]
-    teacher = runpy.run_path(str(Path(__file__).with_name("train-bearing.py")))["teacher"]
-    vectors = torch.from_numpy(teacher(samples, target_index=1))
+    teacher = runpy.run_path(str(Path(__file__).with_name("train-bearing.py")))[
+        "teacher"
+    ]
+    vectors = torch.from_numpy(teacher(samples, target_index=target_index))
     imgs = torch.from_numpy(
         np.stack(
             [
                 np.asarray(Image.open(a.data / f"{i}-rgb.png").convert("RGB"))
-                for i in range(len(rows))
+                for i in frame_ids
             ]
         )
     )
     masks = []
-    for i in range(len(rows)):
+    for i in frame_ids:
         m = np.asarray(Image.open(a.data / f"{i}-mask.png").convert("L")) > 127
         masks.append(m.reshape(30, 4, 40, 4).max((1, 3)))
     masks = torch.from_numpy(np.stack(masks)).float().unsqueeze(1)
@@ -39,7 +46,21 @@ def main():
     rng = np.random.default_rng(391146)
     order = rng.permutation(len(rows))
     val, train = np.split(order, [len(rows) // 8])
-    net = SearchVision().to(a.device)
+    if chair:
+        # A removed image and its partner always belong to the same split.
+        families = np.array([r.get("pairedWith", i) for i, r in zip(frame_ids, rows)])
+        shuffled = np.random.default_rng(901613).permutation(np.unique(families))
+        held = np.isin(families, shuffled[: len(shuffled) // 8])
+        val, train = np.where(held)[0], np.where(~held)[0]
+        arrival = torch.tensor(
+            [
+                r["pixels"] >= 80
+                and abs((r["box"][0] + r["box"][2]) / 320 - 0.5) <= 0.23
+                and math.dist([r["p"]["x"], r["p"]["z"]], r["anchors"][0]) <= 1.26
+                for r in rows
+            ]
+        ).float()
+    net = SearchVision(outputs=6 if chair else 5).to(a.device)
     opt = torch.optim.AdamW(net.parameters(), lr=0.0016)
     best = np.inf
     for ep in range(a.epochs):
@@ -75,6 +96,13 @@ def main():
                     ).sum() / seen.sum().clamp(min=1)
                     visibility = F.binary_cross_entropy_with_logits(v[:, 4], seen)
                     loss = seg + 1.2 * explore + pursue + 0.6 * visibility
+                    if chair:
+                        arrival_loss = F.binary_cross_entropy_with_logits(
+                            v[:, 5],
+                            arrival[batch].to(a.device),
+                            pos_weight=torch.tensor(2.0, device=a.device),
+                        )
+                        loss = loss + 0.75 * arrival_loss
                     if training:
                         opt.zero_grad()
                         loss.backward()
@@ -92,14 +120,16 @@ def main():
                 if stat[0] < best:
                     best = float(stat[0])
                     torch.save(net.state_dict(), a.out / "search-vision.pt")
-                    (a.out / "panel-fit.json").write_text(
+                    (
+                        a.out / ("chair-fit.json" if chair else "panel-fit.json")
+                    ).write_text(
                         json.dumps(
                             dict(
                                 epoch=ep + 1,
                                 train=len(train),
                                 validation=len(val),
                                 loss=best,
-                                seed=872165,
+                                seed=568241 if chair else 872165,
                             ),
                             indent=2,
                         )

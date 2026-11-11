@@ -2,12 +2,13 @@
 const studies={
   recovery:{file:'comparison.json',policy:'current',cases:[0,1,2,3,4],layout:'fresh',selected:1},
   peripheral:{file:'peripheral-report.json',policy:'peripheral',cases:[0,1,2,3,4,5],layout:'unseen2',selected:2},
+  chair:{file:'chair-report.json',policy:'chair',cases:[0,1,2,6],layout:'panel7',selected:0},
   panel:{file:'panel-report.json',policy:'panel',cases:[0,1,2,4],layout:'bin21',selected:1},
   bin:{file:'bin-report.json',policy:'bin',cases:[0,1,2,4],layout:'blind7',selected:4}
 };
 export async function openStudy(embedded=null){
   const params=new URLSearchParams(location.search),scene=params.get('scene');
-  const inferred=!scene||/^panel\d+$/.test(scene)?'panel':/^bin\d+$/.test(scene)?'bin':/^(edge|blind)/.test(scene)?'peripheral':'recovery';
+  const inferred=!scene||/^chair\d+$/.test(scene)?'chair':/^panel\d+$/.test(scene)?'panel':/^bin\d+$/.test(scene)?'bin':/^(edge|blind)/.test(scene)?'peripheral':'recovery';
   const chosen=params.get('study')??inferred;
   if(!Object.hasOwn(studies,chosen))throw Error('등록된 비교 실험을 선택하세요.');
   const read=async path=>{

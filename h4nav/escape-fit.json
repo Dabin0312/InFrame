@@ -1,0 +1,20 @@
+{
+  "development_suite_sha256": "b6a979dca050a1e9faf5c102962737e9745616f37d13229f2a91e47c27d0d4bb",
+  "visual": {
+    "epoch": 18,
+    "train": 11979,
+    "validation": 1543,
+    "loss": 0.21674198160568872,
+    "pose_mse": 0.007692300745596488,
+    "range_log_mae": 0.07946298470099768
+  },
+  "route": {
+    "epoch": 22,
+    "training_pairs": 466648,
+    "validation_pairs": 42422,
+    "direction_mse": 0.003662929853557476
+  },
+  "holdout_sha256": "f92ffde2596b3ba5b596e84c0b3f723b4964ea1679d3f400fc47955f7e4c6c7e",
+  "model_sha256": "105e8cbba5e45418d1f14a59eaada7765784ada8d42b83f207e30351377bc40f",
+  "parent_sha256": "c46f79c3d3cac2856258abc342c423ecda33061063c479f87d4c0b1f27096121"
+}

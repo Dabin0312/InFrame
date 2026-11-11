@@ -1,5 +1,7 @@
 # Castle · 목표 조건 H4
 
+[경계 우회 전후의 주행 경로와 첫 STOP](compare.html?study=escape&scene=chair2&case=0) · [기존 2번의 충돌과 인계 시점 RGB](escape-diagnosis.png)
+
 [같은 출발점에서 목표 바꿔보기](https://dabin0312.github.io/InFrame/demo/search.html) · [개선 전후 경로와 사진](compare.html) · [의자 탐색 비교](compare.html?study=chair&scene=panel7&case=0) · [벽면 구역에서 쓰레기통 찾기](compare.html?study=panel&scene=bin21&case=1) · [쓰레기통 유무 비교](compare.html?study=bin&scene=blind7&case=4) · [소화기 검증 기록](peripheral-report.json) · [이전 35쌍](compare.html?study=recovery) · [초기 H4 실험](report.json) · [학습 기록](fit.json)
 
 같은 시뮬레이터, 출발 좌표, 카메라 방향에서 목표 이름만 바꾼다. `worker.mjs`는 시작 시 이름을 받고 매 스텝 전방 RGB를 받는다. MobileCLIP이 이름을 임베딩하고 YOLOE가 같은 RGB에서 해당 이름의 후보를 찾는다. H4는 RGB 네 장과 후보 네 개, 텍스트 임베딩으로 전진·좌회전·우회전·STOP 중 최대 점수 행동을 실행한다. NavMesh, 자세, 물체 좌표, ID 마스크는 환경·교사·채점에서만 사용한다.
@@ -127,4 +129,25 @@ python h4nav/export-panel.py /tmp/chair-fit/search-vision.pt h4nav/panel-h4.onnx
 node h4nav/evaluate.cjs /tmp/chair-before panel chair
 node h4nav/evaluate.cjs /tmp/chair-after chair chair
 python h4nav/build-panel-report.py /tmp/chair-before /tmp/chair-after /tmp/chair-report --study chair
+```
+
+## 막힌 경계를 돌아 목표 다시 찾기
+
+`escape-h4.onnx`는 이전 H4와 세 목표에 공통으로 쓰는 시각 모델·우회 모델을 하나의 정책으로 실행한다. 시각 모델은 RGB에서 등록 물체의 마스크·가시성·거리와 Castle 안의 카메라 자세를 추정한다. 회전하거나 목표가 가려지면 직전 행동과 프레임 변화로 마지막 관측의 상대 방향·거리를 갱신한다. 우회 모델은 이 관측에서 다음 이동 방향을 예측한다. 지도·센서 자세·충돌 플래그·목표 좌표를 실행 입력으로 전달하지 않는다. 기존 H4의 행동 점수와 정지 판단을 사용하며, 탐색 회전과 충돌 후 회복 시간은 모델 안의 고정 규칙이다. 의자 접근 중 전진이 막히면 직전에 실제로 이동한 쪽과 시각 모델의 우회 방향을 참고한다. 선택한 쪽으로 이동한 거리를 기억하면서 모서리를 돈다. 이 검증은 같은 건물과 같은 3D 물체에서 출발점과 배치를 바꾼 결과다.
+
+두 모델을 먼저 고정하고 새 배치 24개에서 평가했다. 각 배치의 의자·쓰레기통·소화기와 의자 제거 조건에서 첫 RGB, 출발 자세, 장면 배치, 성공 기준, 120스텝 한도를 맞췄다. 기존 2번의 별도 실험은 같은 카메라와 행동을 각각 49·79스텝까지 재현한 후 남은 행동을 새 H4에 맡긴다. 인계 시 그전까지 실제로 실행한 행동과 RGB 이력을 사용한다. [배치와 시드](escape-holdout.json) · [학습 및 모델 해시](escape-fit.json) · [인계 실험 원본](escape-handoff.json)
+
+```sh
+node h4nav/evaluate.cjs /tmp/escape-before chair escape
+node h4nav/evaluate.cjs /tmp/escape-after escape escape
+python h4nav/build-panel-report.py /tmp/escape-before /tmp/escape-after /tmp/escape-report --study escape
+node h4nav/replay-escape.cjs /tmp/handoff.json
+```
+
+학습을 재현하려면 앞에서 설명한 `chair`, `panel`, `peripheral` 수집기로 카메라 영상을 준비한다. 같은 위치에서 의자를 뺀 영상과 원본은 같은 분할에 둔다. 우회 방향 시범은 학습용 바닥에서 표집한 점 쌍으로 만든다. [새 배치 경로·사진](escape-routes.png) · [오프라인 비교 화면](escape-viewer.zip)
+
+```sh
+python h4nav/train-escape-vision.py /tmp/chair-train /tmp/panel-train /tmp/h4-edge-rgb /tmp/escape-fit
+python h4nav/train-escape-route.py /tmp/escape-fit
+python h4nav/export-escape.py h4nav/chair-h4.onnx /tmp/escape-fit h4nav/base-h4.pt /tmp/escape-fit/escape-h4.onnx
 ```

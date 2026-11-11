@@ -58,7 +58,7 @@ $('run').onclick=async()=>{
 window.addEventListener('pagehide',()=>{env?.close();env=null;});
 try{
   study=await openStudy();floor=study.floor;
-  if(study.id==='chair' && !Array.from($('removed').options).some(o=>o.value==='0')){
+  if(study.cases.includes(6) && !Array.from($('removed').options).some(o=>o.value==='0')){
     $('removed').add(new Option('의자 제거','0'),1);
   }
   const layouts=$('layout'),params=new URLSearchParams(location.search);

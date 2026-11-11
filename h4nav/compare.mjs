@@ -15,7 +15,7 @@ function photo(r, key) {
   if(r.firstStop && r.audit.legacyView) details.push('등록 관측점 0.8 m '+({within:'이내',outside:'밖',unresolved:'미확정'}[r.audit.legacyView]));
   $(key+'Text').textContent = details.join(' · ');
 }
-function draw(tris,rows){
+function draw(tris,rows,showBlocked){
   const ctx=$('map').getContext('2d'),w=600,h=450;
   const pts=tris.flat(),xs=pts.map(p=>p[0]),zs=pts.map(p=>p[2]);
   const minX=Math.min(...xs),maxX=Math.max(...xs),minZ=Math.min(...zs),maxZ=Math.max(...zs);
@@ -26,6 +26,14 @@ function draw(tris,rows){
   rows.forEach((r,i)=>{
     ctx.strokeStyle=colours[i];ctx.lineWidth=i?3.5:5;ctx.setLineDash(i?[7,3]:[]);ctx.beginPath();
     [...r.trace,r.endpoint].forEach(({x,z},j)=>ctx[j?'lineTo':'moveTo'](...xy(x,z)));ctx.stroke();ctx.setLineDash([]);
+  });
+  if(showBlocked)rows.forEach((r,i)=>{
+    ctx.strokeStyle=colours[i];ctx.lineWidth=2;
+    r.trace.forEach((p,j)=>{
+      const next=r.trace[j+1]??r.endpoint;
+      if(p.a!==0||p.x!==next.x||p.z!==next.z)return;
+      const [x,y]=xy(p.x,p.z);ctx.beginPath();ctx.arc(x,y,i?4:6,0,Math.PI*2);ctx.stroke();
+    });
   });
   const r=rows[0],k=r.scoreKey;
   if(k>=0&&r.removed!==k){
@@ -53,6 +61,17 @@ async function main(){
     $('diagnosisImg').src=d.photo;
     $('studyInfo').textContent=report.description;
     $('json').href=study.file;
+    if(study.id==='escape'){
+      $('map').nextElementSibling.append('　◎ 전진이 막힌 위치');
+      const counts=report.metrics.blockedForward;
+      if(counts){
+        $('studyInfo').textContent+=' 막힌 전진 합계는 '+study.cases.map(k=>
+          names[k]+' '+counts[k].before+' → '+counts[k].after+'회').join(', ')+'입니다.';
+      }
+      $('diagnosis').querySelector('summary').textContent='기존 2번에서 전진을 여섯 번 막은 경계';
+      $('diagnosisImg').alt='중앙에 보였던 의자가 우회전 뒤 시야를 벗어나는 순간';
+      $('diagnosisImg').style.maxWidth='100%';
+    }
     if(study.id==='chair'){
       $('diagnosis').querySelector('summary').textContent='기존 의자 주행 7번과 22번의 카메라 관측';
       $('diagnosisImg').alt='등록 의자가 시야를 벗어난 순간과 출발 즉시 오정지한 벽면';
@@ -85,15 +104,15 @@ async function main(){
     if(ticket!==revision)return;
     const {before,after}=group.find(x=>x.case===i);
     const toggle=$('toggleBin');
-    const targetCase=study.id==='chair'?0:1;
-    const absentCase=study.id==='chair'?6:4;
-    toggle.hidden=!['bin','panel','chair'].includes(study.id)||![targetCase,absentCase].includes(i);
+    const targetCase=study.cases.includes(6)?0:1;
+    const absentCase=study.cases.includes(6)?6:4;
+    toggle.hidden=!['bin','panel','chair','escape'].includes(study.id)||![targetCase,absentCase].includes(i);
     if(!toggle.hidden){
       const target=names[targetCase];
       toggle.textContent='같은 배치에서 '+target+(i===targetCase?' 제거 보기':' 있음 보기');
       toggle.onclick=()=>{$('trial').value=String(i===targetCase?absentCase:targetCase);$('trial').dispatchEvent(new Event('change'));};
     }
-    draw(floor.tris,[before,after]);photo(before,'old');photo(after,'new');
+    draw(floor.tris,[before,after],study.id==='escape');photo(before,'old');photo(after,'new');
     $('facts').textContent='출발 X '+before.start.x.toFixed(2)+' m · Z '+before.start.z.toFixed(2)+' m · 방향 '+(before.start.yaw*180/Math.PI).toFixed(1)+'° · 두 정책 첫 RGB 해시 '+before.firstFrameSHA256.slice(0,12)+' 동일';
     $('live').href='../demo/search.html?study='+study.id+'&scene='+id+'&case='+i;
     $('table').replaceChildren(...group.map(p=>{const tr=document.createElement('tr');for(const label of [names[p.case],status(p.before),status(p.after)]){const td=document.createElement('td');td.textContent=label;tr.append(td);}return tr;}));

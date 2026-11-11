@@ -4,17 +4,18 @@ import {openDetector} from '../spatial/open-detector.mjs';
 ort.env.wasm.numThreads=1;
 ort.env.wasm.wasmPaths=new URL('../demo/vendor/',import.meta.url).href;
 let detector,student,embedding,history=[],channels,w,h,ctx,small;
+let escapeMemory=new Float32Array(20);
 let searchMemory=new Float32Array(9);
 let previousAction=-1,memory=new Float32Array(40);
 async function init(prompt,width,height){
-  w=width;h=height;searchMemory.fill(0);history=[];previousAction=-1;memory.fill(0);channels=new Map();
+  w=width;h=height;searchMemory.fill(0);escapeMemory.fill(0);history=[];previousAction=-1;memory.fill(0);channels=new Map();
   if(detector)await detector.release();embedding?.dispose();
   detector=await openDetector(prompt,w,h);
   embedding=new ort.Tensor('float32',detector.embedding,[1,512]);
-  const checkpoints={baseline:'baseline.onnx',current:'student.onnx',peripheral:'peripheral.onnx',bin:'bin-h4.onnx',panel:'panel-h4.onnx',chair:'chair-h4.onnx'};
-  const id=new URL(self.location.href).searchParams.get('policy')??'chair';
+  const checkpoints={baseline:'baseline.onnx',current:'student.onnx',peripheral:'peripheral.onnx',bin:'bin-h4.onnx',panel:'panel-h4.onnx',chair:'chair-h4.onnx',escape:'escape-h4.onnx'};
+  const id=new URL(self.location.href).searchParams.get('policy')??'escape';
   student??=await ort.InferenceSession.create(new URL(checkpoints[id],import.meta.url).href,{executionProviders:['wasm']});
-  memory=new Float32Array(['chair','panel','bin','peripheral'].includes(id)?44:40);
+  memory=new Float32Array(['escape','chair','panel','bin','peripheral'].includes(id)?44:40);
   ctx=new OffscreenCanvas(w,h).getContext('2d');small=new OffscreenCanvas(80,60).getContext('2d',{willReadFrequently:true});
 }
 function key(data){let k=2166136261;for(const byte of data)k=Math.imul(k^byte,16777619);return k>>>0;}
@@ -46,15 +47,17 @@ async function act(pixels){
     inputs.memory=new ort.Tensor('float32',memory,[1,1,memory.length]);
   }
   if(student.inputNames.includes('search_memory'))inputs.search_memory=new ort.Tensor('float32',searchMemory,[1,9]);
+  if(student.inputNames.includes('escape_memory'))inputs.escape_memory=new ort.Tensor('float32',escapeMemory,[1,20]);
   try{
-    const {action_logits,next_memory,next_search_memory}=await student.run(inputs);
+    const {action_logits,next_memory,next_search_memory,next_escape_memory}=await student.run(inputs);
+    if(next_escape_memory){escapeMemory=Float32Array.from(next_escape_memory.data);next_escape_memory.dispose();}
     if(next_search_memory){searchMemory=Float32Array.from(next_search_memory.data);next_search_memory.dispose();}
     if(next_memory){memory=Float32Array.from(next_memory.data);next_memory.dispose();}
     const logits=Array.from(action_logits.data);action_logits.dispose();
     if(!logits.every(Number.isFinite))throw Error('정책의 행동 점수를 읽을 수 없습니다.');
     previousAction=logits.indexOf(Math.max(...logits));
     return {action:previousAction,logits,proposal:Array.from(f.proposal)};
-  }finally{rgb.dispose();obs.dispose();inputs.previous_action?.dispose();inputs.memory?.dispose();inputs.camera?.dispose();inputs.search_memory?.dispose();}
+  }finally{rgb.dispose();obs.dispose();inputs.previous_action?.dispose();inputs.memory?.dispose();inputs.camera?.dispose();inputs.search_memory?.dispose();inputs.escape_memory?.dispose();}
 }
 self.onmessage=async({data})=>{
   try{

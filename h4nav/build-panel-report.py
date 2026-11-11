@@ -51,11 +51,12 @@ def main():
     p = argparse.ArgumentParser()
     for n in ("before", "after", "out"):
         p.add_argument(n, type=Path)
-    p.add_argument("--study", choices=["panel", "chair"], default="panel")
+    p.add_argument("--study", choices=["panel", "chair", "escape"], default="panel")
     a = p.parse_args()
-    chair = a.study == "chair"
+    escape = a.study == "escape"
+    chair = a.study in ("chair", "escape")
     prefix = a.study
-    prev = "panel" if chair else "bin"
+    prev = "chair" if escape else ("panel" if chair else "bin")
     absence = 6 if chair else 4
     sought = 0 if chair else 1
     a.out.mkdir(parents=True, exist_ok=True)
@@ -68,7 +69,8 @@ def main():
     )
     old = {
         k: v
-        for data in (["panel-holdout.json"] if chair else [])
+        for data in (["chair-holdout.json"] if escape else [])
+        + (["panel-holdout.json"] if chair else [])
         + [
             "bin-holdout.json",
             "confirmation.json",
@@ -79,9 +81,13 @@ def main():
     }
     new = suite["layouts"]
     dev = (
-        ["panel7", "panel22"]
-        if chair
-        else ["bin17", "bin19", "bin21", "bin23", "bin24"]
+        ["chair2"]
+        if escape
+        else (
+            ["panel7", "panel22"]
+            if chair
+            else ["bin17", "bin19", "bin21", "bin23", "bin24"]
+        )
     )
     labels = {
         "gallery": "실내 전역",
@@ -128,7 +134,7 @@ def main():
                 "anchors",
             ):
                 assert before[f] == after[f], (name, f)
-            if k in dev and (not chair or c < 3):
+            if k in dev and (escape or not chair or c < 3):
                 archived = next(
                     t["after"]
                     for t in load(ROOT / f"{prev}-trial-{k}.json")
@@ -177,6 +183,11 @@ def main():
         panelExit=dict(total=len(panels), **escape),
         diagnostic=summarize(diagnoses, absence),
     )
+    if escape:
+        metrics["blockedForward"] = {
+            str(case): measure([p for p in independent if p["case"] == case], "bumped")
+            for case in cases
+        }
     diagnosis = load(ROOT / f"{prefix}-diagnosis.json")
     report = dict(
         study=prefix,
@@ -190,9 +201,13 @@ def main():
         traces=traces,
         metrics=metrics,
         description=(
-            "같은 Castle의 실내 전역·주행 경계·벽면 구역에서 새 배치를 8개씩 고정했습니다. 같은 카메라와 가구 배치에서 등록 의자만 제거해 두 정책을 120스텝씩 비교했습니다. 기존 7·22번은 개발 사례로 별도 표시합니다."
-            if chair
-            else "같은 Castle에서 벽면 패널 구역 16곳, 실내 전역과 주행 경계 각 4곳을 모델 선택 전에 고정했습니다. 각 출발 자세에서 쓰레기통만 제거한 조건까지 두 정책을 각각 120스텝 한도로 실행했습니다. 기존 다섯 배치는 별도의 원인 재현용입니다."
+            "같은 Castle의 새 출발점·배치 24곳에서 두 정책에 같은 첫 화면과 목표 이름을 주었습니다. 실내 전역·경계·벽면 구역은 각각 8곳입니다. 기존 2번은 별도 원인 재현용입니다. 의자 제거 조건은 같은 배치에서 등록 의자만 뺐습니다."
+            if escape
+            else (
+                "같은 Castle의 실내 전역·주행 경계·벽면 구역에서 새 배치를 8개씩 고정했습니다. 같은 카메라와 가구 배치에서 등록 의자만 제거해 두 정책을 120스텝씩 비교했습니다. 기존 7·22번은 개발 사례로 별도 표시합니다."
+                if chair
+                else "같은 Castle에서 벽면 패널 구역 16곳, 실내 전역과 주행 경계 각 4곳을 모델 선택 전에 고정했습니다. 각 출발 자세에서 쓰레기통만 제거한 조건까지 두 정책을 각각 120스텝 한도로 실행했습니다. 기존 다섯 배치는 별도의 원인 재현용입니다."
+            )
         ),
         diagnosis=dict(
             caption=diagnosis["caption"],

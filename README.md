@@ -29,7 +29,7 @@ InFrame은 지정된 종류의 물체가 보이는 자리까지 이동하고, �
 
 1. **Semantic SLAM.** 7-Scenes Fire의 RGB-D 궤적과 분할 마스크를 결합해 실물 소화기 A·B를 지도에 등록하고 서로 다른 시점의 사진을 연결합니다.
 2. **ObjectNav.** Skokloster Castle 스캔에 소화기 C를 배치하고 지도 기반 교사의 성공 시범 297개로 학생 정책을 학습합니다. 개선한 4스텝 정책은 같은 건물의 예약 출발점 60곳 중 51곳에서 소화기가 보이는 위치에 정지했습니다.
-3. **Go2 interface.** Castle과 동일한 다목표 H4를 모의 어댑터에 연결했습니다. 같은 RGB에서 세 목표의 126개 행동과 첫 STOP이 일치했습니다. [재현 절차와 기록](h4nav/GO2.md) 실제 기체 주행은 후속 평가입니다.
+3. **Go2 interface.** Castle과 동일한 다목표 H4를 모의 어댑터에 연결했습니다. 같은 RGB에서 세 목표의 126개 행동과 첫 STOP이 일치했습니다. [속도 제한을 적용한 새 배치의 경로·정지 사진](https://dabin0312.github.io/InFrame/h4nav/closed-loop.html) · [재현 절차](h4nav/GO2.md). 실제 기체 주행은 후속 평가입니다.
 
 ## Run locally
 

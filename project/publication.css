@@ -59,7 +59,9 @@ html{scroll-behavior:smooth;scroll-padding-top:18px}body{background:#fff}.bar,ma
 @media(max-width:760px){.fw-steps{grid-template-columns:1fr;gap:13px}.fw-steps figure{display:grid;grid-template-columns:minmax(140px,42%) 1fr;align-items:center;gap:14px}.fw-steps li+li:before{display:none}.fw-steps figcaption{margin:0}.fw-policy{grid-template-columns:1fr;gap:6px}.fw-head h3{font-size:18px}.fw-head>span{font-size:12px}.fw-head{padding:10px 0}.fw-stamp{bottom:5px;left:5px;font-size:9px;padding:3px 4px}.fw-lane+.fw-lane{margin-top:23px}.fw-steps figcaption b{font-size:15px}.fw-steps figcaption span{font-size:13px}}
 @media(max-width:500px){.fw-steps figure{display:block}.fw-steps figcaption{margin-top:7px}.fw-steps{gap:23px}.fw-head{display:block;padding:12px 0}.fw-head>span{display:block;margin:3px 0 0 34px}.fw-stamp{bottom:8px;left:8px;font-size:11px;padding:4px 6px}.fw-policy{gap:14px}.fw-steps figcaption span{font-size:14px}}
 
-.system-plate { margin: 18px 0 0; }
+.system-plate { margin: 24px 0 0; }
 .system-plate picture, .system-plate img { display: block; width: 100%; }
-.system-plate img { height: auto; aspect-ratio: 1260 / 756; border: 1px solid var(--line); border-radius: 10px; }
-@media (max-width: 700px) { .system-plate img { aspect-ratio: 385 / 1480; } }
+.system-plate img { height: auto; }
+.system-plate figcaption { display: block; margin: 12px 0 0; color: var(--muted); font-size: 14px; line-height: 1.65; }
+.system-plate figcaption strong { color: var(--ink); }
+@media (max-width: 820px) { .system-plate picture { max-width: 480px; margin: 0 auto; } }

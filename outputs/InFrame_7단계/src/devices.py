@@ -48,8 +48,8 @@ class LocalPolicy:
 
 
 class FrontCamera:
-    def __init__(self, video, clock=time.monotonic):
-        self.video, self.clock = video, clock
+    def __init__(self, video, clock=time.monotonic, size=(192,144)):
+        self.video, self.clock, self.size = video, clock, size
 
     def read(self):
         # Start-of-request monotonic time conservatively includes camera and decode latency.
@@ -64,8 +64,8 @@ class FrontCamera:
             if image.width<2 or image.height<2:
                 raise ValueError('Invalid RGB image sample')
             image = image.convert('RGB')
-            if image.size!=(192,144):
-                image = ImageOps.fit(image,(192,144),method=Image.Resampling.BILINEAR)
+            if image.size!=self.size:
+                image = ImageOps.fit(image,self.size,method=Image.Resampling.BILINEAR)
             rgb = np.array(image, dtype=np.uint8, order='C')
         return stamp, rgb
 

@@ -97,7 +97,11 @@ def main():
     p.add_argument('--forward-limit',type=float,default=MAX_FORWARD)
     p.add_argument('--yaw-limit',type=float,default=MAX_YAW)
     p.add_argument('--log',type=Path)
+    p.add_argument('--goal', help='Run the multi-goal H4 using this text prompt')
+    p.add_argument('--recording', type=Path, help='NPZ containing a uint8 rgb sequence')
     args = p.parse_args()
+    if args.goal and args.backend == 'mock' and not args.recording:
+        p.error('Provide the Castle RGB recording for this goal with --recording')
     if args.backend=='go2' and not args.interface:
         p.error('Specify the DDS network interface for go2')
     if not (0<args.forward_limit<=MAX_FORWARD and 0<args.yaw_limit<=MAX_YAW):
@@ -105,15 +109,21 @@ def main():
     cancelled = threading.Event()
     for sig in (signal.SIGINT,signal.SIGTERM):
         signal.signal(sig, lambda *_: cancelled.set())
-    model = LocalPolicy()
+    if args.goal:
+        from multigoal import MultiGoalH4
+        model = MultiGoalH4(args.goal)
+    else:
+        model = LocalPolicy()
     if args.backend=='go2':
         sport,video = unitree_clients(args.interface)
     else:
         sport = MockSport()
-        video = MockVideo(RecordingCamera(ROOT/'results/habitat/media/FRESH-015-rgb.npz').rgb)
+        video = MockVideo(RecordingCamera(args.recording or ROOT/'results/habitat/media/FRESH-015-rgb.npz').rgb)
     events = []
     guard = MotionGuard(sport,emit=events.append,forward=args.forward_limit,yaw=args.yaw_limit)
-    result = run_session(FrontCamera(video),model,guard,cancelled)
+    result = run_session(FrontCamera(video, size=(160,120) if args.goal else (192,144)),model,guard,cancelled)
+    if args.goal:
+        result.update(goal=args.goal, actions=model.actions)
     if args.log:
         with args.log.open('x',encoding='utf-8') as fp:
             json.dump(dict(result=result,events=events),fp,ensure_ascii=False,indent=2)

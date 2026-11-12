@@ -37,7 +37,7 @@ The two-channel indoor detector uses the same YOLOE-11s weights, text encoder an
 
 The approach examples on the project page pair the gallery recording `3120aeb0b735e436` (frames at 12.00 and 28.00 s, a map derived with AlvaAR, and the associated chair detection; CC BY-NC-SA 4.0 as above) with the FRESH-015 Castle bin run (NavMesh, commanded velocities and robot-camera frame at 16.75 s). The Castle scan is credited in [project sources](../DATA-NOTICES.md) and the bin asset above. The gallery and Castle are separate scenes.
 
-The system diagram uses the registered Fire RGB frame, its Grounding DINO / SAM 2.1 masks, and a top view of its measured point cloud and object anchors. The upload thumbnail is the 12.00 s gallery frame credited above. The teacher path and four consecutive RGB frames (steps 40–43) come from Castle teacher demonstration C-train-000. Fire and Castle source conditions are provided in [project sources](../DATA-NOTICES.md).
+The system figure pairs the registered Fire RGB frame (seq-01, 000000) with a projection of its RGB-D cloud, camera path and object anchors. The Castle teacher path and frames 0, 44 and 88 come from C-train-000. The inference panels reproduce the last four RGB frames and final action logits of [Castle layout 13, chair, updated H4](../h4nav/escape-trial-escape13.json). Camera images are simulation observations of the credited Castle scan and object assets. The Go2 command diagram describes the v0.7 mock tests. [Dataset and asset credits](../DATA-NOTICES.md).
 
 ## Runtime text prompts
 

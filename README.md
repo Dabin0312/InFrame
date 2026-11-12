@@ -7,8 +7,8 @@ InFrame은 지정된 종류의 물체가 보이는 자리까지 이동하고, �
 [Project page](https://dabin0312.github.io/InFrame/) · [Try your own data](https://dabin0312.github.io/InFrame/demo/) · [목표 이름으로 H4 주행](https://dabin0312.github.io/InFrame/demo/search.html) · [주행 영상](https://dabin0312.github.io/InFrame/#run) · [Data & models](https://github.com/Dabin0312/InFrame/releases/tag/v0.7.0)
 
 <picture>
-  <source media="(max-width: 700px)" srcset="project/framework-mobile.png">
-  <img src="project/framework.png" alt="InFrame의 영상 입력, SLAM·의미 지도, Castle 교사 시범, 소화기 H4 학습과 Go2 모의 연결. 의자·쓰레기통은 NavMesh 주행과 YOLOE 연속 관측으로 정지한다.">
+  <source media="(max-width: 820px)" srcset="project/framework-mobile.png">
+  <img src="project/framework.png" alt="Fire RGB-D의 자세와 분할 마스크를 결합해 개체를 지도에 등록한다. Castle 교사 시범으로 학습한 다목표 H4는 목표 이름과 최근 RGB 네 장으로 전진·회전·정지를 선택한다. Go2 명령은 v0.7 소화기 정책으로 모의 검증했다.">
 </picture>
 
 ## Try your own data

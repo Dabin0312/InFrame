@@ -26,11 +26,10 @@
 <header><h2 id="method-title">시스템 프레임워크</h2></header>
 <figure class="system-plate">
   <picture>
-    <source media="(max-width: 700px)" srcset="project/framework-mobile.png">
-    <img src="project/framework.png?v=architecture" width="2520" height="1512" loading="lazy"
-         alt="Fire RGB-D는 ORB-SLAM3 자세와 Grounding DINO·SAM 2.1 마스크로 의미 지도를 구성한다. 업로드 영상은 AlvaAR와 YOLOE로 개체 위치를 삼각측량한다. Habitat 지도 교사의 Castle 소화기 성공 시범 297개로 CNN·GRU 기반 H4를 학습해 전진·회전·STOP을 Go2 모의 어댑터에 전달했다. 브라우저 H4에는 실영상 학습 정지 헤드를 추가했다. 의자·쓰레기통은 지도 기반 주행과 YOLOE 연속 관측으로 정지한다.">
+    <source media="(max-width: 820px)" srcset="project/framework-mobile.svg" width="400" height="1430">
+    <img src="project/framework.svg" width="1080" height="770" loading="lazy" alt="Fire RGB-D의 자세와 분할 마스크를 결합해 개체를 지도에 등록한다. Castle 교사 시범으로 학습한 다목표 H4는 목표 이름과 최근 RGB 네 장으로 전진·회전·정지를 선택한다. Go2 명령은 v0.7 소화기 정책으로 모의 검증했다.">
   </picture>
-<figcaption>초기 소화기 H4와 지도 기반 비교기의 구조입니다. <a href="demo/search.html">세 목표로 확장한 H4 실행 ↗</a></figcaption>
+  <figcaption><strong>그림 1.</strong> Fire의 실측 개체 지도(a), Castle 교사 시범(b), 의자 탐색의 첫 STOP까지 H4가 본 마지막 네 프레임과 행동 점수(c). Go2 모의 명령 시험(d)은 v0.7 소화기 정책으로 수행했습니다.</figcaption>
 </figure></section>
 <section class="band method" id="approach" aria-labelledby="approach-title">
 <header><h2 id="approach-title">접근 순서</h2></header>

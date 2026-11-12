@@ -1,5 +1,6 @@
 // The runtime boundary is intentionally narrow: one text prompt, then front RGB.
 import * as ort from '../demo/vendor/ort.wasm.min.mjs';
+import {visualChange} from './exposure.mjs';
 import {openDetector} from '../spatial/open-detector.mjs';
 ort.env.wasm.numThreads=1;
 ort.env.wasm.wasmPaths=new URL('../demo/vendor/',import.meta.url).href;
@@ -12,10 +13,10 @@ async function init(prompt,width,height){
   if(detector)await detector.release();embedding?.dispose();
   detector=await openDetector(prompt,w,h);
   embedding=new ort.Tensor('float32',detector.embedding,[1,512]);
-  const checkpoints={baseline:'baseline.onnx',current:'student.onnx',peripheral:'peripheral.onnx',bin:'bin-h4.onnx',panel:'panel-h4.onnx',chair:'chair-h4.onnx',escape:'escape-h4.onnx'};
-  const id=new URL(self.location.href).searchParams.get('policy')??'escape';
+  const checkpoints={baseline:'baseline.onnx',current:'student.onnx',peripheral:'peripheral.onnx',bin:'bin-h4.onnx',panel:'panel-h4.onnx',chair:'chair-h4.onnx',escape:'escape-h4.onnx',transfer:'transfer-h4.onnx'};
+  const id=new URL(self.location.href).searchParams.get('policy')??'transfer';
   student??=await ort.InferenceSession.create(new URL(checkpoints[id],import.meta.url).href,{executionProviders:['wasm']});
-  memory=new Float32Array(['escape','chair','panel','bin','peripheral'].includes(id)?44:40);
+  memory=new Float32Array(['transfer','escape','chair','panel','bin','peripheral'].includes(id)?44:40);
   ctx=new OffscreenCanvas(w,h).getContext('2d');small=new OffscreenCanvas(80,60).getContext('2d',{willReadFrequently:true});
 }
 function key(data){let k=2166136261;for(const byte of data)k=Math.imul(k^byte,16777619);return k>>>0;}
@@ -34,6 +35,11 @@ async function act(pixels){
   history.forEach((o,i)=>{seq.set(o.rgb,14400*i);proposals.set(o.proposal,5*i);});
   const rgb=new ort.Tensor('uint8',seq,[1,4,60,80,3]),obs=new ort.Tensor('float32',proposals,[1,4,5]);
   const inputs={rgb,goal_embedding:embedding,rgb_goal_proposals:obs};
+  if(student.inputNames.includes('visual_change')){
+    const [a,b,c,d]=history.map(frame=>frame.rgb);
+    inputs.visual_change=new ort.Tensor('float32',Float32Array.of(
+      visualChange(c,d),visualChange(b,d),visualChange(a,d),visualChange(a,c)),[1,4]);
+  }
   if(student.inputNames.includes('camera')){
     const camera=new Uint8Array(w*h*3);
     for(let i=0;i<w*h;i++){
@@ -57,7 +63,7 @@ async function act(pixels){
     if(!logits.every(Number.isFinite))throw Error('정책의 행동 점수를 읽을 수 없습니다.');
     previousAction=logits.indexOf(Math.max(...logits));
     return {action:previousAction,logits,proposal:Array.from(f.proposal)};
-  }finally{rgb.dispose();obs.dispose();inputs.previous_action?.dispose();inputs.memory?.dispose();inputs.camera?.dispose();inputs.search_memory?.dispose();inputs.escape_memory?.dispose();}
+  }finally{rgb.dispose();obs.dispose();inputs.previous_action?.dispose();inputs.memory?.dispose();inputs.camera?.dispose();inputs.visual_change?.dispose();inputs.search_memory?.dispose();inputs.escape_memory?.dispose();}
 }
 self.onmessage=async({data})=>{
   try{

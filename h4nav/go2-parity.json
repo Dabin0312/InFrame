@@ -1,0 +1,2778 @@
+{
+  "model": "transfer-h4.onnx",
+  "sha256": "184620618c098203cf8de7c2d1060e203a0703f09ee4dddec535d8860cac6851",
+  "cases": [
+    {
+      "goal": "chair",
+      "layout": "escape13",
+      "start": {
+        "x": 0.9286,
+        "z": 16.1608,
+        "yaw": 0.3302
+      },
+      "steps": 70,
+      "matched": 70,
+      "sim_stop": 70,
+      "mock_stop": 70,
+      "audit": {
+        "success": true,
+        "distance": 1.1768236026101704,
+        "centered": true,
+        "visiblePixels": 1979,
+        "visible": [
+          {
+            "pixels": 1979,
+            "box": [
+              57,
+              5,
+              120,
+              95
+            ]
+          },
+          {
+            "pixels": 0,
+            "box": [
+              160,
+              120,
+              -1,
+              -1
+            ]
+          },
+          {
+            "pixels": 134,
+            "box": [
+              10,
+              33,
+              27,
+              56
+            ]
+          }
+        ],
+        "legacyView": null,
+        "viewDistance": null
+      },
+      "final_rpc": "StopMove",
+      "max_request": [
+        0.88,
+        1.0471975511965976
+      ],
+      "max_sent": [
+        0.4,
+        1.0
+      ],
+      "trace": [
+        {
+          "step": 1,
+          "sim": 1,
+          "mock": 1,
+          "rgb_sha256": "3a19d5c3c3f9e96355070f71f957e1205491059edd7633c8af3ce622daa70415",
+          "same_rgb": true
+        },
+        {
+          "step": 2,
+          "sim": 1,
+          "mock": 1,
+          "rgb_sha256": "55985be462554ac3c22dfa7ff451dfd36d6ff8a7f99e8c13e559a670193199f7",
+          "same_rgb": true
+        },
+        {
+          "step": 3,
+          "sim": 1,
+          "mock": 1,
+          "rgb_sha256": "e79aa2b1f4de562a741fad4b547d06cf08abb35d559c6113feecc4b9d24e5c16",
+          "same_rgb": true
+        },
+        {
+          "step": 4,
+          "sim": 1,
+          "mock": 1,
+          "rgb_sha256": "92627953cda4cc8b052ae0a951f9fbc9ec137a4a4d8d09d518f654e1968e7ca3",
+          "same_rgb": true
+        },
+        {
+          "step": 5,
+          "sim": 1,
+          "mock": 1,
+          "rgb_sha256": "5d1bc89364b4719a5fa6e0291f8803e7abb459189b28d4e2a6aa4a4fae24326f",
+          "same_rgb": true
+        },
+        {
+          "step": 6,
+          "sim": 1,
+          "mock": 1,
+          "rgb_sha256": "b4fb09d3efaf208a837c22d35162ee5a076aaef78188ac44d43698ccb0aef8a4",
+          "same_rgb": true
+        },
+        {
+          "step": 7,
+          "sim": 1,
+          "mock": 1,
+          "rgb_sha256": "a2b92af53c98d36d875e2d41aff9ab810dd35b42503bb90908c8d2059dba31be",
+          "same_rgb": true
+        },
+        {
+          "step": 8,
+          "sim": 1,
+          "mock": 1,
+          "rgb_sha256": "89fec04a291c10afddb9db029971581295ee48e98c595dd2e5621545402dde75",
+          "same_rgb": true
+        },
+        {
+          "step": 9,
+          "sim": 1,
+          "mock": 1,
+          "rgb_sha256": "37b29b058cc9144262817bdecc55f9662cc75a5912052c40388efd1071c2a7a2",
+          "same_rgb": true
+        },
+        {
+          "step": 10,
+          "sim": 1,
+          "mock": 1,
+          "rgb_sha256": "4f5f607de4e955eba10bc94688dabb6ad91694c4037f61d502ec74d5b67e6d3b",
+          "same_rgb": true
+        },
+        {
+          "step": 11,
+          "sim": 1,
+          "mock": 1,
+          "rgb_sha256": "974b4af9db9c2c706c436984f85539323a961466fc5458bad0d0a922df304112",
+          "same_rgb": true
+        },
+        {
+          "step": 12,
+          "sim": 1,
+          "mock": 1,
+          "rgb_sha256": "13696897c97bd7be20126de14f5ba65163ba1e40d6af8d8d7fad92e71db976b7",
+          "same_rgb": true
+        },
+        {
+          "step": 13,
+          "sim": 1,
+          "mock": 1,
+          "rgb_sha256": "5dd702d7260688ccdc900a8a40c28785285a79c848a42c43b169691d77b52623",
+          "same_rgb": true
+        },
+        {
+          "step": 14,
+          "sim": 1,
+          "mock": 1,
+          "rgb_sha256": "931ae4104dc8a08289d8975d1f9166ccebffee3a069eac52c695b89a5db2fce4",
+          "same_rgb": true
+        },
+        {
+          "step": 15,
+          "sim": 1,
+          "mock": 1,
+          "rgb_sha256": "e44de81a521102a317abccab7a97dff966ad06ca52faa8b54ceb955f7c74f8a0",
+          "same_rgb": true
+        },
+        {
+          "step": 16,
+          "sim": 1,
+          "mock": 1,
+          "rgb_sha256": "760326c1061022d8e9bedd42e6a4ae9d7ed3553877c6f9779879f409379a4b78",
+          "same_rgb": true
+        },
+        {
+          "step": 17,
+          "sim": 1,
+          "mock": 1,
+          "rgb_sha256": "a02f210e7d0dc24eba4c5840ef42ad93115d510e6933bd2b323b26d256c86ea7",
+          "same_rgb": true
+        },
+        {
+          "step": 18,
+          "sim": 1,
+          "mock": 1,
+          "rgb_sha256": "7d8c9b77bc3984646f8143fe35ee7e9b39fa889fc88e408cf7d0ba87221c48b8",
+          "same_rgb": true
+        },
+        {
+          "step": 19,
+          "sim": 1,
+          "mock": 1,
+          "rgb_sha256": "5737b8238c74e3a95b15e06e32eb3352b571e165a7cd743a985e0c7dfbfb87f4",
+          "same_rgb": true
+        },
+        {
+          "step": 20,
+          "sim": 1,
+          "mock": 1,
+          "rgb_sha256": "376fe6b29efda07a39c1d756e267e870f871bda4933a2a013c3977f159145a5f",
+          "same_rgb": true
+        },
+        {
+          "step": 21,
+          "sim": 1,
+          "mock": 1,
+          "rgb_sha256": "56b5de903117c173f9b9714e5888d1cbdf67ff48c9025bfad724aa54a184b077",
+          "same_rgb": true
+        },
+        {
+          "step": 22,
+          "sim": 1,
+          "mock": 1,
+          "rgb_sha256": "94e43524ca6a7cc2492969c29eff272029d473109c1a8cdc16dfc6bca2cd9adb",
+          "same_rgb": true
+        },
+        {
+          "step": 23,
+          "sim": 1,
+          "mock": 1,
+          "rgb_sha256": "1fd6884e660d5535a617e2f47a527b508f927950ce664f12b98826076c2c2262",
+          "same_rgb": true
+        },
+        {
+          "step": 24,
+          "sim": 1,
+          "mock": 1,
+          "rgb_sha256": "d026d976fe955cd4a087c45e32742cdb64f489c0d7088c5e11a1618403d1ecd8",
+          "same_rgb": true
+        },
+        {
+          "step": 25,
+          "sim": 2,
+          "mock": 2,
+          "rgb_sha256": "3a19d5c3c3f9e96355070f71f957e1205491059edd7633c8af3ce622daa70415",
+          "same_rgb": true
+        },
+        {
+          "step": 26,
+          "sim": 2,
+          "mock": 2,
+          "rgb_sha256": "d026d976fe955cd4a087c45e32742cdb64f489c0d7088c5e11a1618403d1ecd8",
+          "same_rgb": true
+        },
+        {
+          "step": 27,
+          "sim": 2,
+          "mock": 2,
+          "rgb_sha256": "1fd6884e660d5535a617e2f47a527b508f927950ce664f12b98826076c2c2262",
+          "same_rgb": true
+        },
+        {
+          "step": 28,
+          "sim": 0,
+          "mock": 0,
+          "rgb_sha256": "94e43524ca6a7cc2492969c29eff272029d473109c1a8cdc16dfc6bca2cd9adb",
+          "same_rgb": true
+        },
+        {
+          "step": 29,
+          "sim": 0,
+          "mock": 0,
+          "rgb_sha256": "81cd1046caf3ee5d364b2620c6efb9f75eeab934c3d64e93371f1193aee976d5",
+          "same_rgb": true
+        },
+        {
+          "step": 30,
+          "sim": 0,
+          "mock": 0,
+          "rgb_sha256": "845c6b65d3fa05d79f3a2f99e23cf9d1fae45a4a3d1696c2c7f1d415b5a07740",
+          "same_rgb": true
+        },
+        {
+          "step": 31,
+          "sim": 0,
+          "mock": 0,
+          "rgb_sha256": "ceab0cd8a6db4879d0c570481fc4c6a8add3efe902c810b88ca41d4ec52f2fbc",
+          "same_rgb": true
+        },
+        {
+          "step": 32,
+          "sim": 0,
+          "mock": 0,
+          "rgb_sha256": "d2a5a541fc24d4107f52212af2d73f131915fb0587dc8837078aa6a32ef0b98d",
+          "same_rgb": true
+        },
+        {
+          "step": 33,
+          "sim": 0,
+          "mock": 0,
+          "rgb_sha256": "9d93a814b8d387c169519417935846c39db284a5efff9ef3c7f4bce9e0bd4ae6",
+          "same_rgb": true
+        },
+        {
+          "step": 34,
+          "sim": 0,
+          "mock": 0,
+          "rgb_sha256": "6f23053ae4a7b1de6a0bf94dabd87f3fc3f0bbff3ac2fbe39ac350295cb99da4",
+          "same_rgb": true
+        },
+        {
+          "step": 35,
+          "sim": 0,
+          "mock": 0,
+          "rgb_sha256": "2ea724a5d438b7278691b8a080bfbb6ae34840621dbe920909c89e5b3dfa04e8",
+          "same_rgb": true
+        },
+        {
+          "step": 36,
+          "sim": 0,
+          "mock": 0,
+          "rgb_sha256": "a8d5d9278c1cb6923736812b2270e91ff96e8b83b80de22741893a4fb2c86e99",
+          "same_rgb": true
+        },
+        {
+          "step": 37,
+          "sim": 0,
+          "mock": 0,
+          "rgb_sha256": "92aeebee98edc3097ce0352d9c25d71206ebec2ab3723fc584e817923152c3ea",
+          "same_rgb": true
+        },
+        {
+          "step": 38,
+          "sim": 0,
+          "mock": 0,
+          "rgb_sha256": "0ea21f56349e9e736ef87e7bb3a00cc9a7879177fce4a25fe5d8cf0bb87bb094",
+          "same_rgb": true
+        },
+        {
+          "step": 39,
+          "sim": 0,
+          "mock": 0,
+          "rgb_sha256": "309eacd4de9e742a091e037fcc764ed6c62c21e1f3087f3f044da3cb5a98eb0d",
+          "same_rgb": true
+        },
+        {
+          "step": 40,
+          "sim": 1,
+          "mock": 1,
+          "rgb_sha256": "ffe8a51d9b0dd6a734e2ecc5079825460fc24356af3e16524f2e2833b9e8e7a6",
+          "same_rgb": true
+        },
+        {
+          "step": 41,
+          "sim": 1,
+          "mock": 1,
+          "rgb_sha256": "a89d63d0c1c62192e84dac9188921f6fc42163b7ac22dc8428441860a660dff6",
+          "same_rgb": true
+        },
+        {
+          "step": 42,
+          "sim": 1,
+          "mock": 1,
+          "rgb_sha256": "b97c38e1738e872e03554516aeb543b3208576495d501d2c62267b05cd57e863",
+          "same_rgb": true
+        },
+        {
+          "step": 43,
+          "sim": 1,
+          "mock": 1,
+          "rgb_sha256": "017552d81847d5d3e50b57a274195b934b1181e1d165ac41d528f83b218576ee",
+          "same_rgb": true
+        },
+        {
+          "step": 44,
+          "sim": 1,
+          "mock": 1,
+          "rgb_sha256": "036c4938645324101ea205b33367787482808244c0067d577e9ad4c53b5b0b73",
+          "same_rgb": true
+        },
+        {
+          "step": 45,
+          "sim": 2,
+          "mock": 2,
+          "rgb_sha256": "c76393f737c8b0d18eb9cd906e8049fc467cede1b305aa5371f6c73e5f1b29a1",
+          "same_rgb": true
+        },
+        {
+          "step": 46,
+          "sim": 2,
+          "mock": 2,
+          "rgb_sha256": "036c4938645324101ea205b33367787482808244c0067d577e9ad4c53b5b0b73",
+          "same_rgb": true
+        },
+        {
+          "step": 47,
+          "sim": 0,
+          "mock": 0,
+          "rgb_sha256": "017552d81847d5d3e50b57a274195b934b1181e1d165ac41d528f83b218576ee",
+          "same_rgb": true
+        },
+        {
+          "step": 48,
+          "sim": 1,
+          "mock": 1,
+          "rgb_sha256": "5171c135b5389b1ec0dce12a1d94a479ae2ad81944053012510c923e12866cbf",
+          "same_rgb": true
+        },
+        {
+          "step": 49,
+          "sim": 0,
+          "mock": 0,
+          "rgb_sha256": "2925e24ca9dfe4fa6b00161f5fe9bc7ab0a619361ced29a380f069276f2fe0ff",
+          "same_rgb": true
+        },
+        {
+          "step": 50,
+          "sim": 0,
+          "mock": 0,
+          "rgb_sha256": "b9c154095ee6f68fc9bf8e922c03b80d2a1c86fe3c612911697f87a90427640e",
+          "same_rgb": true
+        },
+        {
+          "step": 51,
+          "sim": 0,
+          "mock": 0,
+          "rgb_sha256": "17f5f4453747777bee406ce20ea963e1e2bf7d3e0cc22b15e63aff3488467a2e",
+          "same_rgb": true
+        },
+        {
+          "step": 52,
+          "sim": 0,
+          "mock": 0,
+          "rgb_sha256": "6af787f3fd702840df673e38a9eae8d74095fb38f7746614c0e05b51505f5be2",
+          "same_rgb": true
+        },
+        {
+          "step": 53,
+          "sim": 0,
+          "mock": 0,
+          "rgb_sha256": "0f8e758a72ace8d4b90bc13ad7e9726833ca57469744753b3c3c267ae70ffd6a",
+          "same_rgb": true
+        },
+        {
+          "step": 54,
+          "sim": 1,
+          "mock": 1,
+          "rgb_sha256": "71b2a88aca3ab30652eb2e5778d478e148fcae9866dae1d3e62ccb4571cc9e4f",
+          "same_rgb": true
+        },
+        {
+          "step": 55,
+          "sim": 1,
+          "mock": 1,
+          "rgb_sha256": "02e5b142856af14211ba2d5ec4c8874f926ca9cdcba1c8f6c64a0c5cfae38a06",
+          "same_rgb": true
+        },
+        {
+          "step": 56,
+          "sim": 0,
+          "mock": 0,
+          "rgb_sha256": "193a3efacfb044c212045999854586cd76f6166a66e014583f0990c264f0a34f",
+          "same_rgb": true
+        },
+        {
+          "step": 57,
+          "sim": 0,
+          "mock": 0,
+          "rgb_sha256": "c30b6653623b35b2c6a6533d311b23c5b87f2ac5fab92afa25a87647df8e4355",
+          "same_rgb": true
+        },
+        {
+          "step": 58,
+          "sim": 1,
+          "mock": 1,
+          "rgb_sha256": "1566b880a565172ebfc1c8048331cbe684262cd18484dc07f7f4b0cd02afcbfa",
+          "same_rgb": true
+        },
+        {
+          "step": 59,
+          "sim": 0,
+          "mock": 0,
+          "rgb_sha256": "5e905f8eab42efd5ca819c70e10865a83a761aab915a0c0c0bcde1d5786f9f87",
+          "same_rgb": true
+        },
+        {
+          "step": 60,
+          "sim": 0,
+          "mock": 0,
+          "rgb_sha256": "12d87bd513544314377d5947cd6efbb0097f0b4aed42e9c2a6c17c87617201c4",
+          "same_rgb": true
+        },
+        {
+          "step": 61,
+          "sim": 0,
+          "mock": 0,
+          "rgb_sha256": "7f5de796c5d24c23972dcaccbffda3df522c18896747d1b216b7751c95097516",
+          "same_rgb": true
+        },
+        {
+          "step": 62,
+          "sim": 0,
+          "mock": 0,
+          "rgb_sha256": "32a713acbd89513df33ea7b2da0984e4e06b80c79a6b215f2f2b28cf8f285ecb",
+          "same_rgb": true
+        },
+        {
+          "step": 63,
+          "sim": 0,
+          "mock": 0,
+          "rgb_sha256": "69f6065f99757882a86a2e3c67d14a33b703bad42e2bbb8460e746f6918618ba",
+          "same_rgb": true
+        },
+        {
+          "step": 64,
+          "sim": 0,
+          "mock": 0,
+          "rgb_sha256": "d49f77bb4b9a2bb458868184713213b6c507ff377354dbb74a21bbb20c60477a",
+          "same_rgb": true
+        },
+        {
+          "step": 65,
+          "sim": 1,
+          "mock": 1,
+          "rgb_sha256": "a054c6a60ec531bb9cdee3a1a499d4ebee6bb5ab5558a86fecb25b9ce1b0735a",
+          "same_rgb": true
+        },
+        {
+          "step": 66,
+          "sim": 0,
+          "mock": 0,
+          "rgb_sha256": "ced59a940ba0c6b62668aacef86e0a22af434f8b4869eed8a83ad7168a794d4e",
+          "same_rgb": true
+        },
+        {
+          "step": 67,
+          "sim": 0,
+          "mock": 0,
+          "rgb_sha256": "7c649885f51850dd9db09b4a353077fc8d8b9d78da3f6e6e6e791b1fe57e032b",
+          "same_rgb": true
+        },
+        {
+          "step": 68,
+          "sim": 1,
+          "mock": 1,
+          "rgb_sha256": "0904b4bd9a67c3387b20f925f3bf1355ae5ccd6567f51f89aa336210c937de2f",
+          "same_rgb": true
+        },
+        {
+          "step": 69,
+          "sim": 0,
+          "mock": 0,
+          "rgb_sha256": "4a540b5adf6576239899068d910465e5af1689be9b853c421e85487aad562e95",
+          "same_rgb": true
+        },
+        {
+          "step": 70,
+          "sim": 3,
+          "mock": 3,
+          "rgb_sha256": "90ef5cf67af32f849afea24816c6fd1773f4537a01df7177b168e5f39a4445a5",
+          "same_rgb": true
+        }
+      ]
+    },
+    {
+      "goal": "trash can",
+      "layout": "escape13",
+      "start": {
+        "x": 0.9286,
+        "z": 16.1608,
+        "yaw": 0.3302
+      },
+      "steps": 31,
+      "matched": 31,
+      "sim_stop": 31,
+      "mock_stop": 31,
+      "audit": {
+        "success": true,
+        "distance": 0.9893644724031744,
+        "centered": true,
+        "visiblePixels": 5144,
+        "visible": [
+          {
+            "pixels": 0,
+            "box": [
+              160,
+              120,
+              -1,
+              -1
+            ]
+          },
+          {
+            "pixels": 5144,
+            "box": [
+              47,
+              0,
+              103,
+              102
+            ]
+          },
+          {
+            "pixels": 0,
+            "box": [
+              160,
+              120,
+              -1,
+              -1
+            ]
+          }
+        ],
+        "legacyView": null,
+        "viewDistance": null
+      },
+      "final_rpc": "StopMove",
+      "max_request": [
+        0.88,
+        1.0471975511965976
+      ],
+      "max_sent": [
+        0.4,
+        1.0
+      ],
+      "trace": [
+        {
+          "step": 1,
+          "sim": 1,
+          "mock": 1,
+          "rgb_sha256": "3a19d5c3c3f9e96355070f71f957e1205491059edd7633c8af3ce622daa70415",
+          "same_rgb": true
+        },
+        {
+          "step": 2,
+          "sim": 1,
+          "mock": 1,
+          "rgb_sha256": "55985be462554ac3c22dfa7ff451dfd36d6ff8a7f99e8c13e559a670193199f7",
+          "same_rgb": true
+        },
+        {
+          "step": 3,
+          "sim": 1,
+          "mock": 1,
+          "rgb_sha256": "e79aa2b1f4de562a741fad4b547d06cf08abb35d559c6113feecc4b9d24e5c16",
+          "same_rgb": true
+        },
+        {
+          "step": 4,
+          "sim": 1,
+          "mock": 1,
+          "rgb_sha256": "92627953cda4cc8b052ae0a951f9fbc9ec137a4a4d8d09d518f654e1968e7ca3",
+          "same_rgb": true
+        },
+        {
+          "step": 5,
+          "sim": 1,
+          "mock": 1,
+          "rgb_sha256": "5d1bc89364b4719a5fa6e0291f8803e7abb459189b28d4e2a6aa4a4fae24326f",
+          "same_rgb": true
+        },
+        {
+          "step": 6,
+          "sim": 1,
+          "mock": 1,
+          "rgb_sha256": "b4fb09d3efaf208a837c22d35162ee5a076aaef78188ac44d43698ccb0aef8a4",
+          "same_rgb": true
+        },
+        {
+          "step": 7,
+          "sim": 1,
+          "mock": 1,
+          "rgb_sha256": "a2b92af53c98d36d875e2d41aff9ab810dd35b42503bb90908c8d2059dba31be",
+          "same_rgb": true
+        },
+        {
+          "step": 8,
+          "sim": 1,
+          "mock": 1,
+          "rgb_sha256": "89fec04a291c10afddb9db029971581295ee48e98c595dd2e5621545402dde75",
+          "same_rgb": true
+        },
+        {
+          "step": 9,
+          "sim": 1,
+          "mock": 1,
+          "rgb_sha256": "37b29b058cc9144262817bdecc55f9662cc75a5912052c40388efd1071c2a7a2",
+          "same_rgb": true
+        },
+        {
+          "step": 10,
+          "sim": 1,
+          "mock": 1,
+          "rgb_sha256": "4f5f607de4e955eba10bc94688dabb6ad91694c4037f61d502ec74d5b67e6d3b",
+          "same_rgb": true
+        },
+        {
+          "step": 11,
+          "sim": 1,
+          "mock": 1,
+          "rgb_sha256": "974b4af9db9c2c706c436984f85539323a961466fc5458bad0d0a922df304112",
+          "same_rgb": true
+        },
+        {
+          "step": 12,
+          "sim": 0,
+          "mock": 0,
+          "rgb_sha256": "13696897c97bd7be20126de14f5ba65163ba1e40d6af8d8d7fad92e71db976b7",
+          "same_rgb": true
+        },
+        {
+          "step": 13,
+          "sim": 0,
+          "mock": 0,
+          "rgb_sha256": "6e366ab40e2bbe6acbe3a8a5b2d4f72990c5791a24e6f00985a2faa1e51c7cb2",
+          "same_rgb": true
+        },
+        {
+          "step": 14,
+          "sim": 0,
+          "mock": 0,
+          "rgb_sha256": "26cbf1c3c6432342a35ee4ba37a88f217c1d52f84593e70efe49ac5448138cf0",
+          "same_rgb": true
+        },
+        {
+          "step": 15,
+          "sim": 2,
+          "mock": 2,
+          "rgb_sha256": "b8f4ffdd3f15ae92e41159c0d022402eef28febf79fd87b8cd77c7864edff6f3",
+          "same_rgb": true
+        },
+        {
+          "step": 16,
+          "sim": 0,
+          "mock": 0,
+          "rgb_sha256": "a6478f6575da1080e8c630d044c19269acf6f4d8eabc3e867f1ab61512f99df4",
+          "same_rgb": true
+        },
+        {
+          "step": 17,
+          "sim": 0,
+          "mock": 0,
+          "rgb_sha256": "3ce5124458bea9d77505ea0dfe568103d8fe7165a158f7eceefc397d96a2c2e0",
+          "same_rgb": true
+        },
+        {
+          "step": 18,
+          "sim": 0,
+          "mock": 0,
+          "rgb_sha256": "8039e1f90212a02c6331ec336e417a42554782b428b749ecb6015352856d1fb6",
+          "same_rgb": true
+        },
+        {
+          "step": 19,
+          "sim": 0,
+          "mock": 0,
+          "rgb_sha256": "2f974c5c307059b08354a052a51220a7cccb23524e0cadc1f3c8949aa03fd676",
+          "same_rgb": true
+        },
+        {
+          "step": 20,
+          "sim": 2,
+          "mock": 2,
+          "rgb_sha256": "4cdf112a85ae0a59b939bb80f877e76e03d170df910ae678529c84ca38d98c15",
+          "same_rgb": true
+        },
+        {
+          "step": 21,
+          "sim": 0,
+          "mock": 0,
+          "rgb_sha256": "56f6a0bca23ea726d81ca169dec624fb960fb7bac4e24ef9b7adb7ebdec43cf8",
+          "same_rgb": true
+        },
+        {
+          "step": 22,
+          "sim": 0,
+          "mock": 0,
+          "rgb_sha256": "5a34043cca1ed5743f1dbd73049adb9515dbf1aa4a567dcc0f234614fdb556ca",
+          "same_rgb": true
+        },
+        {
+          "step": 23,
+          "sim": 0,
+          "mock": 0,
+          "rgb_sha256": "1a36968e8c7c7806b030e2ceb20cfed885bcc27c7d2ed2f243fda163042d745c",
+          "same_rgb": true
+        },
+        {
+          "step": 24,
+          "sim": 1,
+          "mock": 1,
+          "rgb_sha256": "46d6d7b58f49756f9cff712d5f7a5e35b3aadf09598d0960da4116d30cb77e02",
+          "same_rgb": true
+        },
+        {
+          "step": 25,
+          "sim": 0,
+          "mock": 0,
+          "rgb_sha256": "fef86dff5259d7e5fbb96e6fdf49e87dd5f461939523b97068b7887848693f26",
+          "same_rgb": true
+        },
+        {
+          "step": 26,
+          "sim": 0,
+          "mock": 0,
+          "rgb_sha256": "e58f51d6f074ad86092651b51bf587452c547a9b14b732ebab585c2270007d19",
+          "same_rgb": true
+        },
+        {
+          "step": 27,
+          "sim": 0,
+          "mock": 0,
+          "rgb_sha256": "3aca6531b01dbc742e6023e19b3f37c85442a46705e161f296c1593ebcca6b3c",
+          "same_rgb": true
+        },
+        {
+          "step": 28,
+          "sim": 0,
+          "mock": 0,
+          "rgb_sha256": "e1cb0a610c9335eaff8af7483a85e807cf349a56d985ee50d2a384391a8f2b31",
+          "same_rgb": true
+        },
+        {
+          "step": 29,
+          "sim": 0,
+          "mock": 0,
+          "rgb_sha256": "deac1d099cf382ac9f28f34559e251fa6560328248e1642103a7245475c3194f",
+          "same_rgb": true
+        },
+        {
+          "step": 30,
+          "sim": 0,
+          "mock": 0,
+          "rgb_sha256": "7e7435ceaae92dae125090b960a07ac159588961aae84d480e568bff95e5f2a9",
+          "same_rgb": true
+        },
+        {
+          "step": 31,
+          "sim": 3,
+          "mock": 3,
+          "rgb_sha256": "2339e37411de920cbf3dfc9bc18070d2cb2002057ab3e193f2b4478b3f739cac",
+          "same_rgb": true
+        }
+      ]
+    },
+    {
+      "goal": "fire extinguisher",
+      "layout": "escape13",
+      "start": {
+        "x": 0.9286,
+        "z": 16.1608,
+        "yaw": 0.3302
+      },
+      "steps": 25,
+      "matched": 25,
+      "sim_stop": 25,
+      "mock_stop": 25,
+      "audit": {
+        "success": true,
+        "distance": 0.8993490052444421,
+        "centered": true,
+        "visiblePixels": 2040,
+        "visible": [
+          {
+            "pixels": 0,
+            "box": [
+              160,
+              120,
+              -1,
+              -1
+            ]
+          },
+          {
+            "pixels": 0,
+            "box": [
+              160,
+              120,
+              -1,
+              -1
+            ]
+          },
+          {
+            "pixels": 2040,
+            "box": [
+              44,
+              9,
+              93,
+              100
+            ]
+          }
+        ],
+        "legacyView": null,
+        "viewDistance": null
+      },
+      "final_rpc": "StopMove",
+      "max_request": [
+        0.88,
+        1.0471975511965976
+      ],
+      "max_sent": [
+        0.4,
+        1.0
+      ],
+      "trace": [
+        {
+          "step": 1,
+          "sim": 1,
+          "mock": 1,
+          "rgb_sha256": "3a19d5c3c3f9e96355070f71f957e1205491059edd7633c8af3ce622daa70415",
+          "same_rgb": true
+        },
+        {
+          "step": 2,
+          "sim": 1,
+          "mock": 1,
+          "rgb_sha256": "55985be462554ac3c22dfa7ff451dfd36d6ff8a7f99e8c13e559a670193199f7",
+          "same_rgb": true
+        },
+        {
+          "step": 3,
+          "sim": 1,
+          "mock": 1,
+          "rgb_sha256": "e79aa2b1f4de562a741fad4b547d06cf08abb35d559c6113feecc4b9d24e5c16",
+          "same_rgb": true
+        },
+        {
+          "step": 4,
+          "sim": 1,
+          "mock": 1,
+          "rgb_sha256": "92627953cda4cc8b052ae0a951f9fbc9ec137a4a4d8d09d518f654e1968e7ca3",
+          "same_rgb": true
+        },
+        {
+          "step": 5,
+          "sim": 1,
+          "mock": 1,
+          "rgb_sha256": "5d1bc89364b4719a5fa6e0291f8803e7abb459189b28d4e2a6aa4a4fae24326f",
+          "same_rgb": true
+        },
+        {
+          "step": 6,
+          "sim": 0,
+          "mock": 0,
+          "rgb_sha256": "b4fb09d3efaf208a837c22d35162ee5a076aaef78188ac44d43698ccb0aef8a4",
+          "same_rgb": true
+        },
+        {
+          "step": 7,
+          "sim": 0,
+          "mock": 0,
+          "rgb_sha256": "9cc170c73da23d70b1769cf3650a51da61c8499b3bfedfe7b2ac8735529aaa30",
+          "same_rgb": true
+        },
+        {
+          "step": 8,
+          "sim": 0,
+          "mock": 0,
+          "rgb_sha256": "561eb2c286c749d7b9ae4d79fe35c1bc248070b3991450e56d3b967e967a5502",
+          "same_rgb": true
+        },
+        {
+          "step": 9,
+          "sim": 0,
+          "mock": 0,
+          "rgb_sha256": "5a9ccf400e7bbd79d2d0511285073792c4906e831d50beb73bfb15d99541f9a3",
+          "same_rgb": true
+        },
+        {
+          "step": 10,
+          "sim": 0,
+          "mock": 0,
+          "rgb_sha256": "5f7c1c03ddbebb5397ad5b49fa0eb8ec07e8b0715ae8d2743d1ef49324383f28",
+          "same_rgb": true
+        },
+        {
+          "step": 11,
+          "sim": 0,
+          "mock": 0,
+          "rgb_sha256": "9649e6b0500bf68f37b8f40eee877cacaba7c1c5a7612295661e91610911b9ae",
+          "same_rgb": true
+        },
+        {
+          "step": 12,
+          "sim": 0,
+          "mock": 0,
+          "rgb_sha256": "25965449cd89ea25d50918ceee32bd2bd35431109c5a32acaaca109b1a7e24bf",
+          "same_rgb": true
+        },
+        {
+          "step": 13,
+          "sim": 0,
+          "mock": 0,
+          "rgb_sha256": "97e5b630d2940a18209a953ea170d75e0f0c7b4d41c8f6752a76140ff9f04ef2",
+          "same_rgb": true
+        },
+        {
+          "step": 14,
+          "sim": 2,
+          "mock": 2,
+          "rgb_sha256": "d7821f9559fd963272fe4afdda4314d18a01b339ff7c6103bd5914fbc8235c02",
+          "same_rgb": true
+        },
+        {
+          "step": 15,
+          "sim": 0,
+          "mock": 0,
+          "rgb_sha256": "e29c234a8398dfb6c80a8b5583b6f4bd59bace7ac4eb25ede6eb6832e69f093f",
+          "same_rgb": true
+        },
+        {
+          "step": 16,
+          "sim": 2,
+          "mock": 2,
+          "rgb_sha256": "0e55efe98ad32f496d17f0620a14ba723b627641d91a2d96bfa4e83cf90c421b",
+          "same_rgb": true
+        },
+        {
+          "step": 17,
+          "sim": 0,
+          "mock": 0,
+          "rgb_sha256": "fbd2cb5b0a01b573843379b90f442edcba937c7dc4a88a17cddcf5de12692a83",
+          "same_rgb": true
+        },
+        {
+          "step": 18,
+          "sim": 0,
+          "mock": 0,
+          "rgb_sha256": "4484bf58dc88a04d675a494e89ea7306fc7f07a582ac30b83cb5aa8b862a796e",
+          "same_rgb": true
+        },
+        {
+          "step": 19,
+          "sim": 0,
+          "mock": 0,
+          "rgb_sha256": "30e1b374b60af07af382b6f627e74f69a142d02dd0e829fe6f41fd2f46776ce6",
+          "same_rgb": true
+        },
+        {
+          "step": 20,
+          "sim": 2,
+          "mock": 2,
+          "rgb_sha256": "14e8182a06feaef19a4fe93f0fe98378959296a04c96b5632bffddac0dd32e7f",
+          "same_rgb": true
+        },
+        {
+          "step": 21,
+          "sim": 0,
+          "mock": 0,
+          "rgb_sha256": "8446a3415bfaa773d9bfd31c0af3b9c01ca68569c608b40badb27db281557ba8",
+          "same_rgb": true
+        },
+        {
+          "step": 22,
+          "sim": 0,
+          "mock": 0,
+          "rgb_sha256": "d028ae3d46d168e13b127f69ffd4f0a7c8374297c052bb32a3fc5ed4e9625e14",
+          "same_rgb": true
+        },
+        {
+          "step": 23,
+          "sim": 0,
+          "mock": 0,
+          "rgb_sha256": "98fcc59457d7ee8fcd49a3fa19feb3a18b68ce8496d727320e9043c712c83201",
+          "same_rgb": true
+        },
+        {
+          "step": 24,
+          "sim": 0,
+          "mock": 0,
+          "rgb_sha256": "feff584e3db37388a7aacd00f212cc95364ea294beb59639a5f4ff04fbb72c6a",
+          "same_rgb": true
+        },
+        {
+          "step": 25,
+          "sim": 3,
+          "mock": 3,
+          "rgb_sha256": "1238409a5e947bd22dfabd3986ab43d65023e9f59cebf2f89b9c46b9f0325648",
+          "same_rgb": true
+        }
+      ]
+    }
+  ],
+  "camera_cut": {
+    "reason": "frame_timeout",
+    "last_move": [
+      0.4,
+      0.0,
+      0.0
+    ],
+    "delay_s": 0.5011512499768287,
+    "final_twist": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "actions_after_timeout": 0
+  },
+  "exposure": {
+    "summary": {
+      "stationary": {
+        "pairs": 54,
+        "old_advanced": 54,
+        "new_advanced": 0
+      },
+      "translated": {
+        "pairs": 61,
+        "old_advanced": 61,
+        "new_advanced": 61
+      }
+    },
+    "records": [
+      {
+        "goal": "chair",
+        "step": 1,
+        "kind": "stationary",
+        "exposure": "offset +12",
+        "advanced": [
+          true,
+          false
+        ]
+      },
+      {
+        "goal": "chair",
+        "step": 1,
+        "kind": "stationary",
+        "exposure": "offset -15",
+        "advanced": [
+          true,
+          false
+        ]
+      },
+      {
+        "goal": "chair",
+        "step": 1,
+        "kind": "stationary",
+        "exposure": "gain 1.3",
+        "advanced": [
+          true,
+          false
+        ]
+      },
+      {
+        "goal": "chair",
+        "step": 1,
+        "kind": "stationary",
+        "exposure": "gain 0.72",
+        "advanced": [
+          true,
+          false
+        ]
+      },
+      {
+        "goal": "chair",
+        "step": 1,
+        "kind": "stationary",
+        "exposure": "gamma 0.75",
+        "advanced": [
+          true,
+          false
+        ]
+      },
+      {
+        "goal": "chair",
+        "step": 1,
+        "kind": "stationary",
+        "exposure": "gamma 1.4",
+        "advanced": [
+          true,
+          false
+        ]
+      },
+      {
+        "goal": "chair",
+        "step": 36,
+        "kind": "stationary",
+        "exposure": "offset +12",
+        "advanced": [
+          true,
+          false
+        ]
+      },
+      {
+        "goal": "chair",
+        "step": 36,
+        "kind": "stationary",
+        "exposure": "offset -15",
+        "advanced": [
+          true,
+          false
+        ]
+      },
+      {
+        "goal": "chair",
+        "step": 36,
+        "kind": "stationary",
+        "exposure": "gain 1.3",
+        "advanced": [
+          true,
+          false
+        ]
+      },
+      {
+        "goal": "chair",
+        "step": 36,
+        "kind": "stationary",
+        "exposure": "gain 0.72",
+        "advanced": [
+          true,
+          false
+        ]
+      },
+      {
+        "goal": "chair",
+        "step": 36,
+        "kind": "stationary",
+        "exposure": "gamma 0.75",
+        "advanced": [
+          true,
+          false
+        ]
+      },
+      {
+        "goal": "chair",
+        "step": 36,
+        "kind": "stationary",
+        "exposure": "gamma 1.4",
+        "advanced": [
+          true,
+          false
+        ]
+      },
+      {
+        "goal": "chair",
+        "step": 70,
+        "kind": "stationary",
+        "exposure": "offset +12",
+        "advanced": [
+          true,
+          false
+        ]
+      },
+      {
+        "goal": "chair",
+        "step": 70,
+        "kind": "stationary",
+        "exposure": "offset -15",
+        "advanced": [
+          true,
+          false
+        ]
+      },
+      {
+        "goal": "chair",
+        "step": 70,
+        "kind": "stationary",
+        "exposure": "gain 1.3",
+        "advanced": [
+          true,
+          false
+        ]
+      },
+      {
+        "goal": "chair",
+        "step": 70,
+        "kind": "stationary",
+        "exposure": "gain 0.72",
+        "advanced": [
+          true,
+          false
+        ]
+      },
+      {
+        "goal": "chair",
+        "step": 70,
+        "kind": "stationary",
+        "exposure": "gamma 0.75",
+        "advanced": [
+          true,
+          false
+        ]
+      },
+      {
+        "goal": "chair",
+        "step": 70,
+        "kind": "stationary",
+        "exposure": "gamma 1.4",
+        "advanced": [
+          true,
+          false
+        ]
+      },
+      {
+        "goal": "chair",
+        "step": 28,
+        "kind": "translated",
+        "advanced": [
+          true,
+          true
+        ]
+      },
+      {
+        "goal": "chair",
+        "step": 29,
+        "kind": "translated",
+        "advanced": [
+          true,
+          true
+        ]
+      },
+      {
+        "goal": "chair",
+        "step": 30,
+        "kind": "translated",
+        "advanced": [
+          true,
+          true
+        ]
+      },
+      {
+        "goal": "chair",
+        "step": 31,
+        "kind": "translated",
+        "advanced": [
+          true,
+          true
+        ]
+      },
+      {
+        "goal": "chair",
+        "step": 32,
+        "kind": "translated",
+        "advanced": [
+          true,
+          true
+        ]
+      },
+      {
+        "goal": "chair",
+        "step": 33,
+        "kind": "translated",
+        "advanced": [
+          true,
+          true
+        ]
+      },
+      {
+        "goal": "chair",
+        "step": 34,
+        "kind": "translated",
+        "advanced": [
+          true,
+          true
+        ]
+      },
+      {
+        "goal": "chair",
+        "step": 35,
+        "kind": "translated",
+        "advanced": [
+          true,
+          true
+        ]
+      },
+      {
+        "goal": "chair",
+        "step": 36,
+        "kind": "translated",
+        "advanced": [
+          true,
+          true
+        ]
+      },
+      {
+        "goal": "chair",
+        "step": 37,
+        "kind": "translated",
+        "advanced": [
+          true,
+          true
+        ]
+      },
+      {
+        "goal": "chair",
+        "step": 38,
+        "kind": "translated",
+        "advanced": [
+          true,
+          true
+        ]
+      },
+      {
+        "goal": "chair",
+        "step": 39,
+        "kind": "translated",
+        "advanced": [
+          true,
+          true
+        ]
+      },
+      {
+        "goal": "chair",
+        "step": 47,
+        "kind": "translated",
+        "advanced": [
+          true,
+          true
+        ]
+      },
+      {
+        "goal": "chair",
+        "step": 49,
+        "kind": "translated",
+        "advanced": [
+          true,
+          true
+        ]
+      },
+      {
+        "goal": "chair",
+        "step": 50,
+        "kind": "translated",
+        "advanced": [
+          true,
+          true
+        ]
+      },
+      {
+        "goal": "chair",
+        "step": 51,
+        "kind": "translated",
+        "advanced": [
+          true,
+          true
+        ]
+      },
+      {
+        "goal": "chair",
+        "step": 52,
+        "kind": "translated",
+        "advanced": [
+          true,
+          true
+        ]
+      },
+      {
+        "goal": "chair",
+        "step": 53,
+        "kind": "translated",
+        "advanced": [
+          true,
+          true
+        ]
+      },
+      {
+        "goal": "chair",
+        "step": 56,
+        "kind": "translated",
+        "advanced": [
+          true,
+          true
+        ]
+      },
+      {
+        "goal": "chair",
+        "step": 57,
+        "kind": "translated",
+        "advanced": [
+          true,
+          true
+        ]
+      },
+      {
+        "goal": "chair",
+        "step": 59,
+        "kind": "translated",
+        "advanced": [
+          true,
+          true
+        ]
+      },
+      {
+        "goal": "chair",
+        "step": 60,
+        "kind": "translated",
+        "advanced": [
+          true,
+          true
+        ]
+      },
+      {
+        "goal": "chair",
+        "step": 61,
+        "kind": "translated",
+        "advanced": [
+          true,
+          true
+        ]
+      },
+      {
+        "goal": "chair",
+        "step": 62,
+        "kind": "translated",
+        "advanced": [
+          true,
+          true
+        ]
+      },
+      {
+        "goal": "chair",
+        "step": 63,
+        "kind": "translated",
+        "advanced": [
+          true,
+          true
+        ]
+      },
+      {
+        "goal": "chair",
+        "step": 64,
+        "kind": "translated",
+        "advanced": [
+          true,
+          true
+        ]
+      },
+      {
+        "goal": "chair",
+        "step": 66,
+        "kind": "translated",
+        "advanced": [
+          true,
+          true
+        ]
+      },
+      {
+        "goal": "chair",
+        "step": 67,
+        "kind": "translated",
+        "advanced": [
+          true,
+          true
+        ]
+      },
+      {
+        "goal": "chair",
+        "step": 69,
+        "kind": "translated",
+        "advanced": [
+          true,
+          true
+        ]
+      },
+      {
+        "goal": "bin",
+        "step": 1,
+        "kind": "stationary",
+        "exposure": "offset +12",
+        "advanced": [
+          true,
+          false
+        ]
+      },
+      {
+        "goal": "bin",
+        "step": 1,
+        "kind": "stationary",
+        "exposure": "offset -15",
+        "advanced": [
+          true,
+          false
+        ]
+      },
+      {
+        "goal": "bin",
+        "step": 1,
+        "kind": "stationary",
+        "exposure": "gain 1.3",
+        "advanced": [
+          true,
+          false
+        ]
+      },
+      {
+        "goal": "bin",
+        "step": 1,
+        "kind": "stationary",
+        "exposure": "gain 0.72",
+        "advanced": [
+          true,
+          false
+        ]
+      },
+      {
+        "goal": "bin",
+        "step": 1,
+        "kind": "stationary",
+        "exposure": "gamma 0.75",
+        "advanced": [
+          true,
+          false
+        ]
+      },
+      {
+        "goal": "bin",
+        "step": 1,
+        "kind": "stationary",
+        "exposure": "gamma 1.4",
+        "advanced": [
+          true,
+          false
+        ]
+      },
+      {
+        "goal": "bin",
+        "step": 16,
+        "kind": "stationary",
+        "exposure": "offset +12",
+        "advanced": [
+          true,
+          false
+        ]
+      },
+      {
+        "goal": "bin",
+        "step": 16,
+        "kind": "stationary",
+        "exposure": "offset -15",
+        "advanced": [
+          true,
+          false
+        ]
+      },
+      {
+        "goal": "bin",
+        "step": 16,
+        "kind": "stationary",
+        "exposure": "gain 1.3",
+        "advanced": [
+          true,
+          false
+        ]
+      },
+      {
+        "goal": "bin",
+        "step": 16,
+        "kind": "stationary",
+        "exposure": "gain 0.72",
+        "advanced": [
+          true,
+          false
+        ]
+      },
+      {
+        "goal": "bin",
+        "step": 16,
+        "kind": "stationary",
+        "exposure": "gamma 0.75",
+        "advanced": [
+          true,
+          false
+        ]
+      },
+      {
+        "goal": "bin",
+        "step": 16,
+        "kind": "stationary",
+        "exposure": "gamma 1.4",
+        "advanced": [
+          true,
+          false
+        ]
+      },
+      {
+        "goal": "bin",
+        "step": 31,
+        "kind": "stationary",
+        "exposure": "offset +12",
+        "advanced": [
+          true,
+          false
+        ]
+      },
+      {
+        "goal": "bin",
+        "step": 31,
+        "kind": "stationary",
+        "exposure": "offset -15",
+        "advanced": [
+          true,
+          false
+        ]
+      },
+      {
+        "goal": "bin",
+        "step": 31,
+        "kind": "stationary",
+        "exposure": "gain 1.3",
+        "advanced": [
+          true,
+          false
+        ]
+      },
+      {
+        "goal": "bin",
+        "step": 31,
+        "kind": "stationary",
+        "exposure": "gain 0.72",
+        "advanced": [
+          true,
+          false
+        ]
+      },
+      {
+        "goal": "bin",
+        "step": 31,
+        "kind": "stationary",
+        "exposure": "gamma 0.75",
+        "advanced": [
+          true,
+          false
+        ]
+      },
+      {
+        "goal": "bin",
+        "step": 31,
+        "kind": "stationary",
+        "exposure": "gamma 1.4",
+        "advanced": [
+          true,
+          false
+        ]
+      },
+      {
+        "goal": "bin",
+        "step": 12,
+        "kind": "translated",
+        "advanced": [
+          true,
+          true
+        ]
+      },
+      {
+        "goal": "bin",
+        "step": 13,
+        "kind": "translated",
+        "advanced": [
+          true,
+          true
+        ]
+      },
+      {
+        "goal": "bin",
+        "step": 14,
+        "kind": "translated",
+        "advanced": [
+          true,
+          true
+        ]
+      },
+      {
+        "goal": "bin",
+        "step": 16,
+        "kind": "translated",
+        "advanced": [
+          true,
+          true
+        ]
+      },
+      {
+        "goal": "bin",
+        "step": 17,
+        "kind": "translated",
+        "advanced": [
+          true,
+          true
+        ]
+      },
+      {
+        "goal": "bin",
+        "step": 18,
+        "kind": "translated",
+        "advanced": [
+          true,
+          true
+        ]
+      },
+      {
+        "goal": "bin",
+        "step": 19,
+        "kind": "translated",
+        "advanced": [
+          true,
+          true
+        ]
+      },
+      {
+        "goal": "bin",
+        "step": 21,
+        "kind": "translated",
+        "advanced": [
+          true,
+          true
+        ]
+      },
+      {
+        "goal": "bin",
+        "step": 22,
+        "kind": "translated",
+        "advanced": [
+          true,
+          true
+        ]
+      },
+      {
+        "goal": "bin",
+        "step": 23,
+        "kind": "translated",
+        "advanced": [
+          true,
+          true
+        ]
+      },
+      {
+        "goal": "bin",
+        "step": 25,
+        "kind": "translated",
+        "advanced": [
+          true,
+          true
+        ]
+      },
+      {
+        "goal": "bin",
+        "step": 26,
+        "kind": "translated",
+        "advanced": [
+          true,
+          true
+        ]
+      },
+      {
+        "goal": "bin",
+        "step": 27,
+        "kind": "translated",
+        "advanced": [
+          true,
+          true
+        ]
+      },
+      {
+        "goal": "bin",
+        "step": 28,
+        "kind": "translated",
+        "advanced": [
+          true,
+          true
+        ]
+      },
+      {
+        "goal": "bin",
+        "step": 29,
+        "kind": "translated",
+        "advanced": [
+          true,
+          true
+        ]
+      },
+      {
+        "goal": "bin",
+        "step": 30,
+        "kind": "translated",
+        "advanced": [
+          true,
+          true
+        ]
+      },
+      {
+        "goal": "extinguisher",
+        "step": 1,
+        "kind": "stationary",
+        "exposure": "offset +12",
+        "advanced": [
+          true,
+          false
+        ]
+      },
+      {
+        "goal": "extinguisher",
+        "step": 1,
+        "kind": "stationary",
+        "exposure": "offset -15",
+        "advanced": [
+          true,
+          false
+        ]
+      },
+      {
+        "goal": "extinguisher",
+        "step": 1,
+        "kind": "stationary",
+        "exposure": "gain 1.3",
+        "advanced": [
+          true,
+          false
+        ]
+      },
+      {
+        "goal": "extinguisher",
+        "step": 1,
+        "kind": "stationary",
+        "exposure": "gain 0.72",
+        "advanced": [
+          true,
+          false
+        ]
+      },
+      {
+        "goal": "extinguisher",
+        "step": 1,
+        "kind": "stationary",
+        "exposure": "gamma 0.75",
+        "advanced": [
+          true,
+          false
+        ]
+      },
+      {
+        "goal": "extinguisher",
+        "step": 1,
+        "kind": "stationary",
+        "exposure": "gamma 1.4",
+        "advanced": [
+          true,
+          false
+        ]
+      },
+      {
+        "goal": "extinguisher",
+        "step": 13,
+        "kind": "stationary",
+        "exposure": "offset +12",
+        "advanced": [
+          true,
+          false
+        ]
+      },
+      {
+        "goal": "extinguisher",
+        "step": 13,
+        "kind": "stationary",
+        "exposure": "offset -15",
+        "advanced": [
+          true,
+          false
+        ]
+      },
+      {
+        "goal": "extinguisher",
+        "step": 13,
+        "kind": "stationary",
+        "exposure": "gain 1.3",
+        "advanced": [
+          true,
+          false
+        ]
+      },
+      {
+        "goal": "extinguisher",
+        "step": 13,
+        "kind": "stationary",
+        "exposure": "gain 0.72",
+        "advanced": [
+          true,
+          false
+        ]
+      },
+      {
+        "goal": "extinguisher",
+        "step": 13,
+        "kind": "stationary",
+        "exposure": "gamma 0.75",
+        "advanced": [
+          true,
+          false
+        ]
+      },
+      {
+        "goal": "extinguisher",
+        "step": 13,
+        "kind": "stationary",
+        "exposure": "gamma 1.4",
+        "advanced": [
+          true,
+          false
+        ]
+      },
+      {
+        "goal": "extinguisher",
+        "step": 25,
+        "kind": "stationary",
+        "exposure": "offset +12",
+        "advanced": [
+          true,
+          false
+        ]
+      },
+      {
+        "goal": "extinguisher",
+        "step": 25,
+        "kind": "stationary",
+        "exposure": "offset -15",
+        "advanced": [
+          true,
+          false
+        ]
+      },
+      {
+        "goal": "extinguisher",
+        "step": 25,
+        "kind": "stationary",
+        "exposure": "gain 1.3",
+        "advanced": [
+          true,
+          false
+        ]
+      },
+      {
+        "goal": "extinguisher",
+        "step": 25,
+        "kind": "stationary",
+        "exposure": "gain 0.72",
+        "advanced": [
+          true,
+          false
+        ]
+      },
+      {
+        "goal": "extinguisher",
+        "step": 25,
+        "kind": "stationary",
+        "exposure": "gamma 0.75",
+        "advanced": [
+          true,
+          false
+        ]
+      },
+      {
+        "goal": "extinguisher",
+        "step": 25,
+        "kind": "stationary",
+        "exposure": "gamma 1.4",
+        "advanced": [
+          true,
+          false
+        ]
+      },
+      {
+        "goal": "extinguisher",
+        "step": 6,
+        "kind": "translated",
+        "advanced": [
+          true,
+          true
+        ]
+      },
+      {
+        "goal": "extinguisher",
+        "step": 7,
+        "kind": "translated",
+        "advanced": [
+          true,
+          true
+        ]
+      },
+      {
+        "goal": "extinguisher",
+        "step": 8,
+        "kind": "translated",
+        "advanced": [
+          true,
+          true
+        ]
+      },
+      {
+        "goal": "extinguisher",
+        "step": 9,
+        "kind": "translated",
+        "advanced": [
+          true,
+          true
+        ]
+      },
+      {
+        "goal": "extinguisher",
+        "step": 10,
+        "kind": "translated",
+        "advanced": [
+          true,
+          true
+        ]
+      },
+      {
+        "goal": "extinguisher",
+        "step": 11,
+        "kind": "translated",
+        "advanced": [
+          true,
+          true
+        ]
+      },
+      {
+        "goal": "extinguisher",
+        "step": 12,
+        "kind": "translated",
+        "advanced": [
+          true,
+          true
+        ]
+      },
+      {
+        "goal": "extinguisher",
+        "step": 13,
+        "kind": "translated",
+        "advanced": [
+          true,
+          true
+        ]
+      },
+      {
+        "goal": "extinguisher",
+        "step": 15,
+        "kind": "translated",
+        "advanced": [
+          true,
+          true
+        ]
+      },
+      {
+        "goal": "extinguisher",
+        "step": 17,
+        "kind": "translated",
+        "advanced": [
+          true,
+          true
+        ]
+      },
+      {
+        "goal": "extinguisher",
+        "step": 18,
+        "kind": "translated",
+        "advanced": [
+          true,
+          true
+        ]
+      },
+      {
+        "goal": "extinguisher",
+        "step": 19,
+        "kind": "translated",
+        "advanced": [
+          true,
+          true
+        ]
+      },
+      {
+        "goal": "extinguisher",
+        "step": 21,
+        "kind": "translated",
+        "advanced": [
+          true,
+          true
+        ]
+      },
+      {
+        "goal": "extinguisher",
+        "step": 22,
+        "kind": "translated",
+        "advanced": [
+          true,
+          true
+        ]
+      },
+      {
+        "goal": "extinguisher",
+        "step": 23,
+        "kind": "translated",
+        "advanced": [
+          true,
+          true
+        ]
+      },
+      {
+        "goal": "extinguisher",
+        "step": 24,
+        "kind": "translated",
+        "advanced": [
+          true,
+          true
+        ]
+      }
+    ]
+  },
+  "footprint": {
+    "footRadius": 0.38,
+    "maxReach": 0.3395390301817264,
+    "before": {
+      "at8": {
+        "p": [
+          4.713599797931522,
+          0.0348999984562397,
+          12.693349050152465
+        ],
+        "yaw": 2.7751963987816852,
+        "travel": 4.3874999999999975,
+        "clearance": 0.04246348182149014,
+        "reach": 0.33910475020342606,
+        "outside": [
+          "FL",
+          "RL"
+        ]
+      },
+      "min": 0.03661036622951188,
+      "steps": 46,
+      "blocked": 0,
+      "poses": [
+        [
+          6.320837020874023,
+          0.06762912259825037,
+          8.613851547241211
+        ],
+        [
+          6.320837020874023,
+          0.06762912259825037,
+          8.613851547241211
+        ],
+        [
+          6.320837020874023,
+          0.06762912259825037,
+          8.613851547241211
+        ],
+        [
+          6.320837020874023,
+          0.06762912259825037,
+          8.613851547241211
+        ],
+        [
+          6.320837020874023,
+          0.06762912259825037,
+          8.613851547241211
+        ],
+        [
+          6.2370973985495635,
+          0.05990000069141388,
+          8.75281227419839
+        ],
+        [
+          6.171712720195467,
+          0.059900000691413886,
+          8.90155679465185
+        ],
+        [
+          6.111529378511927,
+          0.05990000069141388,
+          9.052499698418202
+        ],
+        [
+          6.052774887126136,
+          0.06609151503483288,
+          9.204005889445543
+        ],
+        [
+          5.994411154967643,
+          0.06625107918044733,
+          9.355663141958363
+        ],
+        [
+          5.936154421443998,
+          0.0664060205153077,
+          9.507361536178013
+        ],
+        [
+          5.87792707114619,
+          0.06655969259234207,
+          9.659071211752341
+        ],
+        [
+          5.819707818302309,
+          0.0667130149033866,
+          9.81078399498829
+        ],
+        [
+          5.7614908057160825,
+          0.06686624044878645,
+          9.962497637899698
+        ],
+        [
+          5.703274415581266,
+          0.056934391243520566,
+          10.114211519662916
+        ],
+        [
+          5.645058199202216,
+          0.04485958839473402,
+          10.26592546810045
+        ],
+        [
+          5.586842031574692,
+          0.04091296558980944,
+          10.417639435245087
+        ],
+        [
+          5.528625877702408,
+          0.04084372319825363,
+          10.569353407667927
+        ],
+        [
+          5.470409727735188,
+          0.04077448041020632,
+          10.721067381589231
+        ],
+        [
+          5.412193578884203,
+          0.04070523750882457,
+          10.87278135593886
+        ],
+        [
+          5.3539774303547265,
+          0.04063599457479919,
+          11.024495330411861
+        ],
+        [
+          5.295761281918649,
+          0.04056675163129074,
+          11.176209304920702
+        ],
+        [
+          5.2375451335099665,
+          0.04049750868500092,
+          11.327923279440052
+        ],
+        [
+          5.179328985109406,
+          0.040428265737886306,
+          11.47963725396252
+        ],
+        [
+          5.121112836711286,
+          0.04035902279052404,
+          11.631351228485924
+        ],
+        [
+          5.062896688313909,
+          0.04028977984308628,
+          11.783065203009613
+        ],
+        [
+          5.004680539916763,
+          0.04022053689562512,
+          11.93477917753339
+        ],
+        [
+          4.946464391519689,
+          0.04015129394815663,
+          12.086493152057194
+        ],
+        [
+          4.88824824312264,
+          0.04008205100068557,
+          12.23820712658101
+        ],
+        [
+          4.830032094725598,
+          0.03604919190016642,
+          12.389921101104825
+        ],
+        [
+          4.771815946328559,
+          0.03512195403494826,
+          12.541635075628642
+        ],
+        [
+          4.713599797931522,
+          0.0348999984562397,
+          12.693349050152465
+        ],
+        [
+          4.655383649534485,
+          0.03489999845623971,
+          12.845063024676287
+        ],
+        [
+          4.597167501137449,
+          0.0348999984562397,
+          12.99677699920011
+        ],
+        [
+          4.548583750568724,
+          0.0348999984562397,
+          13.123388499600056
+        ],
+        [
+          4.504814061169268,
+          0.0348999984562397,
+          13.279653385151343
+        ],
+        [
+          4.4808706216796805,
+          0.0348999984562397,
+          13.440353621592898
+        ],
+        [
+          4.463908183408457,
+          0.0348999984562397,
+          13.601962555564697
+        ],
+        [
+          4.449498815948114,
+          0.0348999984562397,
+          13.7638219498426
+        ],
+        [
+          4.4360881305278745,
+          0.0348999984562397,
+          13.925767546939278
+        ],
+        [
+          4.423110629882769,
+          0.0348999984562397,
+          14.087748497480872
+        ],
+        [
+          4.411849605250451,
+          0.0348999984562397,
+          14.230790408665651
+        ],
+        [
+          4.411849605250451,
+          0.0348999984562397,
+          14.230790408665651
+        ],
+        [
+          4.411849605250451,
+          0.0348999984562397,
+          14.230790408665651
+        ],
+        [
+          4.411849605250451,
+          0.0348999984562397,
+          14.230790408665651
+        ],
+        [
+          4.411849605250451,
+          0.0348999984562397,
+          14.230790408665651
+        ]
+      ],
+      "reached": true
+    },
+    "after": {
+      "at8": {
+        "p": [
+          4.735265384738014,
+          0.03589262387708807,
+          11.543038528131667
+        ],
+        "yaw": 2.759315631445565,
+        "travel": 3.5388047970935435,
+        "clearance": 0.9743370709397473,
+        "reach": 0.33620088795529496,
+        "outside": []
+      },
+      "min": 0.4153166865825792,
+      "steps": 62,
+      "blocked": 0,
+      "poses": [
+        [
+          6.287513940287961,
+          0.06161956674867034,
+          8.555680091482506
+        ],
+        [
+          6.269652185691428,
+          0.05990000069141388,
+          8.527259645837864
+        ],
+        [
+          6.269652185691428,
+          0.05990000069141388,
+          8.527259645837864
+        ],
+        [
+          6.269652185691428,
+          0.05990000069141388,
+          8.527259645837864
+        ],
+        [
+          6.269652185691428,
+          0.05990000069141388,
+          8.527259645837864
+        ],
+        [
+          6.269652185691428,
+          0.05990000069141388,
+          8.527259645837864
+        ],
+        [
+          6.269652185691428,
+          0.05990000069141388,
+          8.527259645837864
+        ],
+        [
+          6.147219852036655,
+          0.05990000069141388,
+          8.634102082236835
+        ],
+        [
+          6.026708703749778,
+          0.059900000691413886,
+          8.74311157693643
+        ],
+        [
+          5.907100169742877,
+          0.05990000069141388,
+          8.85311150005727
+        ],
+        [
+          5.828301507874985,
+          0.061488010584805505,
+          8.926288884621203
+        ],
+        [
+          5.789041578380632,
+          0.06403055618924576,
+          8.963028083557315
+        ],
+        [
+          5.769472863440575,
+          0.06538817844267919,
+          8.981463286549397
+        ],
+        [
+          5.769472863440575,
+          0.06538817844267919,
+          8.981463286549397
+        ],
+        [
+          5.769472863440575,
+          0.06538817844267919,
+          8.981463286549397
+        ],
+        [
+          5.706182308962792,
+          0.07300848720778763,
+          9.131128633376106
+        ],
+        [
+          5.644822516570186,
+          0.0805360095629205,
+          9.281598437316868
+        ],
+        [
+          5.583998148869301,
+          0.08080220809706407,
+          9.432285667627719
+        ],
+        [
+          5.5233224774052125,
+          0.07520013901348234,
+          9.583032848402116
+        ],
+        [
+          5.462688258675213,
+          0.07537717350740232,
+          9.733796708425624
+        ],
+        [
+          5.402065650910888,
+          0.07555302176063858,
+          9.884565237719686
+        ],
+        [
+          5.341446312895513,
+          0.07150666409061995,
+          10.03533508171506
+        ],
+        [
+          5.280827901167491,
+          0.06604415233956275,
+          10.1861052981358
+        ],
+        [
+          5.220209753584087,
+          0.06058167188340665,
+          10.336875620757844
+        ],
+        [
+          5.159591681880221,
+          0.055119200417183316,
+          10.487645973887709
+        ],
+        [
+          5.098973632153586,
+          0.049656731554742595,
+          10.638416335853645
+        ],
+        [
+          5.038355588851412,
+          0.04419426345344871,
+          10.78918670040257
+        ],
+        [
+          4.977737547447069,
+          0.03873179557700297,
+          10.93995706571453
+        ],
+        [
+          4.917119506610133,
+          0.03498983298432311,
+          11.090727431254617
+        ],
+        [
+          4.856501465945209,
+          0.03529076328217827,
+          11.241497796863865
+        ],
+        [
+          4.795883425333288,
+          0.0355916935796875,
+          11.392268162494418
+        ],
+        [
+          4.735265384738014,
+          0.03589262387708807,
+          11.543038528131667
+        ],
+        [
+          4.674647344148093,
+          0.0361935541744537,
+          11.693808893771068
+        ],
+        [
+          4.614029303559944,
+          0.03649448447180777,
+          11.844579259411182
+        ],
+        [
+          4.553411262972401,
+          0.03679541476915788,
+          11.99534962505154
+        ],
+        [
+          4.492793222385077,
+          0.03709634506650655,
+          12.146119990691986
+        ],
+        [
+          4.432175181797837,
+          0.03739727536385469,
+          12.296890356332463
+        ],
+        [
+          4.371557141210632,
+          0.037698205661202605,
+          12.447660721972957
+        ],
+        [
+          4.310939100623443,
+          0.037999135958550395,
+          12.598431087613456
+        ],
+        [
+          4.280469550311716,
+          0.03816539644588543,
+          12.674215543806724
+        ],
+        [
+          4.2652347751558555,
+          0.038184264458388996,
+          12.712107771903362
+        ],
+        [
+          4.2652347751558555,
+          0.038184264458388996,
+          12.712107771903362
+        ],
+        [
+          4.254180977126813,
+          0.036519737991477695,
+          12.874200364052827
+        ],
+        [
+          4.250626390393777,
+          0.0348999984562397,
+          13.036658237844716
+        ],
+        [
+          4.24952102190972,
+          0.0348999984562397,
+          13.199154117096649
+        ],
+        [
+          4.249240993596757,
+          0.0348999984562397,
+          13.361653832414602
+        ],
+        [
+          4.2492508271456435,
+          0.0348999984562397,
+          13.524153826356091
+        ],
+        [
+          4.249368246584968,
+          0.0348999984562397,
+          13.686653783057652
+        ],
+        [
+          4.249528834380158,
+          0.0348999984562397,
+          13.849153703546419
+        ],
+        [
+          4.249708945976796,
+          0.0348999984562397,
+          14.011653603689336
+        ],
+        [
+          4.249849070682745,
+          0.0348999984562397,
+          14.13082680830541
+        ],
+        [
+          4.249922171832789,
+          0.0348999984562397,
+          14.190413407093871
+        ],
+        [
+          4.249960051881444,
+          0.0348999984562397,
+          14.220206704877562
+        ],
+        [
+          4.249960051881444,
+          0.0348999984562397,
+          14.220206704877562
+        ],
+        [
+          4.249960051881444,
+          0.0348999984562397,
+          14.220206704877562
+        ],
+        [
+          4.320756414436024,
+          0.0348999984562397,
+          14.301299608249852
+        ],
+        [
+          4.320756414436024,
+          0.0348999984562397,
+          14.301299608249852
+        ],
+        [
+          4.320756414436024,
+          0.0348999984562397,
+          14.301299608249852
+        ],
+        [
+          4.320756414436024,
+          0.0348999984562397,
+          14.301299608249852
+        ],
+        [
+          4.320756414436024,
+          0.0348999984562397,
+          14.301299608249852
+        ],
+        [
+          4.320756414436024,
+          0.0348999984562397,
+          14.301299608249852
+        ],
+        [
+          4.320756414436024,
+          0.0348999984562397,
+          14.301299608249852
+        ]
+      ],
+      "reached": true
+    }
+  }
+}

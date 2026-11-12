@@ -8,7 +8,7 @@ InFrame은 지정된 종류의 물체가 보이는 자리까지 이동하고, �
 
 <picture>
   <source media="(max-width: 820px)" srcset="project/framework-mobile.png">
-  <img src="project/framework.png" alt="Fire RGB-D의 자세와 분할 마스크를 결합해 개체를 지도에 등록한다. Castle 교사 시범으로 학습한 다목표 H4는 목표 이름과 최근 RGB 네 장으로 전진·회전·정지를 선택한다. Go2 명령은 v0.7 소화기 정책으로 모의 검증했다.">
+  <img src="project/framework.png" alt="Fire RGB-D의 자세와 분할 마스크를 결합해 개체를 지도에 등록한다. Castle 교사 시범으로 학습한 다목표 H4는 목표 이름과 최근 RGB 네 장으로 전진·회전·정지를 선택한다. 같은 H4의 세 목표를 Go2 모의 어댑터로 검증했다.">
 </picture>
 
 ## Try your own data
@@ -29,7 +29,7 @@ InFrame은 지정된 종류의 물체가 보이는 자리까지 이동하고, �
 
 1. **Semantic SLAM.** 7-Scenes Fire의 RGB-D 궤적과 분할 마스크를 결합해 실물 소화기 A·B를 지도에 등록하고 서로 다른 시점의 사진을 연결합니다.
 2. **ObjectNav.** Skokloster Castle 스캔에 소화기 C를 배치하고 지도 기반 교사의 성공 시범 297개로 학생 정책을 학습합니다. 개선한 4스텝 정책은 같은 건물의 예약 출발점 60곳 중 51곳에서 소화기가 보이는 위치에 정지했습니다.
-3. **Go2 interface.** 같은 정책을 모의 어댑터에 연결해 RGB 입력, 속도 제한, 정지 명령을 검증했습니다. 실제 기체 주행은 후속 평가입니다.
+3. **Go2 interface.** Castle과 동일한 다목표 H4를 모의 어댑터에 연결했습니다. 같은 RGB에서 세 목표의 126개 행동과 첫 STOP이 일치했습니다. [재현 절차와 기록](h4nav/GO2.md) 실제 기체 주행은 후속 평가입니다.
 
 ## Run locally
 

@@ -1,3 +1,5 @@
+import {footprint} from './footprint.mjs';
+import {go2Rig} from './go2-rig.mjs';
 import {registeredGoals,crossesObject} from './goals.mjs';
 import {addIndoorGoals} from './indoor-scene.mjs';
 import {buildPlanner,followRoute} from './route-planner.mjs';
@@ -6,18 +8,6 @@ import * as T from './three.mjs';
 import {ask} from './rpc.mjs';
 const $=s=>document.querySelector(s);
 const dt=.25;
-async function model(){
-  const loader=new T.GLTFLoader().setMeshoptDecoder(T.MeshoptDecoder);
-  const gltf=await loader.loadAsync(new URL('go2.glb',import.meta.url).href);
-  const body=new T.Group(),basis=new T.Group(),legs=[];
-  basis.quaternion.setFromRotationMatrix(new T.Matrix4().set(0,-1,0,0,0,0,1,0,-1,0,0,0,0,0,0,1));
-  basis.add(gltf.scene);body.add(basis);gltf.scene.getObjectByName('base').position.z=.305;
-  for(const name of ['FL','FR','RL','RR']){
-    const hip=gltf.scene.getObjectByName(name+'_thigh'),knee=gltf.scene.getObjectByName(name+'_calf');
-    hip.rotation.y=.79;knee.rotation.y=-1.54;legs.push({hip,knee,phase:['FL','RR'].includes(name)?1:-1});
-  }
-  return {body,legs};
-}
 export async function init(floor, getStart, onPose){
   const canvas=$('#orbit'),eye=$('#robot-eye'),ctx=eye.getContext('2d',{willReadFrequently:true});
   const detail=document.createElement('canvas');detail.width=320;detail.height=240;
@@ -38,18 +28,14 @@ export async function init(floor, getStart, onPose){
   const tex=new T.CanvasTexture(tile);tex.wrapS=tex.wrapT=T.RepeatWrapping;tex.colorSpace=T.SRGBColorSpace;
   scene.add(new T.Mesh(ground,new T.MeshBasicMaterial({map:tex,side:T.DoubleSide})));
   // The NavMesh marks admissible robot-centre positions. Draw its boundary flat.
-  const edges=new Map();
-  for(const tri of floor.tris)for(let i=0;i<3;i++){
-    const a=tri[i],b=tri[(i+1)%3],key=[a.join(','),b.join(',')].sort().join('|');
-    if(edges.has(key))edges.delete(key);else edges.set(key,[a,b]);
-  }
+  const support=footprint(floor);
   const lines=[];
-  for(const [a,b] of edges.values())lines.push(a[0],a[1]+.004,a[2],b[0],b[1]+.004,b[2]);
+  for(const [a,b] of support.boundary)lines.push(a[0],a[1]+.004,a[2],b[0],b[1]+.004,b[2]);
   const outline=new T.BufferGeometry();outline.setAttribute('position',new T.Float32BufferAttribute(lines,3));
   scene.add(new T.LineSegments(outline,new T.LineBasicMaterial({color:0x81a69c})));
   const outside=new T.Mesh(new T.PlaneGeometry(180,180),new T.MeshBasicMaterial({color:0xe9edef}));
   outside.rotation.x=-Math.PI/2;outside.position.y=-.12;scene.add(outside);
-  const {body,legs}=await model();scene.add(body);
+  const {body,gait}=await go2Rig();scene.add(body);
   const target=new T.Group(),red=new T.MeshStandardMaterial({color:0xc45239});target.position.fromArray(floor.target);scene.add(target);
   const can=new T.Mesh(new T.CapsuleGeometry(.087,.28,6,16),red);target.add(can);const cap=new T.Mesh(new T.BoxGeometry(.14,.035,.05),new T.MeshStandardMaterial({color:0x333e35}));cap.position.y=.26;target.add(cap);
   const ring=new T.Mesh(new T.RingGeometry(.27,.31,36),new T.MeshBasicMaterial({color:0xce7854,side:T.DoubleSide}));ring.rotation.x=-Math.PI/2;ring.position.y=-.27;target.add(ring);
@@ -60,7 +46,7 @@ export async function init(floor, getStart, onPose){
     $('#live-record').hidden=true;if(recordURL)URL.revokeObjectURL(recordURL);recordURL=null;
   }
   function record(result){
-    const json={goal:goalKey,controller:guided?'semantic map + RGB':'H4',stopModel:useDetector?'YOLOE + three observations':'H4',start:startPose,
+    const json={goal:goalKey,controller:guided?'semantic map + RGB':'transfer-h4',stopModel:useDetector?'YOLOE + three observations':'H4',start:startPose,
       stopPose:pose.toArray(),duration:steps*dt,travel,blockedSteps,log,...result};
     recordURL=URL.createObjectURL(new Blob([JSON.stringify(json)],{type:'application/json'}));
     $('#live-record').href=recordURL;$('#live-record').hidden=false;
@@ -73,17 +59,22 @@ export async function init(floor, getStart, onPose){
   canvas.onpointermove=e=>{if(!drag)return;angle-=(e.clientX-drag[0])*.012;tilt=Math.max(.2,Math.min(1.35,tilt+(e.clientY-drag[1])*.009));drag=[e.clientX,e.clientY];redraw();};
   canvas.onpointerup=canvas.onpointercancel=()=>drag=null;
   canvas.onkeydown=e=>{if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key)){e.preventDefault();angle+=(e.key==='ArrowLeft'?-.18:e.key==='ArrowRight'?.18:0);tilt=Math.max(.2,Math.min(1.35,tilt+(e.key==='ArrowUp'?.12:e.key==='ArrowDown'?-.12:0)));redraw();}};
-  function view(){onPose(pose.x,pose.z,yaw);onboard.position.copy(pose);onboard.position.y+=.46;onboard.rotation.set(-.2,yaw,0,'YXZ');capture.render(world,onboard);ctx.drawImage(capture.domElement,0,0);body.position.copy(pose);body.rotation.y=yaw;redraw();}
+  function view(){onPose(pose.x,pose.z,yaw);onboard.position.copy(pose);onboard.position.y+=.46;onboard.rotation.set(-.2,yaw,0,'YXZ');capture.render(world,onboard);ctx.drawImage(capture.domElement,0,0,eye.width,eye.height);body.position.copy(pose);body.rotation.y=yaw;redraw();}
   function outcome(msg){finished=true;$('#hold').disabled=true;$('#live-state').textContent=msg;}
   async function tick(id){
     if(id!==generation||finished)return;
     if(paused){timer=setTimeout(()=>tick(id),80);return;}
     try{
-      view();const pixels=ctx.getImageData(0,0,192,144).data.buffer;
+      view();const pixels=guided?ctx.getImageData(0,0,192,144).data.buffer:null;
       semanticContext.drawImage(eye,0,0,320,240);
       const semantic=semanticContext.getImageData(0,0,320,240).data.buffer;
       let action,match=null,seen=[];
-      if(useDetector){
+      if(!guided){
+        const rgb=ctx.getImageData(0,0,160,120).data.buffer;
+        const d=await ask(worker,{type:'frame',pixels:rgb},controller.signal,[rgb]);
+        if(id!==generation)return;
+        action=[[.22/dt,0,0],[0,Math.PI/12/dt,0],[0,-Math.PI/12/dt,0],[0,0,1]][d.action];
+      }else if(useDetector){
         const d=await ask(worker,{type:'frame',pixels:semantic,t:steps*dt},controller.signal,[semantic]);
         if(id!==generation)return;
         match=d.match;seen=d.boxes;action=followRoute(route,pose.toArray(),yaw,goal,!!match);
@@ -99,7 +90,7 @@ export async function init(floor, getStart, onPose){
         const originals=new Map(),yes=new T.MeshBasicMaterial({color:0xffffff,side:T.DoubleSide}),no=new T.MeshBasicMaterial({color:0,side:T.DoubleSide});
         world.traverse(o=>{if(o.isMesh){originals.set(o,o.material);o.material=(goalKey==='extinguisher'?o.name.startsWith('registered_C'):o.userData.goal===goalKey)?yes:no;}});
         capture.render(world,onboard);const label=document.createElement('canvas');label.width=192;label.height=144;
-        const g=label.getContext('2d');g.drawImage(capture.domElement,0,0);const masks=g.getImageData(0,0,192,144).data;let visible=0,overlap=0;
+        const g=label.getContext('2d');g.drawImage(capture.domElement,0,0,192,144);const masks=g.getImageData(0,0,192,144).data;let visible=0,overlap=0;
         for(let j=0;j<masks.length;j+=4)if(masks[j]>120){
           visible++;if(match){const x=((j/4)%192+.5)*320/192,y=(Math.floor(j/4/192)+.5)*240/144;
           const [l,t,w,h]=match.box;if(x>=l&&x<l+w&&y>=t&&y<t+h)overlap++;}
@@ -122,29 +113,30 @@ export async function init(floor, getStart, onPose){
       const count=4;let blocked=false;for(let i=0;i<count;i++){
         const turn=r*dt/count,mid=yaw+turn/2;yaw+=turn;const dx=-Math.sin(mid)*f*dt/count,dz=-Math.cos(mid)*f*dt/count;
         const x=pose.x+dx,z=pose.z+dz,y=floorHeight(floor.tris,x,z);
-        if(y!==null&&!crossesObject(pose.x,pose.z,x,z)&&Number.isFinite(directFloorLength(floor.tris,pose.toArray(),[x,y,z]))){pose.set(x,y,z);travel+=Math.hypot(dx,dz);}else blocked=true;
+        if(y!==null&&support.clear(pose.toArray(),[x,y,z])&&!crossesObject(pose.x,pose.z,x,z)&&Number.isFinite(directFloorLength(floor.tris,pose.toArray(),[x,y,z]))){pose.set(x,y,z);travel+=Math.hypot(dx,dz);}else blocked=true;
       }
-      if(blocked){blockedSteps++;if(blockedSteps>=3){record({stop:false,success:false});outcome('주행 경계에 3회 도달');return;}}
-      for(const {hip,knee,phase} of legs){const d=f>0?.27*Math.sin(travel*19)*phase:0;hip.rotation.y=.79+d;knee.rotation.y=-1.54+Math.max(0,-d)*1.4;}
+      if(blocked){blockedSteps++;if(guided&&blockedSteps>=3){record({stop:false,success:false});outcome('주행 경계에 3회 도달');return;}}
+      gait(travel,f>0&&!blocked);
       if(f>.001){trail.push(new T.Vector3(pose.x,pose.y+.025,pose.z));breadcrumb.geometry.dispose();breadcrumb.geometry=new T.BufferGeometry().setFromPoints(trail);}
       steps++;$('#live-state').textContent=blocked?'주행 경계':f>.001?'전진':r>.01?'좌회전':r<-.01?'우회전':'목표 확인 중';
       if(steps>=240){view();record({stop:false,success:false});outcome('60초 주행 종료');return;}timer=setTimeout(()=>tick(id),250/Number($('#rate').value));
     }catch(e){if(id===generation)outcome(e.message);}
   }
   async function reset(){
-    $('#rerun').disabled=false;const id=++generation;controller?.abort();worker?.terminate();clearTimeout(timer);controller=new AbortController();goalKey=$('#live-goal').value;goal=registry[goalKey];guided=$('#live-mode').value==='map';useDetector=goalKey!=='extinguisher';
-    worker=new Worker(new URL(useDetector?'./goal-worker.mjs':'../h4/worker.mjs',import.meta.url),{type:'module'});
+    $('#rerun').disabled=false;const id=++generation;controller?.abort();worker?.terminate();clearTimeout(timer);controller=new AbortController();goalKey=$('#live-goal').value;goal=registry[goalKey];guided=$('#live-mode').value==='map';useDetector=guided&&goalKey!=='extinguisher';
+    eye.width=guided?192:160;eye.height=guided?144:120;capture.setSize(eye.width,eye.height,false);
+    worker=new Worker(new URL(!guided?'../h4nav/worker.mjs?policy=transfer':useDetector?'./goal-worker.mjs':'../h4/worker.mjs',import.meta.url),{type:'module'});
     clearRecord();log=[];blockedSteps=0;
-    const start=getStart();startPose={xyz:[...start.xyz],yaw:start.yaw};pose=new T.Vector3(...start.xyz);yaw=start.yaw;steps=travel=0;paused=finished=false;trail=[pose.clone()];breadcrumb.geometry.dispose();breadcrumb.geometry=new T.BufferGeometry();legs.forEach(l=>{l.hip.rotation.y=.79;l.knee.rotation.y=-1.54;});
+    const start=getStart();startPose={xyz:[...start.xyz],yaw:start.yaw};pose=new T.Vector3(...start.xyz);yaw=start.yaw;steps=travel=0;paused=finished=false;trail=[pose.clone()];breadcrumb.geometry.dispose();breadcrumb.geometry=new T.BufferGeometry();gait(0,false);
     $('#elapsed').textContent='0.00 s';$('#hold').textContent='일시 정지';$('#hold').disabled=false;$('#live-state').textContent='정책 준비 중';view();
     if(guided){plan??=buildPlanner(floor);remainingViews=[...goal.views];dwell=0;route=plan(start.xyz,remainingViews);if(!route){outcome('이 출발점에서 관측점까지 연결된 경로가 없습니다.');return;}}
-    try{await ask(worker,{type:'start',goal:goalKey,w:320,h:240},controller.signal);if(id===generation)tick(id);}catch(e){if(id===generation)outcome(e.message);}
+    try{await ask(worker,guided?{type:'start',goal:goalKey,w:320,h:240}:{type:'start',prompt:goal.prompt,w:160,h:120},controller.signal);if(id===generation)tick(id);}catch(e){if(id===generation)outcome(e.message);}
   }
   $('#hold').onclick=()=>{paused=!paused;$('#hold').textContent=paused?'계속 주행':'일시 정지';};
   $('#rerun').onclick=reset;$('.chipcam').hidden=false;
   function preview(){
     clearRecord();generation++; controller?.abort(); worker?.terminate(); clearTimeout(timer); finished=true;
-    const start=getStart(); pose=new T.Vector3(...start.xyz); yaw=start.yaw;
+    const start=getStart(); pose=new T.Vector3(...start.xyz); yaw=start.yaw; gait(0,false);
     breadcrumb.geometry.dispose(); breadcrumb.geometry=new T.BufferGeometry();
     $('#elapsed').textContent='0.00 s'; $('#hold').disabled=true; $('#rerun').disabled=true;
     $('#live-state').textContent='출발 대기'; view();

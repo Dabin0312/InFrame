@@ -1,3 +1,5 @@
+import {footprint} from './footprint.mjs';
+import {floorHeight,directFloorLength} from './navmesh.mjs';
 import {goals} from './goals.mjs';
 import {startMap} from './start-map.mjs';
 
@@ -8,14 +10,35 @@ async function setup() {
   const response = await fetch(new URL('floor.json', import.meta.url));
   if (!response.ok) throw Error('출발 지도를 불러올 수 없습니다.');
   const floor = await response.json();
-  floor.starts.forEach((s,i) => presets.add(new Option(s.id,i)));
+  const support=footprint(floor);
+  // Preserve each recorded preset's heading. If necessary move its origin
+  // inward and mark it in the picker so it cannot be mistaken for a replay.
+  for (const s of floor.starts) {
+    const [x,,z]=s.xyz;
+    if(support.fits(x,z))continue;
+    let best=null;
+    for(let radius=.025;radius<=1 && !best;radius+=.025){
+      for(let i=0;i<72;i++){
+        const nx=x+radius*Math.cos(i*Math.PI/36),nz=z+radius*Math.sin(i*Math.PI/36);
+        if(support.clearance(nx,nz)<.42)continue;
+        const candidate=[nx,floorHeight(floor.tris,nx,nz),nz];
+        if(Number.isFinite(directFloorLength(floor.tris,s.xyz,candidate))){best=candidate;break;}
+      }
+    }
+    if(!best){s.unavailable=true;continue;}
+    s.xyz=best;s.adjusted=true;
+  }
+  floor.starts.forEach((s,i) => {
+    const label=s.unavailable?' · 발 여유 부족':s.adjusted?' · 경계 보정':'';
+    const option=new Option(s.id+label,i);option.disabled=!!s.unavailable;presets.add(option);
+  });
   const custom = new Option('직접 선택','custom');
   custom.disabled = true; presets.add(custom);
   let selected, runtime, preparing, pending = false;
   const map = startMap(el('start-map'), floor, xyz => {
     select({id:'custom', xyz, yaw:heading.value==='recorded' ? 0 : Number(heading.value)}, 'custom');
   }, () => {
-    status.textContent = '물체나 주행 경계 바깥에서는 출발할 수 없어요. 색이 칠해진 바닥을 선택하세요.';
+    status.textContent = '네 발이 들어가는 녹색 바닥에서 출발하세요.';
   });
   function select(start, choice) {
     selected = start;
@@ -43,8 +66,6 @@ async function setup() {
   const goalMenu=el('live-goal'),mode=el('live-mode');
   function changeGoal(){
     const key=goalMenu.value,g=goals[key];
-    if(key!=='extinguisher')mode.value='map';
-    mode.options[1].disabled=key!=='extinguisher';
     map.highlight(key);el('goal-legend').textContent=g.label+' '+g.id;
     el('policy-name').textContent=mode.value==='h4'?'H4 STUDENT POLICY':'SEMANTIC MAP + RGB';
     if(runtime){launch.hidden=false;launch.querySelector('strong').textContent='▶　여기서 주행';runtime.preview();}

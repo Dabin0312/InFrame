@@ -1,4 +1,5 @@
-import {registeredGoals,occupied} from './goals.mjs';
+import {registeredGoals} from './goals.mjs';
+import {footprint,footRadius} from './footprint.mjs';
 import {floorHeight} from './navmesh.mjs';
 
 const ns = 'http://www.w3.org/2000/svg';
@@ -16,9 +17,17 @@ export function startMap(svg, floor, onPick, onInvalid) {
   svg.setAttribute('viewBox', [x0, z0, width, height].join(' '));
   const paths = floor.tris.map(tri => 'M' + tri.map(([x,,z]) => x + ',' + z).join('L') + 'Z');
   svg.append(shape('path', {d:paths.join(''), fill:'#b7d8cf', stroke:'#b7d8cf', 'stroke-width':.035}));
+  const support=footprint(floor);
+  const mask=shape('clipPath',{id:'walkable-floor'});
+  mask.append(shape('path',{d:paths.join('')}));svg.append(mask);
+  const rim=shape('g',{'clip-path':'url(#walkable-floor)'});
+  const outline=support.boundary.map(([a,b])=>'M'+a[0]+','+a[2]+'L'+b[0]+','+b[2]).join('');
+  rim.append(shape('path',{d:outline,fill:'none',stroke:'#d9e5df','stroke-width':2*footRadius,'stroke-linecap':'round'}));
+  svg.append(rim);
   const pins=new Map();
   for(const [key,g] of Object.entries(registeredGoals(floor))){
     const [x,,z]=g.xyz,group=shape('g',{'aria-label':g.label});
+    if(g.radius)rim.append(shape('circle',{cx:x,cy:z,r:g.radius+footRadius,fill:'#d9e5df'}));
     if(g.radius)svg.append(shape('circle',{cx:x,cy:z,r:g.radius,fill:'#e9edef'}));
     const dot=shape('circle',{cx:x,cy:z,r:.30,fill:'#a74827',stroke:'white','stroke-width':.12});
     const label=shape('text',{x:x+.43,y:z+.24,fill:'#793b23','font-size':.78,'font-weight':700});
@@ -40,7 +49,7 @@ export function startMap(svg, floor, onPick, onInvalid) {
   }
   function pick(x,z) {
     const y = floorHeight(floor.tris,x,z);
-    if (y === null || occupied(x,z)) { onInvalid(); return; }
+    if (y === null || !support.fits(x,z)) { onInvalid(); return; }
     onPick([x,y,z]);
   }
   svg.addEventListener('click', event => {

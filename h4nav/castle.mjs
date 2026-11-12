@@ -24,6 +24,22 @@ export async function castle(width=192,height=144){
   await addIndoorGoals(world,overview,registry);
   const objects=categories.map(k=>k==='extinguisher'?extinguisher:world.children.find(g=>g.isGroup&&g.getObjectByProperty('isMesh',true)?.userData.goal===k));
   if(objects.some(o=>!o)||!members.length)throw Error('Castle assets are incomplete');
+  // The closed-loop evaluator sweeps the foot disk against the relocated
+  // meshes. Measure each horizontal radius about its registered anchor.
+  const vertex=new T.Vector3();
+  const objectRadii=objects.map((group,k)=>{
+    group.updateWorldMatrix(true,true);
+    let radius=0;
+    group.traverse(node=>{
+      if(!node.isMesh)return;
+      const position=node.geometry.attributes.position;
+      for(let i=0;i<position.count;i++){
+        vertex.fromBufferAttribute(position,i).applyMatrix4(node.matrixWorld);
+        radius=Math.max(radius,Math.hypot(vertex.x-canonical[k][0],vertex.z-canonical[k][1]));
+      }
+    });
+    return radius;
+  });
   const origins=objects.map(o=>o.position.clone());
   objects.forEach((o,k)=>o.traverse(n=>{if(n.isMesh)n.userData.instance=k+1;}));
   const renderer=new T.WebGLRenderer({antialias:false,preserveDrawingBuffer:true});renderer.setSize(width,height,false);
@@ -73,5 +89,5 @@ export async function castle(width=192,height=144){
     return {success:distance<=1.35&&centered&&pixels>=80,distance,centered,visiblePixels:pixels,visible:s,legacyView:view?.kind??null,viewDistance:view?.distance??null};
   }
   place(canonical);
-  return {place,render,labels,move,score,elevation,floor,ctx,width,height,dispose(){renderer.dispose();renderer.forceContextLoss();}};
+  return {place,render,labels,move,score,objectRadii,elevation,floor,ctx,width,height,dispose(){renderer.dispose();renderer.forceContextLoss();}};
 }

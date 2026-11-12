@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="400" height="1430" viewBox="0 0 400 1430" role="img" aria-labelledby="fig-title fig-desc"><title id="fig-title">InFrame system architecture</title><desc id="fig-desc">Fire RGB-D mapping, Castle teacher demonstrations, multi-goal H4 navigation and the v0.7 Go2 mock command interface. Multi-goal deployment is pending.</desc><defs>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="400" height="1430" viewBox="0 0 400 1430" role="img" aria-labelledby="fig-title fig-desc"><title id="fig-title">InFrame system architecture</title><desc id="fig-desc">Fire RGB-D mapping, Castle teacher demonstrations, multi-goal H4 navigation and the shared multi-goal H4 in the Go2 mock command interface. Physical trials are pending.</desc><defs>
 <marker id="ink" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L8 4 L0 8Z" fill="#20292d"/></marker>
 <marker id="blue" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L8 4 L0 8Z" fill="#16647b"/></marker>
 <marker id="rust" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L8 4 L0 8Z" fill="#a34927"/></marker>
@@ -119,11 +119,11 @@
 <g aria-label="Mock interface" transform="translate(19 1193) scale(1)">
 <text x="0.00" y="24.00" fill="#20292d" font-family="Georgia,'Times New Roman',serif" font-size="22" font-weight="400" text-anchor="start" font-style="italic">(d)</text>
 <text x="39.00" y="24.00" fill="#20292d" font-family="Georgia,'Times New Roman',serif" font-size="24" font-weight="400" text-anchor="start">Go2 command interface</text>
-<text x="0.00" y="61.00" fill="#20292d" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="600" text-anchor="start">v0.7 extinguisher H4</text>
+<text x="0.00" y="61.00" fill="#20292d" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="600" text-anchor="start">Multi-goal H4</text>
 <text x="0.00" y="88.00" fill="#20292d" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="400" text-anchor="start">Velocity limits  →  Move / StopMove</text>
 <text x="0.00" y="114.00" fill="#20292d" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="400" text-anchor="start">Camera timeout  →  StopMove</text>
 <path d="M0 131L362 131" fill="none" stroke="#b9c3c5" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
 <text x="0.00" y="155.00" fill="#505e65" font-family="Arial,Helvetica,sans-serif" font-size="15" font-weight="400" text-anchor="start">Verified with a mock adapter.</text>
-<text x="0.00" y="178.00" fill="#505e65" font-family="Arial,Helvetica,sans-serif" font-size="14" font-weight="400" text-anchor="start">Multi-goal H4 integration and robot trials pending.</text>
+<text x="0.00" y="178.00" fill="#505e65" font-family="Arial,Helvetica,sans-serif" font-size="14" font-weight="400" text-anchor="start">126/126 actions matched. Physical Go2 trials pending.</text>
 </g>
 </svg>

@@ -9,14 +9,14 @@ function segmentDistance(x,z,a,b) {
   const t=Math.max(0,Math.min(1,((x-a[0])*dx+(z-a[2])*dz)/(dx*dx+dz*dz||1)));
   return Math.hypot(x-a[0]-t*dx,z-a[2]-t*dz);
 }
-export function footprint(floor){
-  if(cached.has(floor))return cached.get(floor);
+export function footprint(floor, placements){
+  if(placements===undefined && cached.has(floor))return cached.get(floor);
   const edges=new Map();
   for(const tri of floor.tris)for(let i=0;i<3;i++){
     const a=tri[i],b=tri[(i+1)%3],key=[a.join(','),b.join(',')].sort().join('|');
     if(edges.has(key))edges.delete(key);else edges.set(key,[a,b]);
   }
-  const boundary=[...edges.values()],objects=Object.values(goals).filter(g=>g.xz);
+  const boundary=[...edges.values()],objects=placements ?? Object.values(goals).filter(g=>g.xz);
   function clearance(x,z) {
     if(floorHeight(floor.tris,x,z)===null)return -Infinity;
     let d=Infinity;
@@ -36,6 +36,6 @@ export function footprint(floor){
     return true;
   }
   const shape={boundary,clearance,clear,fits:(x,z)=>clearance(x,z)>=footRadius};
-  cached.set(floor,shape);
+  if(placements===undefined)cached.set(floor,shape);
   return shape;
 }

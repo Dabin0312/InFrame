@@ -1,3 +1,4 @@
+import {cappedAction,period} from '../h4nav/closed-loop-world.mjs';
 import {footprint} from './footprint.mjs';
 import {go2Rig} from './go2-rig.mjs';
 import {registeredGoals,crossesObject} from './goals.mjs';
@@ -7,7 +8,7 @@ import {floorHeight,viewpointRange,directFloorLength} from './navmesh.mjs';
 import * as T from './three.mjs';
 import {ask} from './rpc.mjs';
 const $=s=>document.querySelector(s);
-const dt=.25;
+const dt=period;
 export async function init(floor, getStart, onPose){
   const canvas=$('#orbit'),eye=$('#robot-eye'),ctx=eye.getContext('2d',{willReadFrequently:true});
   const detail=document.createElement('canvas');detail.width=320;detail.height=240;
@@ -73,7 +74,7 @@ export async function init(floor, getStart, onPose){
         const rgb=ctx.getImageData(0,0,160,120).data.buffer;
         const d=await ask(worker,{type:'frame',pixels:rgb},controller.signal,[rgb]);
         if(id!==generation)return;
-        action=[[.22/dt,0,0],[0,Math.PI/12/dt,0],[0,-Math.PI/12/dt,0],[0,0,1]][d.action];
+        action=cappedAction(d.action);
       }else if(useDetector){
         const d=await ask(worker,{type:'frame',pixels:semantic,t:steps*dt},controller.signal,[semantic]);
         if(id!==generation)return;
@@ -89,13 +90,21 @@ export async function init(floor, getStart, onPose){
         // Render target IDs against full scene depth, with the same camera and pose.
         const originals=new Map(),yes=new T.MeshBasicMaterial({color:0xffffff,side:T.DoubleSide}),no=new T.MeshBasicMaterial({color:0,side:T.DoubleSide});
         world.traverse(o=>{if(o.isMesh){originals.set(o,o.material);o.material=(goalKey==='extinguisher'?o.name.startsWith('registered_C'):o.userData.goal===goalKey)?yes:no;}});
-        capture.render(world,onboard);const label=document.createElement('canvas');label.width=192;label.height=144;
-        const g=label.getContext('2d');g.drawImage(capture.domElement,0,0,192,144);const masks=g.getImageData(0,0,192,144).data;let visible=0,overlap=0;
+        capture.render(world,onboard);const label=document.createElement('canvas');label.width=eye.width;label.height=eye.height;
+        const g=label.getContext('2d');g.drawImage(capture.domElement,0,0);const masks=g.getImageData(0,0,label.width,label.height).data;let visible=0,overlap=0,xmin=label.width,xmax=-1;
         for(let j=0;j<masks.length;j+=4)if(masks[j]>120){
+          const column=(j/4)%label.width;xmin=Math.min(xmin,column);xmax=Math.max(xmax,column);
           visible++;if(match){const x=((j/4)%192+.5)*320/192,y=(Math.floor(j/4/192)+.5)*240/144;
           const [l,t,w,h]=match.box;if(x>=l&&x<l+w&&y>=t&&y<t+h)overlap++;}
         }
         originals.forEach((m,o)=>o.material=m);yes.dispose();no.dispose();
+        if(!guided){
+          const distance=Math.hypot(pose.x-goal.xyz[0],pose.z-goal.xyz[2]);
+          const centered=visible>0&&Math.abs((xmin+xmax)/(2*label.width)-.5)<=.25;
+          const success=distance<=1.35&&centered&&visible>=80;
+          record({stop:true,visible,centered,distance,success,photo:eye.toDataURL('image/png')});
+          outcome('STOP · '+goal.label+' '+goal.id+(success?' 확인':' · 기준 밖')+' · '+distance.toFixed(2)+' m');return;
+        }
         const range=viewpointRange(floor.tris,pose.toArray(),goal.views);
         const metric=range.kind==='within'?'관측점까지 바닥 경로 '+range.distance.toFixed(2)+' m':
           range.kind==='outside'?'관측점 0.8 m 밖':'관측점 거리 미확정';
